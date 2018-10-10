@@ -6,9 +6,9 @@ class App extends Component {
         super(props);
         this.state = {
             todos: [],
+            inputCreateTodoValue: '',
+            inputUpdateTodoValue: '', // only needed for debugging API interop
         };
-        this.inputCreateTodoValue = '';
-        this.inputUpdateTodoValue = '';  // only needed for debugging API interop
     }
  
     componentDidMount() {
@@ -16,9 +16,9 @@ class App extends Component {
     }
 
     createTodo() {
-        if (this.inputCreateTodoValue.length > 0) {
+        if (this.state.inputCreateTodoValue.length > 0) {
             const params = new URLSearchParams();
-            params.append('title', this.inputCreateTodoValue);
+            params.append('title', this.state.inputCreateTodoValue);
             params.append('completed', 'false'); // should be default value.. comment this?
             axios
             .post('http://localhost:8000/api/v1/todos/', params) // Create remote data point
@@ -57,13 +57,13 @@ class App extends Component {
 
     updateTodo(itemId) {
         const params = new URLSearchParams();
-        params.append('title', this.inputUpdateTodoValue);
+        params.append('title', this.state.inputUpdateTodoValue);
         axios
         .put('http://localhost:8000/api/v1/todos/' + itemId.toString() + '/', params)
         .then(res => {
             if (res.status === 200) {
                 const todos = this.state.todos;
-                todos[itemId].title = this.inputUpdateTodoValue;
+                todos[itemId].title = this.state.inputUpdateTodoValue;
                 this.setState({ todos: todos });
             }
         })
@@ -87,22 +87,19 @@ class App extends Component {
     }
 
     updateInputCreateTodoValue(evt) {
-        console.log('congrats');
-        this.inputCreateTodoValue = evt.target.value;
-        // this.setState({ inputCreateTodoValue: evt.target.value });
+        this.setState({ inputCreateTodoValue: evt.target.value });
     }
 
     updateInputUpdateTodoValue(evt) {
-        this.inputUpdateTodoValue = evt.target.value;
-        // this.setState({ inputUpdateTodoValue: evt.target.value });
+        this.setState({ inputUpdateTodoValue: evt.target.value });
     }
 
     render() {
       return (
           <div>
             <button onClick={this.createTodo.bind(this)}>{'+'}</button>
-            <input value={this.inputCreateTodoValue} onChange={evt => this.updateInputCreateTodoValue.bind(evt)} type='text' placeholder='Enter your task here...'></input>
-            <input value={this.inputUpdateTodoValue} onChange={evt => this.updateInputUpdateTodoValue.bind(evt)} type='text' placeholder='Edited value for todo'></input>
+            <input value={this.state.inputCreateTodoValue} onChange={evt => this.updateInputCreateTodoValue(evt)} type='text' placeholder='Enter your task here...'></input>
+            <input value={this.state.inputUpdateTodoValue} onChange={evt => this.updateInputUpdateTodoValue(evt)} type='text' placeholder='Edited value for todo'></input>
             <div>
             {
                 Object.keys(this.state.todos).map( (objKey, index) => (
