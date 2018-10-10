@@ -9,6 +9,8 @@ class App extends Component {
             inputCreateTodoValue: '',
             inputUpdateTodoValue: '', // only needed for debugging API interop
         };
+        this.API_URL = 'http://localhost:8000/api/v1/todos/';
+        this.SLASH = '/';
     }
  
     componentDidMount() {
@@ -21,7 +23,7 @@ class App extends Component {
             params.append('title', this.state.inputCreateTodoValue);
             params.append('completed', 'false'); // should be default value.. comment this?
             axios
-            .post('http://localhost:8000/api/v1/todos/', params) // Create remote data point
+            .post(this.API_URL, params) // Create remote data point
             .then(res => { // Update the local data point inside the state
                 if (res.status === 201){
                     const todo = res.data;
@@ -41,12 +43,15 @@ class App extends Component {
 
     readTodos() {
         axios
-            .get('http://localhost:8000/api/v1/todos/')
+            .get(this.API_URL)
             .then(res => {
-                var arr = res.data;
-                var result = {};
-                for (var i=0; i<arr.length; i++) {
-                    result[arr[i].id] = { 'title': arr[i].title, 'completed': arr[i].completed };
+                const arr = res.data;
+                let result = {};
+                for (let i=0; i<arr.length; i++) {
+                    result[arr[i].id] = {
+                        'title': arr[i].title,
+                        'completed': arr[i].completed
+                    };
                 }
                 this.setState( { todos: result })
             })
@@ -59,7 +64,7 @@ class App extends Component {
         const params = new URLSearchParams();
         params.append('title', this.state.inputUpdateTodoValue);
         axios
-        .put('http://localhost:8000/api/v1/todos/' + itemId.toString() + '/', params)
+        .put(this.API_URL + itemId.toString() + this.SLASH, params)
         .then(res => {
             if (res.status === 200) {
                 const todos = this.state.todos;
@@ -74,11 +79,12 @@ class App extends Component {
 
     deleteTodo(itemId) {
         axios
-        .delete('http://localhost:8000/api/v1/todos/' + itemId.toString() + '/')
+        .delete(this.API_URL + itemId.toString() + this.SLASH)
         .then(res => {
             if (res.status === 204) {
-                delete this.state.todos[itemId];
-                this.setState(this.state);
+                const todos = this.state.todos;
+                delete todos[itemId];
+                this.setState({ todos: todos });
             }
         })
         .catch(err => {
@@ -98,18 +104,28 @@ class App extends Component {
       return (
           <div>
             <button onClick={this.createTodo.bind(this)}>{'+'}</button>
-            <input value={this.state.inputCreateTodoValue} onChange={evt => this.updateInputCreateTodoValue(evt)} type='text' placeholder='Enter your task here...'></input>
-            <input value={this.state.inputUpdateTodoValue} onChange={evt => this.updateInputUpdateTodoValue(evt)} type='text' placeholder='Edited value for todo'></input>
-            <div>
-            {
-                Object.keys(this.state.todos).map( (objKey, index) => (
-                <div key={objKey}>
-                    <span>{this.state.todos[objKey].completed.toString()+' '}</span>
-                    <label>{this.state.todos[objKey].title+' '}</label>
-                    <button onClick={this.updateTodo.bind(this, objKey)}>{'Update'}</button>
-                    <button onClick={this.deleteTodo.bind(this, objKey)}>{'X'}</button>
-                </div>
-                ))}
+            <input
+                value={this.state.inputCreateTodoValue}
+                onChange={evt => this.updateInputCreateTodoValue(evt)}
+                type='text'
+                placeholder='Enter your task here...'>
+            </input>
+            <input
+                value={this.state.inputUpdateTodoValue}
+                onChange={evt => this.updateInputUpdateTodoValue(evt)}
+                type='text'
+                placeholder='Edited value for todo'>
+            </input>
+            <div> {
+                Object.keys(this.state.todos).map( todoId => (
+                    <div key={ todoId }>
+                        <span>{this.state.todos[todoId].completed.toString()+' '}</span>
+                        <label>{this.state.todos[todoId].title+' '}</label>
+                        <button onClick={this.updateTodo.bind(this, todoId)}>{'Update'}</button>
+                        <button onClick={this.deleteTodo.bind(this, todoId)}>{'X'}</button>
+                    </div>
+                ))
+            }
             </div>
         </div>
       );
