@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios'; // new
+import axios from 'axios';
 
 class App extends Component {
     constructor(props) {
@@ -21,18 +21,15 @@ class App extends Component {
         if (this.state.inputCreateTodoValue.length > 0) {
             const params = new URLSearchParams();
             params.append('title', this.state.inputCreateTodoValue);
-            params.append('completed', 'false'); // should be default value.. comment this?
+            params.append('completed', 'false');
             axios
-            .post(this.API_URL, params) // Create remote data point
-            .then(res => { // Update the local data point inside the state
+            .post(this.API_URL, params)
+            .then(res => {
                 if (res.status === 201){
-                    const todo = res.data;
+                    const todoObj = res.data; // { 'id':..., 'title':..., 'completed':... }
                     const todos = this.state.todos;
-                    todos[todo.id] = { // prefer indexed data structure (dictionary) over response's data structure (array)
-                        'title': todo.title,
-                        'completed': todo.completed
-                    };
-                    this.setState({ todos: todos });
+                    const updatedTodos = this.insertTodoObj(todoObj, todos);
+                    this.setState({ todos: updatedTodos });
                 }
             })
             .catch(err => {
@@ -45,15 +42,14 @@ class App extends Component {
         axios
             .get(this.API_URL)
             .then(res => {
-                const arr = res.data;
-                let result = {};
-                for (let i=0; i<arr.length; i++) {
-                    result[arr[i].id] = {
-                        'title': arr[i].title,
-                        'completed': arr[i].completed
-                    };
+                const arrTodos = res.data; // [ { 'id':..., 'title':..., 'completed':... }, {...}, ... ]
+                let objTodos = {}; // { <id_x>: {'title':..., 'completed':...}, <id_y>:{...}, ... }
+                for (let i=0; i<arrTodos.length; i++) {
+                    const todoObj = arrTodos[i];  // { 'id':..., 'title':..., 'completed':... }
+                    objTodos = this.insertTodoObj(todoObj, objTodos);
                 }
-                this.setState( { todos: result })
+                const updatedObjTodos = objTodos;
+                this.setState( { todos: updatedObjTodos })
             })
             .catch(err => {
                 console.log(err);
@@ -69,7 +65,8 @@ class App extends Component {
             if (res.status === 200) {
                 const todos = this.state.todos;
                 todos[itemId].title = this.state.inputUpdateTodoValue;
-                this.setState({ todos: todos });
+                const updatedTodos = todos;
+                this.setState({ todos: updatedTodos });
             }
         })
         .catch(err => {
@@ -84,7 +81,8 @@ class App extends Component {
             if (res.status === 204) {
                 const todos = this.state.todos;
                 delete todos[itemId];
-                this.setState({ todos: todos });
+                const updatedTodos = todos;
+                this.setState({ todos: updatedTodos });
             }
         })
         .catch(err => {
@@ -92,12 +90,21 @@ class App extends Component {
         });
     }
 
-    updateInputCreateTodoValue(evt) {
-        this.setState({ inputCreateTodoValue: evt.target.value });
+    /* Helper method which enables code reuse and separation of concerns */
+    insertTodoObj(todoObj, todos) {
+        todos[todoObj.id] = {
+            'title': todoObj.title,
+            'completed': todoObj.completed
+        };
+        return todos;
     }
 
-    updateInputUpdateTodoValue(evt) {
-        this.setState({ inputUpdateTodoValue: evt.target.value });
+    updateInputCreateTodoValue(event) {
+        this.setState({ inputCreateTodoValue: event.target.value });
+    }
+
+    updateInputUpdateTodoValue(event) {
+        this.setState({ inputUpdateTodoValue: event.target.value });
     }
 
     render() {
@@ -106,13 +113,13 @@ class App extends Component {
             <button onClick={this.createTodo.bind(this)}>{'+'}</button>
             <input
                 value={this.state.inputCreateTodoValue}
-                onChange={evt => this.updateInputCreateTodoValue(evt)}
+                onChange={event => this.updateInputCreateTodoValue(event)}
                 type='text'
                 placeholder='Enter your task here...'>
             </input>
             <input
                 value={this.state.inputUpdateTodoValue}
-                onChange={evt => this.updateInputUpdateTodoValue(evt)}
+                onChange={event => this.updateInputUpdateTodoValue(event)}
                 type='text'
                 placeholder='Edited value for todo'>
             </input>
