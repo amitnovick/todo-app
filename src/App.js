@@ -108,34 +108,34 @@ class App extends Component {
     }
 
     render() {
-      return (
-          <div>
-            <button onClick={this.createTodo.bind(this)}>{'+'}</button>
-            <input
-                value={this.state.inputCreateTodoValue}
-                onChange={event => this.updateInputCreateTodoValue(event)}
-                type='text'
-                placeholder='Enter your task here...'>
-            </input>
-            <input
-                value={this.state.inputUpdateTodoValue}
-                onChange={event => this.updateInputUpdateTodoValue(event)}
-                type='text'
-                placeholder='Edited value for todo'>
-            </input>
-            <div> {
-                Object.keys(this.state.todos).map( todoId => (
-                    <div key={ todoId }>
-                        <span>{this.state.todos[todoId].completed.toString()+' '}</span>
-                        <label>{this.state.todos[todoId].title+' '}</label>
-                        <button onClick={this.updateTodo.bind(this, todoId)}>{'Update'}</button>
-                        <button onClick={this.deleteTodo.bind(this, todoId)}>{'X'}</button>
-                    </div>
-                ))
-            }
+        return (
+            <div>
+                <button onClick={this.createTodo.bind(this)}>{'+'}</button>
+                <input
+                    value={this.state.inputCreateTodoValue}
+                    onChange={event => this.updateInputCreateTodoValue(event)}
+                    type='text'
+                    placeholder='Enter your task here...'>
+                </input>
+                <input
+                    value={this.state.inputUpdateTodoValue}
+                    onChange={event => this.updateInputUpdateTodoValue(event)}
+                    type='text'
+                    placeholder='Edited value for todo'>
+                </input>
+                <div> {
+                    Object.keys(this.state.todos).map( todoId => (
+                        <div key={ todoId }>
+                            <span>{this.state.todos[todoId].completed.toString()+' '}</span>
+                            <label>{this.state.todos[todoId].title+' '}</label>
+                            <button onClick={this.updateTodo.bind(this, todoId)}>{'Update'}</button>
+                            <button onClick={this.deleteTodo.bind(this, todoId)}>{'X'}</button>
+                        </div>
+                    ))
+                }
+                </div>
             </div>
-        </div>
-      );
+        );
     }
 }
 
