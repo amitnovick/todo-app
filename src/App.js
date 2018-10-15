@@ -114,14 +114,10 @@ class App extends Component {
       const { todos, inputCreateTodoValue, inputUpdateTodoValue } = this.state;
       return (
         <div>
-          <button onClick={this.createTodo}>
-            {'+'}
-          </button>
-          <input
-            value={inputCreateTodoValue}
-            onChange={this.updateInputCreateTodoValue}
-            type='text'
-            placeholder='Enter your task here...'
+          <TodoCreationInput
+            createTodo = {this.createTodo}
+            inputCreateTodoValue = {inputCreateTodoValue}
+            updateInputCreateTodoValue = {this.updateInputCreateTodoValue}
           />
           <input
             value={inputUpdateTodoValue}
@@ -138,6 +134,29 @@ class App extends Component {
         </div>
       );
     }
+}
+
+class TodoCreationInput extends Component {
+  render() {
+    const {
+      createTodo,
+      inputCreateTodoValue,
+      updateInputCreateTodoValue,
+    } = this.props;
+    return (
+      <div>
+        <button onClick={createTodo}>
+          {'+'}
+        </button>
+        <input
+          value={inputCreateTodoValue}
+          onChange={updateInputCreateTodoValue}
+          type='text'
+          placeholder='Enter your task here...'
+        />
+    </div>
+    );
+  }
 }
 
 class TodoTable extends Component {
