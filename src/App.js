@@ -114,7 +114,7 @@ class App extends Component {
 
     render() {
       const { todos, inputCreateTodoValue, inputUpdateTodoValue } = this.state;
-      
+
       return (
         <div>
           <TodoCreationInput
@@ -125,8 +125,8 @@ class App extends Component {
           <input
             value={inputUpdateTodoValue}
             onChange={this.updateInputUpdateTodoValue}
-            type='text'
-            placeholder='Edited value for todo'
+            type="text"
+            placeholder="Edited value for todo"
           />
           <TodoTable 
             todosList={todos}
@@ -138,53 +138,48 @@ class App extends Component {
     }
 }
 
-class TodoCreationInput extends Component {
-  render() {
-    const {
-      createTodo,
-      inputCreateTodoValue,
-      updateInputCreateTodoValue,
-    } = this.props;
+const Button = ({ onClick, className = '', children }) =>
+  <button
+    onClick={() => onClick()}
+    className={className}
+    type="button"
+  >
+    {children}
+  </button>
 
-    return (
-      <div>
-        <button onClick={createTodo}>
-          {'+'}
-        </button>
-        <input
-          value={inputCreateTodoValue}
-          onChange={updateInputCreateTodoValue}
-          type='text'
-          placeholder='Enter your task here...'
-        />
-    </div>
-    );
-  }
-}
+const TodoCreationInput = ({
+  createTodo,
+  inputCreateTodoValue,
+  updateInputCreateTodoValue,
+}) =>
+    <div>
+      <Button onClick={createTodo}>
+        {'+'}
+      </Button>
+      <input
+        value={inputCreateTodoValue}
+        onChange={updateInputCreateTodoValue}
+        type="text"
+        placeholder="Enter your task here..."
+      />
+  </div>
 
-class TodoTable extends Component {
-  render() {
-    const { todosList, updateTodo, deleteTodo } = this.props;
-
-    return (
-      <div>
-      {
-        todosList.map( todo => 
-          <div key={todo.id}>
-            <span>{todo.completed.toString()+' '}</span>
-            <label>{todo.title+' '}</label>
-            <button onClick={() => updateTodo(todo.id)}>
-              {'Update'}
-            </button>
-            <button onClick={() => deleteTodo(todo.id)}>
-              {'X'}
-            </button>
-          </div>
-        )
-      }
+const TodoTable = ({ todosList, updateTodo, deleteTodo }) =>
+  <div>
+  {
+    todosList.map( todo => 
+      <div key={todo.id}>
+        <span>{todo.completed.toString()+' '}</span>
+        <label>{todo.title+' '}</label>
+        <Button onClick={() => updateTodo(todo.id)}>
+          {'Update'}
+        </Button>
+        <Button onClick={() => deleteTodo(todo.id)}>
+          {'X'}
+        </Button>
       </div>
-    );
+    )
   }
-}
+  </div>
 
 export default App;
