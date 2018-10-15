@@ -19,6 +19,8 @@ class App extends Component {
       };
 
       this.createTodo = this.createTodo.bind(this);
+      this.updateTodo = this.updateTodo.bind(this);
+      this.deleteTodo = this.deleteTodo.bind(this);
       this.updateInputCreateTodoValue = this.updateInputCreateTodoValue.bind(this);
       this.updateInputUpdateTodoValue = this.updateInputUpdateTodoValue.bind(this);
     }
@@ -112,6 +114,7 @@ class App extends Component {
 
     render() {
       const { todos, inputCreateTodoValue, inputUpdateTodoValue } = this.state;
+      
       return (
         <div>
           <TodoCreationInput
@@ -129,7 +132,6 @@ class App extends Component {
             todosList={todos}
             updateTodo={this.updateTodo}
             deleteTodo={this.deleteTodo}
-            that={this}
           />
         </div>
       );
@@ -143,6 +145,7 @@ class TodoCreationInput extends Component {
       inputCreateTodoValue,
       updateInputCreateTodoValue,
     } = this.props;
+
     return (
       <div>
         <button onClick={createTodo}>
@@ -161,7 +164,8 @@ class TodoCreationInput extends Component {
 
 class TodoTable extends Component {
   render() {
-    const { todosList, updateTodo, deleteTodo, that } = this.props;
+    const { todosList, updateTodo, deleteTodo } = this.props;
+
     return (
       <div>
       {
@@ -169,10 +173,10 @@ class TodoTable extends Component {
           <div key={todo.id}>
             <span>{todo.completed.toString()+' '}</span>
             <label>{todo.title+' '}</label>
-            <button onClick={updateTodo.bind(that, todo.id)}>
+            <button onClick={() => updateTodo(todo.id)}>
               {'Update'}
             </button>
-            <button onClick={deleteTodo.bind(that, todo.id)}>
+            <button onClick={() => deleteTodo(todo.id)}>
               {'X'}
             </button>
           </div>
