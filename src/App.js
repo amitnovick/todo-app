@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import {
-  API_URL,
-  SLASH,
-  TODO_TITLE,
-  TODO_ID,
-  TODO_COMPLETED,
-} from './constants/index.js';
+  uploadServerCreateTodo,
+  downloadServerReadTodos,
+  uploadServerUpdateTodo,
+  uploadServerDeleteTodo,
+} from './Utils.js';
 
 class App extends Component {
     constructor(props) {
@@ -18,6 +16,10 @@ class App extends Component {
         inputUpdateTodoValue: '', // only needed for debugging API interop
       };
 
+      this.updateStateCreateTodo = this.updateStateCreateTodo.bind(this);
+      this.updateStateReadTodos = this.updateStateReadTodos.bind(this);
+      this.updateStateUpdateTodo = this.updateStateUpdateTodo.bind(this);
+      this.updateStateDeleteTodo = this.updateStateDeleteTodo.bind(this);
       this.createTodo = this.createTodo.bind(this);
       this.updateTodo = this.updateTodo.bind(this);
       this.deleteTodo = this.deleteTodo.bind(this);
@@ -31,77 +33,51 @@ class App extends Component {
 
     createTodo() {
       if (this.state.inputCreateTodoValue.length > 0) {
-        const params = new URLSearchParams();
-        params.append([TODO_TITLE], this.state.inputCreateTodoValue);
-        params.append([TODO_COMPLETED], 'false');
-
-        axios
-          .post(API_URL, params)
-          .then(res => {
-            if (res.status === 201){
-              const todo = res.data; // { 'id':..., 'title':..., 'completed':... }
-              const newTodos = this.state.todos.concat([todo]);
-              this.setState({ todos: newTodos });
-            }
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        uploadServerCreateTodo(this.updateStateCreateTodo, this.state.inputCreateTodoValue);
       }
     }
 
     readTodos() {
-      axios
-        .get(API_URL)
-        .then(res => {
-          const todos = res.data; // [ { 'id':..., 'title':..., 'completed':... }, {...}, ... ]
-          this.setState( { todos: todos });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      downloadServerReadTodos(this.updateStateReadTodos);
     }
 
     updateTodo(itemId) {
-      const params = new URLSearchParams();
-      params.append([TODO_TITLE], this.state.inputUpdateTodoValue);
-
-      axios
-        .put(API_URL + itemId.toString() + SLASH, params)
-        .then(res => {
-          if (res.status === 200) {
-            const replaceTodoById = (todo) => {
-              if (todo.id === itemId) {
-                return {
-                  [TODO_ID]: todo.id,
-                  [TODO_TITLE]: this.state.inputUpdateTodoValue,
-                  [TODO_COMPLETED]: todo.completed,
-                };
-              }
-              return todo;
-            }
-            const newTodos = this.state.todos.map(replaceTodoById);
-            this.setState({ todos: newTodos });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      uploadServerUpdateTodo(this.updateStateUpdateTodo, this.state.inputUpdateTodoValue, itemId);
     }
 
     deleteTodo(itemId) {
-      axios
-        .delete(API_URL + itemId.toString() + SLASH)
-        .then(res => {
-          if (res.status === 204) {
-            const isNotId = (todo) => todo.id !== itemId;
-            const newTodos = this.state.todos.filter(isNotId);
-            this.setState({ todos: newTodos });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      uploadServerDeleteTodo(this.updateStateDeleteTodo, itemId);
+    }
+
+    updateStateCreateTodo(todo) {
+      const newTodos = this.state.todos.concat([todo]);
+      this.setState({ todos: newTodos });
+    }
+
+    updateStateReadTodos(todos) {
+      this.setState( { todos: todos });
+    }
+
+    updateStateUpdateTodo(itemId, updatedTodo) {
+      const replaceTodoById = (todo) => {
+        if (todo.id === itemId) {
+          return updatedTodo;
+          // return {
+          //   [TODO_ID]: todo.id,
+          //   [TODO_TITLE]: inputUpdateTodoValue,
+          //   [TODO_COMPLETED]: todo.completed,
+          // };
+        }
+        return todo;
+      }
+      const newTodos = this.state.todos.map(replaceTodoById);
+      this.setState({ todos: newTodos });
+    }
+
+    updateStateDeleteTodo(itemId) {
+      const isNotId = (todo) => todo.id !== itemId;
+      const newTodos = this.state.todos.filter(isNotId);
+      this.setState({ todos: newTodos });
     }
 
     updateInputCreateTodoValue(event) {
