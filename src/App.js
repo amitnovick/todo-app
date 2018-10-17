@@ -4,7 +4,9 @@ import {
   downloadServerReadTodos,
   uploadServerUpdateTodo,
   uploadServerDeleteTodo
-} from "./Utils.js";
+} from "./store.js";
+import Utils from "./utils";
+import { TODO_ID, TODO_TITLE, TODO_COMPLETED } from "./constants/index.js";
 
 class App extends Component {
   constructor(props) {
@@ -31,16 +33,12 @@ class App extends Component {
     );
   }
 
-  componentDidMount() {
-    this.readTodos();
-  }
-
   createTodo() {
-    if (this.state.inputCreateTodoValue.length > 0) {
-      uploadServerCreateTodo(
-        this.updateStateCreateTodo,
-        this.state.inputCreateTodoValue
-      );
+    const title = this.state.inputCreateTodoValue;
+    if (title.length > 0) {
+      const newTodo = this.createNewTodo(title);
+      this.updateStateCreateTodo(newTodo);
+      uploadServerCreateTodo(newTodo);
     }
   }
 
@@ -91,12 +89,24 @@ class App extends Component {
     this.setState({ todos: newTodos });
   }
 
+  createNewTodo(title) {
+    return {
+      [TODO_ID]: Utils.uuid(),
+      [TODO_TITLE]: title,
+      [TODO_COMPLETED]: TODO_COMPLETED_DEFAULT
+    };
+  }
+
   updateInputCreateTodoValue(event) {
     this.setState({ inputCreateTodoValue: event.target.value });
   }
 
   updateInputUpdateTodoValue(event) {
     this.setState({ inputUpdateTodoValue: event.target.value });
+  }
+
+  componentDidMount() {
+    this.readTodos();
   }
 
   render() {

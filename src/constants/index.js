@@ -3,3 +3,4 @@ export const SLASH = "/";
 export const TODO_TITLE = "title";
 export const TODO_ID = "id";
 export const TODO_COMPLETED = "completed";
+export const TODO_COMPLETED_DEFAULT = false;

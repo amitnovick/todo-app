@@ -1,19 +1,16 @@
 import { API_URL, SLASH, TODO_TITLE } from "./constants/index.js";
 import axios from "axios";
 
-export const uploadServerCreateTodo = (
-  updateStateCreateTodo,
-  inputCreateTodoValue
-) => {
+export const uploadServerCreateTodo = title => {
   const params = new URLSearchParams();
-  params.append([TODO_TITLE], inputCreateTodoValue);
+  params.append([TODO_TITLE], title);
 
   axios
     .post(API_URL, params)
     .then(res => {
       if (res.status === 201) {
-        const todo = res.data; // { 'id':..., 'title':..., 'completed':... }
-        updateStateCreateTodo(todo);
+        // const todo = res.data; // { 'id':..., 'title':..., 'completed':... }
+        // updateStateCreateTodo(todo);
       }
     })
     .catch(err => {
