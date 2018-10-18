@@ -1,12 +1,19 @@
 import React, { Component } from "react";
+import Utils from "./utils.js";
+
 import {
   uploadServerCreateTodo,
   downloadServerReadTodos,
   uploadServerUpdateTodo,
   uploadServerDeleteTodo
-} from "./store.js";
-import Utils from "./utils";
-import { TODO_ID, TODO_TITLE, TODO_COMPLETED } from "./constants/index.js";
+} from "./utils.js";
+
+import {
+  TODO_ID,
+  TODO_TITLE,
+  TODO_COMPLETED,
+  TODO_COMPLETED_DEFAULT
+} from "./constants/index.js";
 
 class App extends Component {
   constructor(props) {
@@ -38,24 +45,34 @@ class App extends Component {
     if (title.length > 0) {
       const newTodo = this.createNewTodo(title);
       this.updateStateCreateTodo(newTodo);
-      uploadServerCreateTodo(newTodo);
+      // uploadServerCreateTodo(newTodo);
     }
   }
 
   readTodos() {
-    downloadServerReadTodos(this.updateStateReadTodos);
+    const todos = this.retrieveStoredTodos();
+    this.updateStateReadTodos(todos);
+    // downloadServerReadTodos(this.updateStateReadTodos);
   }
 
   updateTodo(itemId) {
-    uploadServerUpdateTodo(
-      this.updateStateUpdateTodo,
+    const newTodos = this.updateExistingTodo(
+      itemId,
       this.state.inputUpdateTodoValue,
-      itemId
+      this.state.todos
     );
+    this.updateStateUpdateTodo(newTodos);
+    // uploadServerUpdateTodo(
+    //   this.updateStateUpdateTodo,
+    //   this.state.inputUpdateTodoValue,
+    //   itemId
+    // );
   }
 
   deleteTodo(itemId) {
-    uploadServerDeleteTodo(this.updateStateDeleteTodo, itemId);
+    const newTodos = this.deleteExistingTodo(itemId, this.state.todos);
+    this.updateStateDeleteTodo(newTodos);
+    // uploadServerDeleteTodo(this.updateStateDeleteTodo, itemId);
   }
 
   updateStateCreateTodo(todo) {
@@ -67,25 +84,11 @@ class App extends Component {
     this.setState({ todos: todos });
   }
 
-  updateStateUpdateTodo(itemId, updatedTodo) {
-    const replaceTodoById = todo => {
-      if (todo.id === itemId) {
-        return updatedTodo;
-        // return {
-        //   [TODO_ID]: todo.id,
-        //   [TODO_TITLE]: inputUpdateTodoValue,
-        //   [TODO_COMPLETED]: todo.completed,
-        // };
-      }
-      return todo;
-    };
-    const newTodos = this.state.todos.map(replaceTodoById);
+  updateStateUpdateTodo(newTodos) {
     this.setState({ todos: newTodos });
   }
 
-  updateStateDeleteTodo(itemId) {
-    const isNotId = todo => todo.id !== itemId;
-    const newTodos = this.state.todos.filter(isNotId);
+  updateStateDeleteTodo(newTodos) {
     this.setState({ todos: newTodos });
   }
 
@@ -95,6 +98,48 @@ class App extends Component {
       [TODO_TITLE]: title,
       [TODO_COMPLETED]: TODO_COMPLETED_DEFAULT
     };
+  }
+
+  retrieveStoredTodos() {
+    const list = [
+      {
+        id: "24fef44223434343",
+        title: "Finish the Todos app using React",
+        completed: false
+      },
+      {
+        id: "asd6263afs6dasd6",
+        title: "Create some more interesting React projects",
+        completed: false
+      },
+      {
+        id: "22f4a52656fa6wsa6",
+        title: "Get a job as a Junior front-end developer",
+        completed: false
+      }
+    ];
+    return list;
+  }
+
+  updateExistingTodo(itemId, title, todos) {
+    const replaceTodoById = todo => {
+      if (todo.id === itemId) {
+        return {
+          [TODO_ID]: todo.id,
+          [TODO_TITLE]: title,
+          [TODO_COMPLETED]: todo.completed
+        };
+      }
+      return todo;
+    };
+    const newTodos = todos.map(replaceTodoById);
+    return newTodos;
+  }
+
+  deleteExistingTodo(itemId, todos) {
+    const isNotId = todo => todo.id !== itemId;
+    const newTodos = todos.filter(isNotId);
+    return newTodos;
   }
 
   updateInputCreateTodoValue(event) {
