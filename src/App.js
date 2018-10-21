@@ -24,16 +24,6 @@ class App extends Component {
       inputCreateTodoValue: "",
       inputUpdateTodoValue: "" // only needed for debugging API interop
     };
-
-    // this.createTodo = this.createTodo.bind(this);
-    // this.updateTodo = this.updateTodo.bind(this);
-    // this.deleteTodo = this.deleteTodo.bind(this);
-    // this.updateInputCreateTodoValue = this.updateInputCreateTodoValue.bind(
-    //   this
-    // );
-    // this.updateInputUpdateTodoValue = this.updateInputUpdateTodoValue.bind(
-    //   this
-    // );
   }
 
   createTodo() {
