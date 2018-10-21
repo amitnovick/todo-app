@@ -25,19 +25,15 @@ class App extends Component {
       inputUpdateTodoValue: "" // only needed for debugging API interop
     };
 
-    this.updateStateCreateTodo = this.updateStateCreateTodo.bind(this);
-    this.updateStateReadTodos = this.updateStateReadTodos.bind(this);
-    this.updateStateUpdateTodo = this.updateStateUpdateTodo.bind(this);
-    this.updateStateDeleteTodo = this.updateStateDeleteTodo.bind(this);
-    this.createTodo = this.createTodo.bind(this);
-    this.updateTodo = this.updateTodo.bind(this);
-    this.deleteTodo = this.deleteTodo.bind(this);
-    this.updateInputCreateTodoValue = this.updateInputCreateTodoValue.bind(
-      this
-    );
-    this.updateInputUpdateTodoValue = this.updateInputUpdateTodoValue.bind(
-      this
-    );
+    // this.createTodo = this.createTodo.bind(this);
+    // this.updateTodo = this.updateTodo.bind(this);
+    // this.deleteTodo = this.deleteTodo.bind(this);
+    // this.updateInputCreateTodoValue = this.updateInputCreateTodoValue.bind(
+    //   this
+    // );
+    // this.updateInputUpdateTodoValue = this.updateInputUpdateTodoValue.bind(
+    //   this
+    // );
   }
 
   createTodo() {
@@ -160,20 +156,22 @@ class App extends Component {
     return (
       <div>
         <TodoCreationInput
-          createTodo={this.createTodo}
+          createTodo={() => this.createTodo()}
           inputCreateTodoValue={inputCreateTodoValue}
-          updateInputCreateTodoValue={this.updateInputCreateTodoValue}
+          updateInputCreateTodoValue={event =>
+            this.updateInputCreateTodoValue(event)
+          }
         />
         <input
           value={inputUpdateTodoValue}
-          onChange={this.updateInputUpdateTodoValue}
+          onChange={event => this.updateInputUpdateTodoValue(event)}
           type="text"
           placeholder="Edited value for todo"
         />
         <TodoTable
           todosList={todos}
-          updateTodo={this.updateTodo}
-          deleteTodo={this.deleteTodo}
+          updateTodo={itemId => this.updateTodo(itemId)}
+          deleteTodo={itemId => this.deleteTodo(itemId)}
         />
       </div>
     );
