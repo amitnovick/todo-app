@@ -4,3 +4,4 @@ export const TODO_TITLE = "title";
 export const TODO_ID = "id";
 export const TODO_COMPLETED = "completed";
 export const TODO_COMPLETED_DEFAULT = false;
+export const ENTER_KEY = 13;

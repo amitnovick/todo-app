@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Utils from "./utils.js";
 
 import {
   uploadServerCreateTodo,
@@ -8,12 +7,7 @@ import {
   uploadServerDeleteTodo
 } from "./utils.js";
 
-import {
-  TODO_ID,
-  TODO_TITLE,
-  TODO_COMPLETED,
-  TODO_COMPLETED_DEFAULT
-} from "./constants/index.js";
+import { ENTER_KEY } from "./constants/index.js";
 
 class App extends Component {
   constructor(props) {
@@ -24,41 +18,35 @@ class App extends Component {
       inputCreateTodoValue: "",
       inputUpdateTodoValue: "" // only needed for debugging API interop
     };
+
+    this.updateStateCreateTodo = this.updateStateCreateTodo.bind(this);
+    this.updateStateReadTodos = this.updateStateReadTodos.bind(this);
+    this.updateStateUpdateTodo = this.updateStateUpdateTodo.bind(this);
+    this.updateStateDeleteTodo = this.updateStateDeleteTodo.bind(this);
   }
 
   createTodo() {
     const title = this.state.inputCreateTodoValue;
-    if (title.length > 0) {
-      const newTodo = this.createNewTodo(title);
-      this.updateStateCreateTodo(newTodo);
-      // uploadServerCreateTodo(newTodo);
+    const shouldCreateNewTodo = title.length > 0;
+    if (shouldCreateNewTodo) {
+      uploadServerCreateTodo(this.updateStateCreateTodo, title);
     }
   }
 
   readTodos() {
-    const todos = this.retrieveStoredTodos();
-    this.updateStateReadTodos(todos);
-    // downloadServerReadTodos(this.updateStateReadTodos);
+    downloadServerReadTodos(this.updateStateReadTodos);
   }
 
   updateTodo(itemId) {
-    const newTodos = this.updateExistingTodo(
-      itemId,
+    uploadServerUpdateTodo(
+      this.updateStateUpdateTodo,
       this.state.inputUpdateTodoValue,
-      this.state.todos
+      itemId
     );
-    this.updateStateUpdateTodo(newTodos);
-    // uploadServerUpdateTodo(
-    //   this.updateStateUpdateTodo,
-    //   this.state.inputUpdateTodoValue,
-    //   itemId
-    // );
   }
 
   deleteTodo(itemId) {
-    const newTodos = this.deleteExistingTodo(itemId, this.state.todos);
-    this.updateStateDeleteTodo(newTodos);
-    // uploadServerDeleteTodo(this.updateStateDeleteTodo, itemId);
+    uploadServerDeleteTodo(this.updateStateDeleteTodo, itemId);
   }
 
   updateStateCreateTodo(todo) {
@@ -70,74 +58,48 @@ class App extends Component {
     this.setState({ todos: todos });
   }
 
-  updateStateUpdateTodo(newTodos) {
+  updateStateUpdateTodo(itemId, newTodo) {
+    const newTodos = this.state.todos.map(todo => {
+      return todo.id === itemId ? newTodo : todo;
+    });
     this.setState({ todos: newTodos });
   }
 
-  updateStateDeleteTodo(newTodos) {
+  updateStateDeleteTodo(itemId) {
+    const newTodos = this.state.todos.filter(todo => {
+      return todo.id !== itemId;
+    });
     this.setState({ todos: newTodos });
   }
 
-  createNewTodo(title) {
-    return {
-      [TODO_ID]: Utils.uuid(),
-      [TODO_TITLE]: title,
-      [TODO_COMPLETED]: TODO_COMPLETED_DEFAULT
-    };
-  }
-
-  retrieveStoredTodos() {
-    const list = [
-      {
-        id: "24fef44223434343",
-        title: "Finish the Todos app using React",
-        completed: false
-      },
-      {
-        id: "asd6263afs6dasd6",
-        title: "Create some more interesting React projects",
-        completed: false
-      },
-      {
-        id: "22f4a52656fa6wsa6",
-        title: "Get a job as a Junior front-end developer",
-        completed: false
-      }
-    ];
-    return list;
-  }
-
-  updateExistingTodo(itemId, title, todos) {
-    const replaceTodoById = todo => {
-      if (todo.id === itemId) {
-        return {
-          [TODO_ID]: todo.id,
-          [TODO_TITLE]: title,
-          [TODO_COMPLETED]: todo.completed
-        };
-      }
-      return todo;
-    };
-    const newTodos = todos.map(replaceTodoById);
-    return newTodos;
-  }
-
-  deleteExistingTodo(itemId, todos) {
-    const isNotId = todo => todo.id !== itemId;
-    const newTodos = todos.filter(isNotId);
-    return newTodos;
-  }
-
-  updateInputCreateTodoValue(event) {
+  handleNewTodoTextChange(event) {
     this.setState({ inputCreateTodoValue: event.target.value });
   }
 
-  updateInputUpdateTodoValue(event) {
+  handleEditTodoTextChange(event) {
     this.setState({ inputUpdateTodoValue: event.target.value });
+  }
+
+  handleTodoItemOperationUpdate(todoId) {
+    this.updateTodo(todoId);
+  }
+
+  handleTodoItemOperationDelete(todoId) {
+    this.deleteTodo(todoId);
   }
 
   componentDidMount() {
     this.readTodos();
+  }
+
+  handleNewTodoKeyDown(event) {
+    const pressedEnter = event.keyCode === ENTER_KEY;
+    if (!pressedEnter) {
+      return;
+    }
+
+    event.preventDefault();
+    this.createTodo();
   }
 
   render() {
@@ -145,62 +107,44 @@ class App extends Component {
 
     return (
       <div>
-        <TodoCreationInput
-          createTodo={() => this.createTodo()}
-          inputCreateTodoValue={inputCreateTodoValue}
-          updateInputCreateTodoValue={event =>
-            this.updateInputCreateTodoValue(event)
-          }
-        />
-        <input
-          value={inputUpdateTodoValue}
-          onChange={event => this.updateInputUpdateTodoValue(event)}
-          type="text"
-          placeholder="Edited value for todo"
-        />
-        <TodoTable
-          todosList={todos}
-          updateTodo={itemId => this.updateTodo(itemId)}
-          deleteTodo={itemId => this.deleteTodo(itemId)}
-        />
+        <div className="todo-creation-field">
+          <input
+            value={inputCreateTodoValue}
+            onChange={event => this.handleNewTodoTextChange(event)}
+            type="text"
+            placeholder="Enter your task here..."
+            onKeyDown={event => this.handleNewTodoKeyDown(event)}
+          />
+        </div>
+        <div className="todo-edit-field">
+          <input
+            value={inputUpdateTodoValue}
+            onChange={event => this.handleEditTodoTextChange(event)}
+            type="text"
+            placeholder="Edited value for todo"
+          />
+        </div>
+        <div className="todo-items-list">
+          {todos.map(todo => (
+            <div key={todo.id}>
+              <span>{todo.completed.toString() + " "}</span>
+              <label>{todo.title + " "}</label>
+              <button
+                onClick={() => this.handleTodoItemOperationUpdate(todo.id)}
+              >
+                {"Update"}
+              </button>
+              <button
+                onClick={() => this.handleTodoItemOperationDelete(todo.id)}
+              >
+                {"X"}
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 }
-
-const Button = ({ onClick, className = "", children }) => (
-  <button onClick={() => onClick()} className={className} type="button">
-    {children}
-  </button>
-);
-
-const TodoCreationInput = ({
-  createTodo,
-  inputCreateTodoValue,
-  updateInputCreateTodoValue
-}) => (
-  <div>
-    <Button onClick={createTodo}>{"+"}</Button>
-    <input
-      value={inputCreateTodoValue}
-      onChange={updateInputCreateTodoValue}
-      type="text"
-      placeholder="Enter your task here..."
-    />
-  </div>
-);
-
-const TodoTable = ({ todosList, updateTodo, deleteTodo }) => (
-  <div>
-    {todosList.map(todo => (
-      <div key={todo.id}>
-        <span>{todo.completed.toString() + " "}</span>
-        <label>{todo.title + " "}</label>
-        <Button onClick={() => updateTodo(todo.id)}>{"Update"}</Button>
-        <Button onClick={() => deleteTodo(todo.id)}>{"X"}</Button>
-      </div>
-    ))}
-  </div>
-);
 
 export default App;
