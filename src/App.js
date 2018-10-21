@@ -14,7 +14,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      todos: [],
+      todos: null,
       inputCreateTodoValue: "",
       inputUpdateTodoValue: "" // only needed for debugging API interop
     };
@@ -88,10 +88,6 @@ class App extends Component {
     this.deleteTodo(todoId);
   }
 
-  componentDidMount() {
-    this.readTodos();
-  }
-
   handleNewTodoKeyDown(event) {
     const pressedEnter = event.keyCode === ENTER_KEY;
     if (!pressedEnter) {
@@ -102,9 +98,16 @@ class App extends Component {
     this.createTodo();
   }
 
+  componentDidMount() {
+    this.readTodos();
+  }
+
   render() {
     const { todos, inputCreateTodoValue, inputUpdateTodoValue } = this.state;
 
+    if (!todos) {
+      return null;
+    }
     return (
       <div>
         <div className="todo-creation-field">
@@ -146,5 +149,30 @@ class App extends Component {
     );
   }
 }
+
+// class TodoItem extends Component {
+//   constructor(props) {
+//     super(props);
+//   }
+
+//   render() {
+//     return (
+//       <div className="todo-items-list">
+//         {todos.map(todo => (
+//           <div key={todo.id}>
+//             <span>{todo.completed.toString() + " "}</span>
+//             <label>{todo.title + " "}</label>
+//             <button onClick={() => this.handleTodoItemOperationUpdate(todo.id)}>
+//               {"Update"}
+//             </button>
+//             <button onClick={() => this.handleTodoItemOperationDelete(todo.id)}>
+//               {"X"}
+//             </button>
+//           </div>
+//         ))}
+//       </div>
+//     );
+//   }
+// }
 
 export default App;
