@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { createTodo, readTodos, updateTodo, deleteTodo } from "./controller.js";
 import { ENTER_KEY } from "./constants/index.js";
 
 class App extends Component {
@@ -7,38 +6,9 @@ class App extends Component {
     super(props);
 
     this.state = {
-      todos: null,
       newTodoFieldValue: "",
       editTodoFieldValue: "" // only needed for debugging API interop
     };
-
-    this.updateStateCreateTodo = this.updateStateCreateTodo.bind(this);
-    this.updateStateReadTodos = this.updateStateReadTodos.bind(this);
-    this.updateStateUpdateTodo = this.updateStateUpdateTodo.bind(this);
-    this.updateStateDeleteTodo = this.updateStateDeleteTodo.bind(this);
-  }
-
-  updateStateCreateTodo(todo) {
-    const newTodos = this.state.todos.concat([todo]);
-    this.setState({ todos: newTodos });
-  }
-
-  updateStateReadTodos(todos) {
-    this.setState({ todos: todos });
-  }
-
-  updateStateUpdateTodo(todoId, newTodo) {
-    const newTodos = this.state.todos.map(todo => {
-      return todo.id === todoId ? newTodo : todo;
-    });
-    this.setState({ todos: newTodos });
-  }
-
-  updateStateDeleteTodo(todoId) {
-    const newTodos = this.state.todos.filter(todo => {
-      return todo.id !== todoId;
-    });
-    this.setState({ todos: newTodos });
   }
 
   handleNewTodoTextChange(event) {
@@ -56,30 +26,35 @@ class App extends Component {
     }
 
     event.preventDefault();
-    createTodo(this.updateStateCreateTodo, this.state.newTodoFieldValue);
+
+    const newVal = this.state.newTodoFieldValue.trim();
+    this.props.controller.createTodo(newVal);
+    this.setState({ newTodoFieldValue: "" });
   }
 
-  handleTodoItemOperationUpdate(todoId) {
-    updateTodo(
-      this.updateStateUpdateTodo,
-      this.state.newTodoFieldValue,
-      todoId
-    );
+  updateTodo(todoId) {
+    const updateVal = this.state.editTodoFieldValue.trim();
+    this.props.controller.updateTodo(updateVal, todoId);
+    this.setState({ editTodoFieldValue: "" });
   }
 
-  handleTodoItemOperationDelete(todoId) {
-    deleteTodo(this.updateStateDeleteTodo, todoId);
-  }
-
-  componentDidMount() {
-    readTodos(this.updateStateReadTodos);
+  deleteTodo(todoId) {
+    this.props.controller.deleteTodo(todoId);
   }
 
   render() {
-    const { todos, newTodoFieldValue, editTodoFieldValue } = this.state;
+    let main = null;
+    const todos = this.props.controller.todos;
+    const { newTodoFieldValue, editTodoFieldValue } = this.state;
 
-    if (!todos) {
-      return null;
+    if (todos) {
+      main = (
+        <TodoList
+          todos={todos}
+          onUpdate={todoId => this.updateTodo(todoId)}
+          onDelete={todoId => this.deleteTodo(todoId)}
+        />
+      );
     }
     return (
       <div>
@@ -100,11 +75,7 @@ class App extends Component {
             placeholder="Edited value for todo"
           />
         </div>
-        <TodoList
-          todos={todos}
-          onUpdate={todoId => this.handleTodoItemOperationUpdate(todoId)}
-          onDelete={todoId => this.handleTodoItemOperationDelete(todoId)}
-        />
+        {main}
       </div>
     );
   }
