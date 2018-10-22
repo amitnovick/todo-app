@@ -130,9 +130,8 @@ class TodoItem extends Component {
   handleSubmit() {
     const editTextValue = this.state.editText.trim();
     if (editTextValue.length > 0) {
-      this.props.onSave(this.props.todo, editTextValue); // TODO <-- complete
+      this.props.onSave(this.props.todo, editTextValue);
       this.setState({ editText: "" });
-      // TODO setState for App component, `editing`: false
     }
   }
 
