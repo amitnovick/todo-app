@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-
-import {
-  uploadServerCreateTodo,
-  downloadServerReadTodos,
-  uploadServerUpdateTodo,
-  uploadServerDeleteTodo
-} from "./utils.js";
-
+import { createTodo, readTodos, updateTodo, deleteTodo } from "./controller.js";
 import { ENTER_KEY } from "./constants/index.js";
 
 class App extends Component {
@@ -15,38 +8,14 @@ class App extends Component {
 
     this.state = {
       todos: null,
-      inputCreateTodoValue: "",
-      inputUpdateTodoValue: "" // only needed for debugging API interop
+      newTodoFieldValue: "",
+      editTodoFieldValue: "" // only needed for debugging API interop
     };
 
     this.updateStateCreateTodo = this.updateStateCreateTodo.bind(this);
     this.updateStateReadTodos = this.updateStateReadTodos.bind(this);
     this.updateStateUpdateTodo = this.updateStateUpdateTodo.bind(this);
     this.updateStateDeleteTodo = this.updateStateDeleteTodo.bind(this);
-  }
-
-  createTodo() {
-    const title = this.state.inputCreateTodoValue;
-    const shouldCreateNewTodo = title.length > 0;
-    if (shouldCreateNewTodo) {
-      uploadServerCreateTodo(this.updateStateCreateTodo, title);
-    }
-  }
-
-  readTodos() {
-    downloadServerReadTodos(this.updateStateReadTodos);
-  }
-
-  updateTodo(itemId) {
-    uploadServerUpdateTodo(
-      this.updateStateUpdateTodo,
-      this.state.inputUpdateTodoValue,
-      itemId
-    );
-  }
-
-  deleteTodo(itemId) {
-    uploadServerDeleteTodo(this.updateStateDeleteTodo, itemId);
   }
 
   updateStateCreateTodo(todo) {
@@ -58,34 +27,26 @@ class App extends Component {
     this.setState({ todos: todos });
   }
 
-  updateStateUpdateTodo(itemId, newTodo) {
+  updateStateUpdateTodo(todoId, newTodo) {
     const newTodos = this.state.todos.map(todo => {
-      return todo.id === itemId ? newTodo : todo;
+      return todo.id === todoId ? newTodo : todo;
     });
     this.setState({ todos: newTodos });
   }
 
-  updateStateDeleteTodo(itemId) {
+  updateStateDeleteTodo(todoId) {
     const newTodos = this.state.todos.filter(todo => {
-      return todo.id !== itemId;
+      return todo.id !== todoId;
     });
     this.setState({ todos: newTodos });
   }
 
   handleNewTodoTextChange(event) {
-    this.setState({ inputCreateTodoValue: event.target.value });
+    this.setState({ newTodoFieldValue: event.target.value });
   }
 
   handleEditTodoTextChange(event) {
-    this.setState({ inputUpdateTodoValue: event.target.value });
-  }
-
-  handleTodoItemOperationUpdate(todoId) {
-    this.updateTodo(todoId);
-  }
-
-  handleTodoItemOperationDelete(todoId) {
-    this.deleteTodo(todoId);
+    this.setState({ editTodoFieldValue: event.target.value });
   }
 
   handleNewTodoKeyDown(event) {
@@ -95,15 +56,27 @@ class App extends Component {
     }
 
     event.preventDefault();
-    this.createTodo();
+    createTodo(this.updateStateCreateTodo, this.state.newTodoFieldValue);
+  }
+
+  handleTodoItemOperationUpdate(todoId) {
+    updateTodo(
+      this.updateStateUpdateTodo,
+      this.state.newTodoFieldValue,
+      todoId
+    );
+  }
+
+  handleTodoItemOperationDelete(todoId) {
+    deleteTodo(this.updateStateDeleteTodo, todoId);
   }
 
   componentDidMount() {
-    this.readTodos();
+    readTodos(this.updateStateReadTodos);
   }
 
   render() {
-    const { todos, inputCreateTodoValue, inputUpdateTodoValue } = this.state;
+    const { todos, newTodoFieldValue, editTodoFieldValue } = this.state;
 
     if (!todos) {
       return null;
@@ -112,7 +85,7 @@ class App extends Component {
       <div>
         <div className="todo-creation-field">
           <input
-            value={inputCreateTodoValue}
+            value={newTodoFieldValue}
             onChange={event => this.handleNewTodoTextChange(event)}
             type="text"
             placeholder="Enter your task here..."
@@ -121,58 +94,35 @@ class App extends Component {
         </div>
         <div className="todo-edit-field">
           <input
-            value={inputUpdateTodoValue}
+            value={editTodoFieldValue}
             onChange={event => this.handleEditTodoTextChange(event)}
             type="text"
             placeholder="Edited value for todo"
           />
         </div>
-        <div className="todo-items-list">
-          {todos.map(todo => (
-            <div key={todo.id}>
-              <span>{todo.completed.toString() + " "}</span>
-              <label>{todo.title + " "}</label>
-              <button
-                onClick={() => this.handleTodoItemOperationUpdate(todo.id)}
-              >
-                {"Update"}
-              </button>
-              <button
-                onClick={() => this.handleTodoItemOperationDelete(todo.id)}
-              >
-                {"X"}
-              </button>
-            </div>
-          ))}
-        </div>
+        <TodoList
+          todos={todos}
+          onUpdate={todoId => this.handleTodoItemOperationUpdate(todoId)}
+          onDelete={todoId => this.handleTodoItemOperationDelete(todoId)}
+        />
       </div>
     );
   }
 }
 
-// class TodoItem extends Component {
-//   constructor(props) {
-//     super(props);
-//   }
-
-//   render() {
-//     return (
-//       <div className="todo-items-list">
-//         {todos.map(todo => (
-//           <div key={todo.id}>
-//             <span>{todo.completed.toString() + " "}</span>
-//             <label>{todo.title + " "}</label>
-//             <button onClick={() => this.handleTodoItemOperationUpdate(todo.id)}>
-//               {"Update"}
-//             </button>
-//             <button onClick={() => this.handleTodoItemOperationDelete(todo.id)}>
-//               {"X"}
-//             </button>
-//           </div>
-//         ))}
-//       </div>
-//     );
-//   }
-// }
+const TodoList = ({ todos, onUpdate, onDelete }) => {
+  return (
+    <div className="todo-items-list">
+      {todos.map(todo => (
+        <div key={todo.id}>
+          <span>{todo.completed.toString() + " "}</span>
+          <label>{todo.title + " "}</label>
+          <button onClick={() => onUpdate(todo.id)}>{"Update"}</button>
+          <button onClick={() => onDelete(todo.id)}>{"X"}</button>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 export default App;
