@@ -3,6 +3,7 @@ import {
   uploadServerCreateTodo,
   downloadServerReadTodos,
   uploadServerUpdateTodo,
+  uploadServerToggleTodo,
   uploadServerDeleteTodo
 } from "../apiFetch.js";
 import TodoApp from "./TodoApp.js";
@@ -26,10 +27,12 @@ class TodoAppContainer extends Component {
     this.createTodo = this.createTodo.bind(this);
     this.readTodos = this.readTodos.bind(this);
     this.updateTodo = this.updateTodo.bind(this);
+    this.toggleTodo = this.toggleTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
     this.callbackCreateTodo = this.callbackCreateTodo.bind(this);
     this.callbackReadTodos = this.callbackReadTodos.bind(this);
     this.callbackUpdateTodo = this.callbackUpdateTodo.bind(this);
+    this.callbackToggleTodo = this.callbackToggleTodo.bind(this);
     this.callbackDeleteTodo = this.callbackDeleteTodo.bind(this);
   }
 
@@ -49,8 +52,19 @@ class TodoAppContainer extends Component {
     uploadServerUpdateTodo(this.callbackUpdateTodo, newTitle, todo.id);
   }
 
-  deleteTodo(todoId) {
-    uploadServerDeleteTodo(this.callbackDeleteTodo, todoId);
+  deleteTodo(todoID) {
+    this.startLoading(todoID);
+    uploadServerDeleteTodo(this.callbackDeleteTodo, todoID);
+  }
+
+  toggleTodo(todo) {
+    this.startLoading(todo.id);
+    uploadServerToggleTodo(
+      this.callbackToggleTodo,
+      todo.title,
+      !todo.completed,
+      todo.id
+    );
   }
 
   callbackCreateTodo(todo) {
@@ -63,19 +77,28 @@ class TodoAppContainer extends Component {
     this.setState({ todos: todos });
   }
 
-  callbackUpdateTodo(todoId, newTodo) {
-    this.stopLoading(todoId);
+  callbackUpdateTodo(todoID, newTodo) {
+    this.stopLoading(todoID);
 
     const newTodos = this.state.todos.map(todo => {
-      return todo.id === todoId ? newTodo : todo;
+      return todo.id === todoID ? newTodo : todo;
     });
     this.setState({ todos: newTodos });
   }
 
-  callbackDeleteTodo(todoId) {
-    // this.startLoading(todoId);
+  callbackToggleTodo(todoID, newTodo) {
+    this.stopLoading(todoID);
+
+    const newTodos = this.state.todos.map(todo => {
+      return todo.id === todoID ? newTodo : todo;
+    });
+    this.setState({ todos: newTodos });
+  }
+
+  callbackDeleteTodo(todoID) {
+    this.stopLoading(todoID);
     const newTodos = this.state.todos.filter(todo => {
-      return todo.id !== todoId;
+      return todo.id !== todoID;
     });
     this.setState({ todos: newTodos });
   }
@@ -101,9 +124,10 @@ class TodoAppContainer extends Component {
       <TodoApp
         todos={this.state.todos}
         loadingTodoIDs={this.state.loadingTodoIDs}
-        createTodo={text => this.createTodo(text)}
-        submitTitle={(todo, text) => this.updateTodo(todo, text)}
+        createTodo={title => this.createTodo(title)}
+        replaceTodoTitle={(todo, title) => this.updateTodo(todo, title)}
         destroyTodo={todoID => this.deleteTodo(todoID)}
+        toggleTodo={todo => this.toggleTodo(todo)}
       />
     );
   }
