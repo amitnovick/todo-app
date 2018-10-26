@@ -7,6 +7,8 @@ import { ESCAPE_KEY, ENTER_KEY } from "../constants/index.js";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+import Button from "./Button.js";
 
 library.add(faSpinner);
 
@@ -80,9 +82,8 @@ class TodoListItem extends Component {
     } else if (isBeingEdited) {
       content = (
         <div key={todo.id}>
-          <input
+          <StyledEditTitleField
             ref="editTitleField"
-            className="edit-todo-field"
             value={editTitle}
             onChange={event => this.handleEditTitleTextChange(event)}
             onKeyDown={event => this.handleEditTitleKeyDown(event)}
@@ -94,32 +95,106 @@ class TodoListItem extends Component {
     } else {
       content = (
         <div className="view">
-          <input
-            className="toggle"
+          <StyledCheckbox
             type="checkbox"
             checked={todo.completed}
             onChange={() => this.props.onToggle()}
           />
-          <label onDoubleClick={() => this.handleTitleClick()}>
+          <StyledTitleLabel onDoubleClick={() => this.handleTitleClick()}>
             {todo.title + " "}
-          </label>
-          <button className="destroy" onClick={() => this.handleDestroyClick()}>
-            {"X"}
-          </button>
+          </StyledTitleLabel>
+          <StyledDeleteButton onClick={() => this.handleDestroyClick()} />
         </div>
       );
     }
     return (
-      <li
+      <StyledListItem
         className={classNames({
           completed: this.props.todo.completed,
           editing: this.props.editing
         })}
       >
         {content}
-      </li>
+      </StyledListItem>
     );
   }
 }
 
 export default TodoListItem;
+
+const StyledCheckbox = styled.input`
+  text-align: center;
+  width: 40px;
+  /* auto, since non-WebKit browsers doesn't support input styling */
+  height: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  border: none; /* Mobile Safari */
+  -webkit-appearance: none;
+  appearance: none;
+  opacity: 0;
+`;
+
+const StyledDeleteButton = styled("Button")`
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 10px;
+  bottom: 0;
+  width: 40px;
+  height: 40px;
+  margin: auto 0;
+  font-size: 30px;
+  color: #cc9a9a;
+  margin-bottom: 11px;
+  transition: color 0.2s ease-out;
+
+  :hover {
+    color: #af5b5e;
+  }
+
+  :after {
+    content: "×";
+  }
+`;
+
+const StyledListItem = styled.li`
+  position: relative;
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
+
+  :last-child {
+    border-bottom: none;
+  }
+`;
+
+const StyledTitleLabel = styled.label`
+  word-break: break-all;
+  padding: 15px 15px 15px 60px;
+  display: block;
+  line-height: 1.2;
+  transition: color 0.4s;
+`;
+
+const StyledEditTitleField = styled.input`
+  position: relative;
+  margin: 0;
+  width: 100%;
+  font-size: 24px;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: 1.4em;
+  border: 0;
+  color: inherit;
+  padding: 6px;
+  border: 1px solid #999;
+  box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* From =.todo-list li .edit=, disabled cuz don't know  how to make visible yet */
+  // display: none;
+`;

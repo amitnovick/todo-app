@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import TodoListItem from "./TodoListItem.js";
+import styled from "styled-components";
 
 class TodoList extends Component {
   constructor(props) {
@@ -38,8 +39,8 @@ class TodoList extends Component {
     const { titleEditItemID } = this.state;
 
     return (
-      <section className="main">
-        <ul className="todo-list">
+      <StyledSection>
+        <StyledUnorderedList>
           {todos.map(todo => (
             <TodoListItem
               key={todo.id}
@@ -53,10 +54,22 @@ class TodoList extends Component {
               onToggle={() => onToggle(todo)}
             />
           ))}
-        </ul>
-      </section>
+        </StyledUnorderedList>
+      </StyledSection>
     );
   }
 }
 
 export default TodoList;
+
+const StyledUnorderedList = styled.ul`
+  margin: 0;
+  padding: 0;
+  list-style: none;
+`;
+
+const StyledSection = styled.section`
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid #e6e6e6;
+`;
