@@ -70,15 +70,15 @@ class TodoListItem extends Component {
   render() {
     const { todo, isLoading, isBeingEdited } = this.props;
     const { editTitle } = this.state;
+    let content;
     if (isLoading) {
-      return (
+      content = (
         <div key={todo.id}>
           <FontAwesomeIcon icon="spinner" pulse />
         </div>
       );
-    }
-    if (isBeingEdited) {
-      return (
+    } else if (isBeingEdited) {
+      content = (
         <div key={todo.id}>
           <input
             ref="editTitleField"
@@ -91,15 +91,9 @@ class TodoListItem extends Component {
           />
         </div>
       );
-    }
-    return (
-      <li
-        className={classNames({
-          completed: this.props.todo.completed,
-          editing: this.props.editing
-        })}
-      >
-        <div key={todo.id}>
+    } else {
+      content = (
+        <div className="view">
           <input
             className="toggle"
             type="checkbox"
@@ -109,11 +103,20 @@ class TodoListItem extends Component {
           <label onDoubleClick={() => this.handleTitleClick()}>
             {todo.title + " "}
           </label>
-          <button
-            className="destroy"
-            onClick={() => this.handleDestroyClick()}
-          />
+          <button className="destroy" onClick={() => this.handleDestroyClick()}>
+            {"X"}
+          </button>
         </div>
+      );
+    }
+    return (
+      <li
+        className={classNames({
+          completed: this.props.todo.completed,
+          editing: this.props.editing
+        })}
+      >
+        {content}
       </li>
     );
   }
