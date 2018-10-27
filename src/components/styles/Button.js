@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 class Button extends Component {
   render() {
-    return <StyledButton />;
+    return <StyledButton {...this.props} />;
   }
 }
 

@@ -39,8 +39,8 @@ class TodoList extends Component {
     const { titleEditItemID } = this.state;
 
     return (
-      <StyledSection>
-        <StyledUnorderedList>
+      <section className="main">
+        <ul className="todo-list">
           {todos.map(todo => (
             <TodoListItem
               key={todo.id}
@@ -54,22 +54,26 @@ class TodoList extends Component {
               onToggle={() => onToggle(todo)}
             />
           ))}
-        </StyledUnorderedList>
-      </StyledSection>
+        </ul>
+      </section>
     );
   }
 }
 
 export default TodoList;
 
-const StyledUnorderedList = styled.ul`
-  margin: 0;
-  padding: 0;
-  list-style: none;
-`;
+// const StyledUnorderedList = styled.ul`
+//   .todo_list {
+//     margin: 0;
+//     padding: 0;
+//     list-style: none;
+//   }
+// `;
 
-const StyledSection = styled.section`
-  position: relative;
-  z-index: 2;
-  border-top: 1px solid #e6e6e6;
-`;
+// const StyledSection = styled.section`
+//   .main {
+//     position: relative;
+//     z-index: 2;
+//     border-top: 1px solid #e6e6e6;
+//   }
+// `;
