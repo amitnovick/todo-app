@@ -8,16 +8,19 @@ import styled from "styled-components";
 // }
 
 export const Input = styled.input`
+  /* .todoapp input::-webkit-input-placeholder */
   ::-webkit-input-placeholder {
     font-style: italic;
     font-weight: 300;
     color: #e6e6e6;
   }
+  /* .todoapp input::-moz-placeholder */
   ::-moz-placeholder {
     font-style: italic;
     font-weight: 300;
     color: #e6e6e6;
   }
+  /* .todoapp input::input-placeholder */
   ::input-placeholder {
     font-style: italic;
     font-weight: 300;
@@ -25,7 +28,8 @@ export const Input = styled.input`
   }
 `;
 
-export const Textbox = styled(Input)`
+const Textbox = styled(Input)`
+  /* .new-todo,.edit */
   position: relative;
   margin: 0;
   width: 100%;
@@ -42,14 +46,4 @@ export const Textbox = styled(Input)`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;
-
-export const TodoCreationTextbox = styled(Textbox)`
-  padding: 16px 16px 16px 60px;
-  border: none;
-  background: rgba(0, 0, 0, 0.003);
-  box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
-`;
-
-export const EditTitleTextbox = styled(Textbox)`
-  display: none;
-`;
+export default Textbox;

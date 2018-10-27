@@ -5,8 +5,8 @@ import {
   uploadServerUpdateTodo,
   uploadServerToggleTodo,
   uploadServerDeleteTodo
-} from "../apiFetch.js";
-import TodoApp from "./TodoApp.js";
+} from "../../apiFetch.js";
+import App from "./index.js";
 
 /* TODO Purpose: re-sending failed requests
       Proposition:
@@ -16,7 +16,7 @@ import TodoApp from "./TodoApp.js";
       - every time a task is first attempted it is added to the queue
       */
 
-class TodoAppContainer extends Component {
+class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -121,7 +121,7 @@ class TodoAppContainer extends Component {
 
   render() {
     return (
-      <TodoApp
+      <App
         todos={this.state.todos}
         loadingTodoIDs={this.state.loadingTodoIDs}
         createTodo={title => this.createTodo(title)}
@@ -133,4 +133,4 @@ class TodoAppContainer extends Component {
   }
 }
 
-export default TodoAppContainer;
+export default AppContainer;

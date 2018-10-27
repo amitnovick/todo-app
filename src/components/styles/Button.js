@@ -1,13 +1,6 @@
-import React, { Component } from "react";
 import styled from "styled-components";
 
-class Button extends Component {
-  render() {
-    return <StyledButton {...this.props} />;
-  }
-}
-
-const StyledButton = styled.button`
+export default styled.button`
   margin: 0;
   padding: 0;
   border: 0;
@@ -22,5 +15,3 @@ const StyledButton = styled.button`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;
-
-export default Button;

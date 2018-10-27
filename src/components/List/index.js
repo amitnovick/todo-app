@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import TodoListItem from "./TodoListItem.js";
-import styled from "styled-components";
+import ListItem from "../ListItem/index.js";
+import Section from "./Section.js";
+import Ul from "./Ul.js";
 
-class TodoList extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
 
@@ -39,10 +40,10 @@ class TodoList extends Component {
     const { titleEditItemID } = this.state;
 
     return (
-      <section className="main">
-        <ul className="todo-list">
+      <Section className="main">
+        <Ul className="todo-list">
           {todos.map(todo => (
-            <TodoListItem
+            <ListItem
               key={todo.id}
               todo={todo}
               isBeingEdited={titleEditItemID === todo.id}
@@ -54,13 +55,13 @@ class TodoList extends Component {
               onToggle={() => onToggle(todo)}
             />
           ))}
-        </ul>
-      </section>
+        </Ul>
+      </Section>
     );
   }
 }
 
-export default TodoList;
+export default App;
 
 // const StyledUnorderedList = styled.ul`
 //   .todo_list {

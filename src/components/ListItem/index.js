@@ -2,17 +2,18 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 
-import { ESCAPE_KEY, ENTER_KEY } from "../constants/index.js";
+import { ESCAPE_KEY, ENTER_KEY } from "../../constants/index.js";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import styled from "styled-components";
-import Button from "./styles/Button.js";
+import Button from "./Button.js";
+import Textbox from "./Textbox.js";
+import Li from "./Li.js";
 
 library.add(faSpinner);
 
-class TodoListItem extends Component {
+class ListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -82,7 +83,7 @@ class TodoListItem extends Component {
     } else if (isBeingEdited) {
       content = (
         <div key={todo.id}>
-          <input
+          <Textbox
             className="edit"
             ref="editTitleField"
             value={editTitle}
@@ -105,7 +106,7 @@ class TodoListItem extends Component {
           <label onDoubleClick={() => this.handleTitleClick()}>
             {todo.title + " "}
           </label>
-          <button
+          <Button
             className="destroy"
             onClick={() => this.handleDestroyClick()}
           />
@@ -113,19 +114,19 @@ class TodoListItem extends Component {
       );
     }
     return (
-      <li
+      <Li
         className={classNames({
           completed: todo.completed,
           editing: isBeingEdited
         })}
       >
         {content}
-      </li>
+      </Li>
     );
   }
 }
 
-export default TodoListItem;
+export default ListItem;
 
 // const StyledCheckbox = styled.input`
 //   // .todo-list li .toggle

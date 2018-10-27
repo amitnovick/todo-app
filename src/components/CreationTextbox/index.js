@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { ENTER_KEY } from "../constants/index.js";
-import styled from "styled-components";
-import Input from "./styles/Input.js";
+import { ENTER_KEY } from "../../constants/index.js";
+import Textbox from "./Textbox.js";
 
 class CreationTextbox extends Component {
   constructor(props) {
@@ -29,7 +28,7 @@ class CreationTextbox extends Component {
     const { newTitle } = this.state;
     return (
       <header>
-        <input
+        <Textbox
           className="new-todo"
           value={newTitle}
           onChange={event => this.handleNewTitleChange(event)}
