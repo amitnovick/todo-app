@@ -49,7 +49,12 @@ class AppContainer extends Component {
 
   updateTodo(todo, newTitle) {
     this.startLoading(todo.id);
-    uploadServerUpdateTodo(this.callbackUpdateTodo, newTitle, todo.id);
+    uploadServerUpdateTodo(
+      this.callbackUpdateTodo,
+      newTitle,
+      todo.id,
+      todo.completed
+    );
   }
 
   deleteTodo(todoID) {

@@ -1,5 +1,6 @@
 // import React, { Component } from "react";
 import styled from "styled-components";
+import Input from "./Input.js";
 
 // class TodoAppInput extends Component {
 //   render() {
@@ -7,28 +8,7 @@ import styled from "styled-components";
 //   }
 // }
 
-export const Input = styled.input`
-  /* .todoapp input::-webkit-input-placeholder */
-  ::-webkit-input-placeholder {
-    font-style: italic;
-    font-weight: 300;
-    color: #e6e6e6;
-  }
-  /* .todoapp input::-moz-placeholder */
-  ::-moz-placeholder {
-    font-style: italic;
-    font-weight: 300;
-    color: #e6e6e6;
-  }
-  /* .todoapp input::input-placeholder */
-  ::input-placeholder {
-    font-style: italic;
-    font-weight: 300;
-    color: #e6e6e6;
-  }
-`;
-
-const Textbox = styled(Input)`
+export default styled(Input)`
   /* .new-todo,.edit */
   position: relative;
   margin: 0;
@@ -46,4 +26,3 @@ const Textbox = styled(Input)`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 `;
-export default Textbox;

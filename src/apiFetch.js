@@ -36,10 +36,12 @@ export const downloadServerReadTodos = callbackReadTodos => {
 export const uploadServerUpdateTodo = (
   callbackUpdateTodo,
   newTitle,
-  todoID
+  todoID,
+  todoCompleted
 ) => {
   const params = new URLSearchParams();
   params.append([TODO_TITLE], newTitle);
+  params.append([TODO_COMPLETED], todoCompleted);
 
   axios
     .put(`${API_URL}${todoID.toString()}${SLASH}`, params)

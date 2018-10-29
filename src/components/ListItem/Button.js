@@ -15,14 +15,4 @@ export default styled(Button)`
   color: #cc9a9a;
   margin-bottom: 11px;
   transition: color 0.2s ease-out;
-
-  /* .todo-list li .destroy:hover */
-  :hover {
-    color: #af5b5e;
-  }
-
-  /* .todo-list li .destroy:after */
-  :after {
-    content: "×";
-  }
 `;

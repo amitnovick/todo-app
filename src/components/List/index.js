@@ -3,6 +3,17 @@ import ListItem from "../ListItem/index.js";
 import Section from "./Section.js";
 import Ul from "./Ul.js";
 
+const styles = {
+  li: {
+    isLastChild: {
+      borderBottom: "none"
+    },
+    isLastChild_isBeingEdited: {
+      marginBottom: "-1px"
+    }
+  }
+};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -35,14 +46,18 @@ class App extends Component {
     this.props.onDestroy(itemID);
   }
 
+  /* Utility method */
+  isLastChild(i, arr) {
+    return i === arr.length - 1;
+  }
+
   render() {
     const { todos, loadingItemIDs, onToggle } = this.props;
     const { titleEditItemID } = this.state;
-
     return (
       <Section className="main">
         <Ul className="todo-list">
-          {todos.map(todo => (
+          {todos.map((todo, i, arr) => (
             <ListItem
               key={todo.id}
               todo={todo}
@@ -53,6 +68,13 @@ class App extends Component {
               onCancelTitleEdit={() => this.deactivateTitleEditMode()}
               isLoading={loadingItemIDs.includes(todo.id)}
               onToggle={() => onToggle(todo)}
+              style={Object.assign(
+                {},
+                titleEditItemID === todo.id &&
+                  this.isLastChild(i, arr) &&
+                  styles.li.isLastChild_isBeingEdited,
+                this.isLastChild(i, arr) && styles.li.isLastChild
+              )}
             />
           ))}
         </Ul>

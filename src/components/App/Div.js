@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export default styled.div`
-  // .todoapp
+  /* .todoapp */
   background: #fff;
   margin: 130px 0 40px 0;
   position: relative;

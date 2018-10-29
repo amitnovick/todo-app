@@ -10,17 +10,75 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import Button from "./Button.js";
 import Textbox from "./Textbox.js";
 import Li from "./Li.js";
+import Checkbox from "./Checkbox.js";
+import Label from "./Label.js";
 
 library.add(faSpinner);
+
+const styles = {
+  li: {
+    isBeingEdited: {
+      "border-bottom": "none",
+      padding: 0
+    }
+  },
+  textbox: {
+    isBeingEdited: {
+      display: "block",
+      width: "506px",
+      padding: "12px 16px",
+      margin: "0 0 0 43px"
+    }
+  },
+  div: {
+    isBeingEdited: {
+      display: "none"
+    }
+  },
+  label: {
+    isCompleted: {
+      backgroundImage:
+        "url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E')",
+      color: "#d9d9d9",
+      textDecoration: "line"
+    }
+  },
+  button: {
+    liIsHovered: {
+      display: "block"
+    },
+    buttonIsHovered: {
+      color: "#af5b5e"
+    }
+  }
+};
 
 class ListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editTitle: ""
+      editTitle: "",
+      liIsHovered: false,
+      buttonIsHovered: false
     };
 
     this.cancelTitleEdit = this.cancelTitleEdit.bind(this);
+  }
+
+  buttonHandleMouseEnter() {
+    this.setState({ buttonIsHovered: true });
+  }
+
+  buttonHandleMouseLeave() {
+    this.setState({ buttonIsHovered: false });
+  }
+
+  liHandleMouseEnter() {
+    this.setState({ liIsHovered: true });
+  }
+
+  liHandleMouseLeave() {
+    this.setState({ liIsHovered: false });
   }
 
   handleEditTitleTextChange(event) {
@@ -72,7 +130,7 @@ class ListItem extends Component {
 
   render() {
     const { todo, isLoading, isBeingEdited, onToggle } = this.props;
-    const { editTitle } = this.state;
+    const { editTitle, liIsHovered, buttonIsHovered } = this.state;
     let content;
     if (isLoading) {
       content = (
@@ -91,25 +149,41 @@ class ListItem extends Component {
             onKeyDown={event => this.handleEditTitleKeyDown(event)}
             type="text"
             placeholder="Edited value for todo"
+            style={isBeingEdited ? styles.textbox.isBeingEdited : {}}
           />
         </div>
       );
     } else {
       content = (
-        <div className="view">
-          <input
+        <div
+          className="view"
+          style={isBeingEdited ? styles.div.isBeingEdited : {}}
+        >
+          <Checkbox
             className="toggle"
             type="checkbox"
             checked={todo.completed}
             onChange={() => onToggle()}
           />
-          <label onDoubleClick={() => this.handleTitleClick()}>
+          <Label
+            onDoubleClick={() => this.handleTitleClick()}
+            style={todo.completed ? styles.label.isCompleted : {}}
+          >
             {todo.title + " "}
-          </label>
+          </Label>
           <Button
             className="destroy"
             onClick={() => this.handleDestroyClick()}
-          />
+            style={Object.assign(
+              {},
+              liIsHovered && styles.button.liIsHovered,
+              buttonIsHovered && styles.button.buttonIsHovered
+            )}
+            onMouseEnter={() => this.buttonHandleMouseEnter()}
+            onMouseLeave={() => this.buttonHandleMouseLeave()}
+          >
+            {"×"}
+          </Button>
         </div>
       );
     }
@@ -119,6 +193,10 @@ class ListItem extends Component {
           completed: todo.completed,
           editing: isBeingEdited
         })}
+        style={isBeingEdited ? styles.li.isBeingEdited : {}}
+        onMouseEnter={() => this.liHandleMouseEnter()}
+        onMouseLeave={() => this.liHandleMouseLeave()}
+        // isCompleted={todo.completed}
       >
         {content}
       </Li>
