@@ -17,8 +17,6 @@ class TodoList extends Component {
     this.state = {
       titleEditItemID: null
     };
-
-    this.deactivateTitleEditMode = this.deactivateTitleEditMode.bind(this);
   }
 
   replaceTitle(todoToSave, text) {
