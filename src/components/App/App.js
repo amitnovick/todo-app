@@ -8,10 +8,10 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 /**
  * Internal dependencies
  */
-import List from "../List/index.js";
-import CreationTextbox from "../CreationTextbox/index.js";
+import TodoList from "../TodoList/TodoList.js";
+import CreateTodoTextbox from "../CreateTodoTextbox/CreateTodoTextbox.js";
 /* Styled components */
-import Div from "./styles/Div.js";
+import Wrapper from "./styles/Wrapper.js";
 
 library.add(faSpinner);
 
@@ -31,7 +31,7 @@ const App = ({
   let spinner = <FontAwesomeIcon icon="spinner" pulse />;
   main =
     todos.length > 0 ? (
-      <List
+      <TodoList
         todos={todos}
         loadingItemIDs={loadingTodoIDs}
         onDestroy={todoID => destroyTodo(todoID)}
@@ -43,13 +43,13 @@ const App = ({
     loadingNewTodo === true ? (
       spinner
     ) : (
-      <CreationTextbox createTodo={title => createTodo(title)} />
+      <CreateTodoTextbox createTodo={title => createTodo(title)} />
     );
   app = finishedReadingTodos ? (
-    <Div className="todoapp">
+    <Wrapper>
       {newTodoBarContent}
       {main}
-    </Div>
+    </Wrapper>
   ) : (
     spinner
   );

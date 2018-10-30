@@ -10,18 +10,20 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 /**
  * Internal dependencies
  */
-import { ESCAPE_KEY, ENTER_KEY } from "../../constants/index.js";
 /* Styled components */
 import DeleteButton from "./styles/DeleteButton.js";
-import Textbox from "./styles/Textbox.js";
-import Li from "./styles/Li.js";
-import Checkbox from "./styles/Checkbox.js";
-import Label from "./styles/Label.js";
-import Div from "./styles/Div.js";
+import EditTitleTextbox from "./styles/EditTitleTextbox.js";
+import StyledTodoListItem from "./styles/StyledTodoListItem.js";
+import ToggleCompleteCheckbox from "./styles/ToggleCompleteCheckbox.js";
+import TitleText from "./styles/TitleText.js";
+import ListItemControlsWrapper from "./styles/ListItemControlsWrapper.js";
 
 library.add(faSpinner);
+const editTitleField = "editTitleField";
+const ENTER_KEY = 13;
+const ESCAPE_KEY = 27;
 
-class ListItem extends Component {
+class TodoListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -111,9 +113,8 @@ class ListItem extends Component {
     } else if (isBeingEdited) {
       content = (
         <div key={todo.id}>
-          <Textbox
-            className="edit"
-            ref="editTitleField"
+          <EditTitleTextbox
+            ref={editTitleField}
             value={editTitle}
             onChange={event => this.handleEditTitleTextChange(event)}
             onKeyDown={event => this.handleEditTitleKeyDown(event)}
@@ -126,21 +127,19 @@ class ListItem extends Component {
       );
     } else {
       content = (
-        <Div className="view" isBeingEdited={isBeingEdited}>
-          <Checkbox
-            className="toggle"
+        <ListItemControlsWrapper isBeingEdited={isBeingEdited}>
+          <ToggleCompleteCheckbox
             type="checkbox"
             checked={todo.completed}
             onChange={() => onToggle()}
           />
-          <Label
+          <TitleText
             onDoubleClick={() => this.handleTitleClick()}
             isCompleted={todo.completed}
           >
             {todo.title + " "}
-          </Label>
+          </TitleText>
           <DeleteButton
-            className="destroy"
             onClick={() => this.props.onDestroy()}
             liIsHovered={liIsHovered}
             buttonIsHovered={buttonIsHovered}
@@ -149,20 +148,20 @@ class ListItem extends Component {
           >
             {"×"}
           </DeleteButton>
-        </Div>
+        </ListItemControlsWrapper>
       );
     }
     return (
-      <Li
+      <StyledTodoListItem
         isLastChild={isLastChild}
         isBeingEdited={isBeingEdited}
         onMouseEnter={() => this.liHandleMouseEnter()}
         onMouseLeave={() => this.liHandleMouseLeave()}
       >
         {content}
-      </Li>
+      </StyledTodoListItem>
     );
   }
 }
 
-export default ListItem;
+export default TodoListItem;

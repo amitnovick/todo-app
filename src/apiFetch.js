@@ -1,10 +1,9 @@
-import {
-  API_URL,
-  SLASH,
-  TODO_TITLE,
-  TODO_COMPLETED
-} from "./constants/index.js";
 import axios from "axios";
+
+const API_URL = "http://localhost:8000/api/v1/todos/";
+const SLASH = "/";
+const TODO_TITLE = "title";
+const TODO_COMPLETED = "completed";
 
 export const uploadServerCreateTodo = (callbackCreateTodo, title) => {
   const params = new URLSearchParams();

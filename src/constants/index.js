@@ -1,9 +1,0 @@
-export const API_URL = "http://localhost:8000/api/v1/todos/";
-export const SLASH = "/";
-export const TODO_TITLE = "title";
-export const TODO_ID = "id";
-export const TODO_COMPLETED = "completed";
-export const TODO_COMPLETED_DEFAULT = false;
-export const TODO_LOADING = "loading";
-export const ENTER_KEY = 13;
-export const ESCAPE_KEY = 27;

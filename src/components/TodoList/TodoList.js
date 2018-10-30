@@ -5,12 +5,12 @@ import React, { Component } from "react";
 /**
  * Internal dependencies
  */
-import ListItem from "../ListItem/index.js";
+import TodoListItem from "../TodoListItem/TodoListItem.js";
 /* Styled components */
-import Section from "./styles/Section.js";
-import Ul from "./styles/Ul.js";
+import ListWrapper from "./styles/ListWrapper.js";
+import StyledTodoList from "./styles/StyledTodoList.js";
 
-class App extends Component {
+class TodoList extends Component {
   constructor(props) {
     super(props);
 
@@ -47,10 +47,10 @@ class App extends Component {
     const { todos, loadingItemIDs, onToggle } = this.props;
     const { titleEditItemID } = this.state;
     return (
-      <Section className="main">
-        <Ul className="todo-list">
+      <ListWrapper>
+        <StyledTodoList>
           {todos.map((todo, i, arr) => (
-            <ListItem
+            <TodoListItem
               key={todo.id}
               todo={todo}
               isBeingEdited={titleEditItemID === todo.id}
@@ -63,10 +63,10 @@ class App extends Component {
               isLastChild={this.isLastChild(i, arr)}
             />
           ))}
-        </Ul>
-      </Section>
+        </StyledTodoList>
+      </ListWrapper>
     );
   }
 }
 
-export default App;
+export default TodoList;
