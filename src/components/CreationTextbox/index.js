@@ -6,7 +6,8 @@ import React, { Component } from "react";
  * Internal dependencies
  */
 import { ENTER_KEY } from "../../constants/index.js";
-import Textbox from "./Textbox.js";
+/* Styled components */
+import Textbox from "./styles/Textbox.js";
 
 class CreationTextbox extends Component {
   constructor(props) {

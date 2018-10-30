@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Input from "../styles/Input.js";
+import Input from "../../styles/Input.js";
 
 export default styled(Input)`
   text-align: center;

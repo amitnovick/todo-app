@@ -11,12 +11,13 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
  * Internal dependencies
  */
 import { ESCAPE_KEY, ENTER_KEY } from "../../constants/index.js";
-import Button from "./Button.js";
-import Textbox from "./Textbox.js";
-import Li from "./Li.js";
-import Checkbox from "./Checkbox.js";
-import Label from "./Label.js";
-import Div from "./Div.js";
+/* Styled components */
+import DeleteButton from "./styles/DeleteButton.js";
+import Textbox from "./styles/Textbox.js";
+import Li from "./styles/Li.js";
+import Checkbox from "./styles/Checkbox.js";
+import Label from "./styles/Label.js";
+import Div from "./styles/Div.js";
 
 library.add(faSpinner);
 
@@ -138,7 +139,7 @@ class ListItem extends Component {
           >
             {todo.title + " "}
           </Label>
-          <Button
+          <DeleteButton
             className="destroy"
             onClick={() => this.props.onDestroy()}
             liIsHovered={liIsHovered}
@@ -147,7 +148,7 @@ class ListItem extends Component {
             onMouseLeave={() => this.buttonHandleMouseLeave()}
           >
             {"×"}
-          </Button>
+          </DeleteButton>
         </Div>
       );
     }

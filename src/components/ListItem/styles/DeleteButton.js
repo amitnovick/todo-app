@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from "../styles/Button.js";
+import Button from "../../styles/Button.js";
 
 export default styled(Button)`
   /* .todo-list li .destroy */

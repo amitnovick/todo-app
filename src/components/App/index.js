@@ -10,7 +10,8 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
  */
 import List from "../List/index.js";
 import CreationTextbox from "../CreationTextbox/index.js";
-import Div from "./Div.js";
+/* Styled components */
+import Div from "./styles/Div.js";
 
 library.add(faSpinner);
 

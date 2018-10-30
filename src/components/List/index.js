@@ -6,8 +6,9 @@ import React, { Component } from "react";
  * Internal dependencies
  */
 import ListItem from "../ListItem/index.js";
-import Section from "./Section.js";
-import Ul from "./Ul.js";
+/* Styled components */
+import Section from "./styles/Section.js";
+import Ul from "./styles/Ul.js";
 
 class App extends Component {
   constructor(props) {
