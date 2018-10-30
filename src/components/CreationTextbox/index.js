@@ -1,4 +1,10 @@
+/**
+ * External dependencies
+ */
 import React, { Component } from "react";
+/**
+ * Internal dependencies
+ */
 import { ENTER_KEY } from "../../constants/index.js";
 import Textbox from "./Textbox.js";
 

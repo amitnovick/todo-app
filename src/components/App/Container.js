@@ -1,4 +1,10 @@
+/**
+ * External dependencies
+ */
 import React, { Component } from "react";
+/**
+ * Internal dependencies
+ */
 import {
   uploadServerCreateTodo,
   downloadServerReadTodos,
@@ -8,20 +14,14 @@ import {
 } from "../../apiFetch.js";
 import App from "./index.js";
 
-/* TODO Purpose: re-sending failed requests
-      Proposition:
-      - create queue of unsuccessful tasks as a class field
-        a task added to the queue should have type
-        e.g. values like { 'create', 'read', 'update', 'delete' }
-      - every time a task is first attempted it is added to the queue
-      */
-
 class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
-      loadingTodoIDs: []
+      loadingTodoIDs: [],
+      loadingNewTodo: false,
+      finishedReadingTodos: false
     };
 
     this.createTodo = this.createTodo.bind(this);
@@ -39,11 +39,13 @@ class AppContainer extends Component {
   createTodo(title) {
     const shouldCreateNewTodo = title.length > 0;
     if (shouldCreateNewTodo) {
+      this.setState({ loadingNewTodo: true });
       uploadServerCreateTodo(this.callbackCreateTodo, title);
     }
   }
 
   readTodos() {
+    this.setState({ finishedReadingTodos: false });
     downloadServerReadTodos(this.callbackReadTodos);
   }
 
@@ -73,12 +75,13 @@ class AppContainer extends Component {
   }
 
   callbackCreateTodo(todo) {
-    // this.stopLoading(todo.id);
+    this.setState({ loadingNewTodo: false });
     const newTodos = this.state.todos.concat([todo]);
     this.setState({ todos: newTodos });
   }
 
   callbackReadTodos(todos) {
+    this.setState({ finishedReadingTodos: true });
     this.setState({ todos: todos });
   }
 
@@ -129,10 +132,12 @@ class AppContainer extends Component {
       <App
         todos={this.state.todos}
         loadingTodoIDs={this.state.loadingTodoIDs}
+        loadingNewTodo={this.state.loadingNewTodo}
         createTodo={title => this.createTodo(title)}
         replaceTodoTitle={(todo, title) => this.updateTodo(todo, title)}
         destroyTodo={todoID => this.deleteTodo(todoID)}
         toggleTodo={todo => this.toggleTodo(todo)}
+        finishedReadingTodos={this.state.finishedReadingTodos}
       />
     );
   }

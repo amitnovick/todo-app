@@ -1,18 +1,13 @@
+/**
+ * External dependencies
+ */
 import React, { Component } from "react";
+/**
+ * Internal dependencies
+ */
 import ListItem from "../ListItem/index.js";
 import Section from "./Section.js";
 import Ul from "./Ul.js";
-
-const styles = {
-  li: {
-    isLastChild: {
-      borderBottom: "none"
-    },
-    isLastChild_isBeingEdited: {
-      marginBottom: "-1px"
-    }
-  }
-};
 
 class App extends Component {
   constructor(props) {
@@ -42,10 +37,6 @@ class App extends Component {
     });
   }
 
-  handleDestroyClick(itemID) {
-    this.props.onDestroy(itemID);
-  }
-
   /* Utility method */
   isLastChild(i, arr) {
     return i === arr.length - 1;
@@ -64,17 +55,11 @@ class App extends Component {
               isBeingEdited={titleEditItemID === todo.id}
               replaceTitle={title => this.replaceTitle(todo, title)}
               onTitleClick={() => this.activateTitleEditMode(todo)}
-              onDestroyClick={() => this.handleDestroyClick(todo.id)}
+              onDestroy={() => this.props.onDestroy(todo.id)}
               onCancelTitleEdit={() => this.deactivateTitleEditMode()}
               isLoading={loadingItemIDs.includes(todo.id)}
               onToggle={() => onToggle(todo)}
-              style={Object.assign(
-                {},
-                titleEditItemID === todo.id &&
-                  this.isLastChild(i, arr) &&
-                  styles.li.isLastChild_isBeingEdited,
-                this.isLastChild(i, arr) && styles.li.isLastChild
-              )}
+              isLastChild={this.isLastChild(i, arr)}
             />
           ))}
         </Ul>
@@ -84,19 +69,3 @@ class App extends Component {
 }
 
 export default App;
-
-// const StyledUnorderedList = styled.ul`
-//   .todo_list {
-//     margin: 0;
-//     padding: 0;
-//     list-style: none;
-//   }
-// `;
-
-// const StyledSection = styled.section`
-//   .main {
-//     position: relative;
-//     z-index: 2;
-//     border-top: 1px solid #e6e6e6;
-//   }
-// `;

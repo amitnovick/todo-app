@@ -1,68 +1,33 @@
+/**
+ * External dependencies
+ */
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import classNames from "classnames";
-
-import { ESCAPE_KEY, ENTER_KEY } from "../../constants/index.js";
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
+/**
+ * Internal dependencies
+ */
+import { ESCAPE_KEY, ENTER_KEY } from "../../constants/index.js";
 import Button from "./Button.js";
 import Textbox from "./Textbox.js";
 import Li from "./Li.js";
 import Checkbox from "./Checkbox.js";
 import Label from "./Label.js";
+import Div from "./Div.js";
 
 library.add(faSpinner);
-
-const styles = {
-  li: {
-    isBeingEdited: {
-      "border-bottom": "none",
-      padding: 0
-    }
-  },
-  textbox: {
-    isBeingEdited: {
-      display: "block",
-      width: "506px",
-      padding: "12px 16px",
-      margin: "0 0 0 43px"
-    }
-  },
-  div: {
-    isBeingEdited: {
-      display: "none"
-    }
-  },
-  label: {
-    isCompleted: {
-      backgroundImage:
-        "url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E')",
-      color: "#d9d9d9",
-      textDecoration: "line"
-    }
-  },
-  button: {
-    liIsHovered: {
-      display: "block"
-    },
-    buttonIsHovered: {
-      color: "#af5b5e"
-    }
-  }
-};
 
 class ListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editTitle: "",
-      liIsHovered: false,
-      buttonIsHovered: false
+      editTitle: this.props.todo.title,
+      liIsHovered: false, // Styling-purposed state
+      buttonIsHovered: false // Styling-purposed state
     };
-
-    this.cancelTitleEdit = this.cancelTitleEdit.bind(this);
   }
 
   buttonHandleMouseEnter() {
@@ -94,19 +59,17 @@ class ListItem extends Component {
   }
 
   handleTitleClick() {
+    this.setState({ editTitle: this.props.todo.title });
     this.props.onTitleClick();
-  }
-
-  handleDestroyClick() {
-    this.props.onDestroyClick();
   }
 
   replaceTitle() {
     const editTitleValue = this.state.editTitle.trim();
-    if (editTitleValue.length > 0) {
+    if (editTitleValue.length === 0) this.props.onDestroy();
+    else if (editTitleValue !== this.props.todo.title) {
       this.props.replaceTitle(editTitleValue);
       this.setState({ editTitle: "" });
-    }
+    } else this.cancelTitleEdit();
   }
 
   cancelTitleEdit() {
@@ -129,7 +92,13 @@ class ListItem extends Component {
   }
 
   render() {
-    const { todo, isLoading, isBeingEdited, onToggle } = this.props;
+    const {
+      todo,
+      isLoading,
+      isBeingEdited,
+      onToggle,
+      isLastChild
+    } = this.props;
     const { editTitle, liIsHovered, buttonIsHovered } = this.state;
     let content;
     if (isLoading) {
@@ -147,18 +116,16 @@ class ListItem extends Component {
             value={editTitle}
             onChange={event => this.handleEditTitleTextChange(event)}
             onKeyDown={event => this.handleEditTitleKeyDown(event)}
+            onBlur={() => this.replaceTitle()}
             type="text"
             placeholder="Edited value for todo"
-            style={isBeingEdited ? styles.textbox.isBeingEdited : {}}
+            isBeingEdited={isBeingEdited}
           />
         </div>
       );
     } else {
       content = (
-        <div
-          className="view"
-          style={isBeingEdited ? styles.div.isBeingEdited : {}}
-        >
+        <Div className="view" isBeingEdited={isBeingEdited}>
           <Checkbox
             className="toggle"
             type="checkbox"
@@ -167,36 +134,29 @@ class ListItem extends Component {
           />
           <Label
             onDoubleClick={() => this.handleTitleClick()}
-            style={todo.completed ? styles.label.isCompleted : {}}
+            isCompleted={todo.completed}
           >
             {todo.title + " "}
           </Label>
           <Button
             className="destroy"
-            onClick={() => this.handleDestroyClick()}
-            style={Object.assign(
-              {},
-              liIsHovered && styles.button.liIsHovered,
-              buttonIsHovered && styles.button.buttonIsHovered
-            )}
+            onClick={() => this.props.onDestroy()}
+            liIsHovered={liIsHovered}
+            buttonIsHovered={buttonIsHovered}
             onMouseEnter={() => this.buttonHandleMouseEnter()}
             onMouseLeave={() => this.buttonHandleMouseLeave()}
           >
             {"×"}
           </Button>
-        </div>
+        </Div>
       );
     }
     return (
       <Li
-        className={classNames({
-          completed: todo.completed,
-          editing: isBeingEdited
-        })}
-        style={isBeingEdited ? styles.li.isBeingEdited : {}}
+        isLastChild={isLastChild}
+        isBeingEdited={isBeingEdited}
         onMouseEnter={() => this.liHandleMouseEnter()}
         onMouseLeave={() => this.liHandleMouseLeave()}
-        // isCompleted={todo.completed}
       >
         {content}
       </Li>
@@ -205,206 +165,3 @@ class ListItem extends Component {
 }
 
 export default ListItem;
-
-// const StyledCheckbox = styled.input`
-//   // .todo-list li .toggle
-//   .todo-list li .toggle {
-//   text-align: center;
-//   width: 40px;
-//   /* auto, since non-WebKit browsers doesn't support input styling */
-//   height: auto;
-//   position: absolute;
-//   top: 0;
-//   bottom: 0;
-//   margin: auto 0;
-//   border: none; /* Mobile Safari */
-//   -webkit-appearance: none;
-//   appearance: none;
-//   opacity: 0;
-//   }
-// `;
-
-// const StyledDeleteButton = styled(Button)`
-//   display: none;
-//   position: absolute;
-//   top: 0;
-//   right: 10px;
-//   bottom: 0;
-//   width: 40px;
-//   height: 40px;
-//   margin: auto 0;
-//   font-size: 30px;
-//   color: #cc9a9a;
-//   margin-bottom: 11px;
-//   transition: color 0.2s ease-out;
-
-//   :hover {
-//     color: #af5b5e;
-//   }
-
-//   :after {
-//     content: "×";
-//   }
-// `;
-
-// const StyledListItem = styled.li`
-//   // .todo-list li .toggle
-//   .toggle {
-//     text-align: center;
-//     width: 40px;
-//     /* auto, since non-WebKit browsers doesn't support input styling */
-//     height: auto;
-//     position: absolute;
-//     top: 0;
-//     bottom: 0;
-//     margin: auto 0;
-//     border: none; /* Mobile Safari */
-//     -webkit-appearance: none;
-//     appearance: none;
-//     opacity: 0;
-//   }
-
-//   // .todo-list li
-//   position: relative;
-//   font-size: 24px;
-//   border-bottom: 1px solid #ededed;
-
-//   // .todo-list li:last-child
-//   :last-child {
-//     border-bottom: none;
-//   }
-
-//   //.todo-list li.editing
-//   .editing {
-//     border-bottom: none;
-//     padding: 0;
-//   }
-
-//   // .todo-list li.editing .edit
-//   .editing .edit {
-//     display: block;
-//     width: 506px;
-//     padding: 12px 16px;
-//     margin: 0 0 0 43px;
-//   }
-
-//   // .todo-list li.editing .view
-//   .editing .view {
-//     display: none;
-//   }
-
-//   // .todo-list li .toggle
-//   .toggle {
-//     text-align: center;
-//     width: 40px;
-//     /* auto, since non-WebKit browsers doesn't support input styling */
-//     height: auto;
-//     position: absolute;
-//     top: 0;
-//     bottom: 0;
-//     margin: auto 0;
-//     border: none; /* Mobile Safari */
-//     -webkit-appearance: none;
-//     appearance: none;
-//     opacity: 0;
-//   }
-
-//   // .todo-list li .toggle + label
-//   /* Firefox requires _#_ to be escaped - https://bugzilla.mozilla.org/show_bug.cgi?id=922433 */
-//   /* IE and Edge requires *everything* to be escaped to render, so we do that instead of just the _#_ - https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/7157459/ */
-//   .toggle + label {
-//     background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E");
-//     background-repeat: no-repeat;
-//     background-position: center left;
-//   }
-
-//   // .todo-list li .toggle:checked + label
-//   .toggle:checked + label {
-//     background-image: url("data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E");
-//   }
-
-//   // .todo-list li label
-//   label {
-//     word-break: break-all;
-//     padding: 15px 15px 15px 60px;
-//     display: block;
-//     line-height: 1.2;
-//     transition: color 0.4s;
-//   }
-
-//   // .todo-list li.completed label
-//   .completed label {
-//     color: #d9d9d9;
-//     text-decoration: line-through;
-//   }
-
-//   // .todo-list li .destroy
-//   .destroy {
-//     display: none;
-//     position: absolute;
-//     top: 0;
-//     right: 10px;
-//     bottom: 0;
-//     width: 40px;
-//     height: 40px;
-//     margin: auto 0;
-//     font-size: 30px;
-//     color: #cc9a9a;
-//     margin-bottom: 11px;
-//     transition: color 0.2s ease-out;
-//   }
-
-//   // .todo-list li .destroy:hover
-//   .destroy:hover {
-//     color: #af5b5e;
-//   }
-
-//   // .todo-list li .destroy:after
-//   .destroy:after {
-//     content: "×";
-//   }
-
-//   // .todo-list li:hover .destroy
-//   :hover .destroy {
-//     display: block;
-//   }
-
-//   // .todo-list li .edit
-//   .edit {
-//     display: none;
-//   }
-
-//   // .todo-list li.editing:last-child
-//   .editing:last-child {
-//     margin-bottom: -1px;
-//   }
-// `;
-
-// const StyledTitleLabel = styled.label`
-//   word-break: break-all;
-//   padding: 15px 15px 15px 60px;
-//   display: block;
-//   line-height: 1.2;
-//   transition: color 0.4s;
-// `;
-
-// const StyledEditTitleField = styled.input`
-//   position: relative;
-//   margin: 0;
-//   width: 100%;
-//   font-size: 24px;
-//   font-family: inherit;
-//   font-weight: inherit;
-//   line-height: 1.4em;
-//   border: 0;
-//   color: inherit;
-//   padding: 6px;
-//   border: 1px solid #999;
-//   box-shadow: inset 0 -1px 5px 0 rgba(0, 0, 0, 0.2);
-//   box-sizing: border-box;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-
-//   /* From =.todo-list li .edit=, disabled cuz don't know  how to make visible yet */
-//   // display: none;
-// `;
