@@ -37,12 +37,12 @@ class TodoListItem extends Component {
     };
   }
 
-  handleToggleButtonIsHovered() {
-    this.setState({ buttonIsHovered: !this.state.buttonIsHovered });
+  handleToggleButtonIsHovered(isHovered) {
+    this.setState({ buttonIsHovered: isHovered });
   }
 
-  handleToggleLiIsHovered() {
-    this.setState({ liIsHovered: !this.state.liIsHovered });
+  handleToggleLiIsHovered(isHovered) {
+    this.setState({ liIsHovered: isHovered });
   }
 
   handleEditTitleTextChange(event) {
@@ -139,8 +139,8 @@ class TodoListItem extends Component {
             onClick={() => this.props.onDestroy()}
             liIsHovered={liIsHovered}
             buttonIsHovered={buttonIsHovered}
-            onMouseEnter={() => this.handleToggleButtonIsHovered()}
-            onMouseLeave={() => this.handleToggleButtonIsHovered()}
+            onMouseEnter={() => this.handleToggleButtonIsHovered(true)}
+            onMouseLeave={() => this.handleToggleButtonIsHovered(false)}
           >
             {"×"}
           </DeleteButton>
@@ -151,8 +151,8 @@ class TodoListItem extends Component {
       <StyledTodoListItem
         isLastChild={isLastChild}
         isBeingEdited={isBeingEdited}
-        onMouseEnter={() => this.handleToggleLiIsHovered()}
-        onMouseLeave={() => this.handleToggleLiIsHovered()}
+        onMouseEnter={() => this.handleToggleLiIsHovered(true)}
+        onMouseLeave={() => this.handleToggleLiIsHovered(false)}
       >
         {content}
       </StyledTodoListItem>
