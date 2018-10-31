@@ -8,10 +8,12 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 /**
  * Internal dependencies
  */
-import TodoList from "../TodoList/TodoList.js";
-import CreateTodoTextbox from "../CreateTodoTextbox/CreateTodoTextbox.js";
-/* Styled components */
-import Wrapper from "./styles/Wrapper.js";
+import TodoList from "../TodoList/index.js";
+import CreateTodoTextbox from "../CreateTodoTextbox/index.js";
+/**
+ *  Style dependencies
+ */
+import { Wrapper } from "./style.js";
 
 library.add(faSpinner);
 

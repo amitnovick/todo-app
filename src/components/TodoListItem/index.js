@@ -10,13 +10,17 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 /**
  * Internal dependencies
  */
-/* Styled components */
-import DeleteButton from "./styles/DeleteButton.js";
-import EditTitleTextbox from "./styles/EditTitleTextbox.js";
-import StyledTodoListItem from "./styles/StyledTodoListItem.js";
-import ToggleCompleteCheckbox from "./styles/ToggleCompleteCheckbox.js";
-import TitleText from "./styles/TitleText.js";
-import ListItemControlsWrapper from "./styles/ListItemControlsWrapper.js";
+/**
+ * Styled dependencies
+ */
+import {
+  DeleteButton,
+  EditTitleTextbox,
+  StyledTodoListItem,
+  ToggleCompleteCheckbox,
+  TitleText,
+  ListItemControlsWrapper
+} from "./style.js";
 
 library.add(faSpinner);
 const editTitleField = "editTitleField";

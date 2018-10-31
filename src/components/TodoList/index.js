@@ -5,10 +5,11 @@ import React, { Component } from "react";
 /**
  * Internal dependencies
  */
-import TodoListItem from "../TodoListItem/TodoListItem.js";
-/* Styled components */
-import ListWrapper from "./styles/ListWrapper.js";
-import StyledTodoList from "./styles/StyledTodoList.js";
+import TodoListItem from "../TodoListItem/index.js";
+/**
+ *  Style dependencies
+ */
+import { ListWrapper, StyledTodoList } from "./style.js";
 
 class TodoList extends Component {
   constructor(props) {

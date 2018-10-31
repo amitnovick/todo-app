@@ -5,8 +5,10 @@ import React, { Component } from "react";
 /**
  * Internal dependencies
  */
-/* Styled components */
-import StyledCreateTodoTextbox from "./styles/StyledCreateTodoTextbox.js";
+/**
+ *  Style dependencies
+ */
+import { StyledCreateTodoTextbox } from "./style.js";
 
 const ENTER_KEY = 13;
 

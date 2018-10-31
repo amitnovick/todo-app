@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export default styled.div`
+export const Wrapper = styled.div`
   /* .todoapp */
   background: #fff;
   margin: 130px 0 40px 0;
