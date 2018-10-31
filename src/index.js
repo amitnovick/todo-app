@@ -1,7 +1,13 @@
+/**
+ * External dependencies
+ */
 import React from "react";
 import ReactDOM from "react-dom";
-import AppContainer from "./components/todo-app/container.js";
+/**
+ * Internal dependencies
+ */
 import * as serviceWorker from "./serviceWorker";
+import AppContainer from "./pages/offline-container.js";
 
 ReactDOM.render(<AppContainer />, document.getElementById("root"));
 

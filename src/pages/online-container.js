@@ -11,8 +11,8 @@ import {
   uploadServerUpdateTodo,
   uploadServerToggleTodo,
   uploadServerDeleteTodo
-} from "../../lib/rest-endpoint.js";
-import App from "./index.js";
+} from "../lib/rest-endpoint.js";
+import App from "../components/todo-app/index.js";
 
 class AppContainer extends Component {
   constructor(props) {
