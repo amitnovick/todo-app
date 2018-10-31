@@ -11,7 +11,7 @@ import {
   uploadServerUpdateTodo,
   uploadServerToggleTodo,
   uploadServerDeleteTodo
-} from "../../apiFetch.js";
+} from "../../lib/rest-endpoint.js";
 import App from "./index.js";
 
 class AppContainer extends Component {
