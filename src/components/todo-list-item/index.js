@@ -3,10 +3,6 @@
  */
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-
 /**
  * Internal dependencies
  */
@@ -22,7 +18,6 @@ import {
   ListItemControlsWrapper
 } from "./style.js";
 
-library.add(faSpinner);
 const editTitleField = "editTitleField";
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
@@ -103,7 +98,7 @@ class TodoListItem extends Component {
     if (isLoading) {
       content = (
         <div key={todo.id}>
-          <FontAwesomeIcon icon="spinner" pulse />
+          <label>{"Loading..."}</label>
         </div>
       );
     } else if (isBeingEdited) {

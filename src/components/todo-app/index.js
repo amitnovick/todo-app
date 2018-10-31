@@ -2,9 +2,6 @@
  * External dependencies
  */
 import React from "react";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 /**
  * Internal dependencies
  */
@@ -14,8 +11,6 @@ import CreateTodoTextbox from "../create-todo-textbox/index.js";
  *  Style dependencies
  */
 import { Wrapper } from "./style.js";
-
-library.add(faSpinner);
 
 const App = ({
   todos,
@@ -30,7 +25,7 @@ const App = ({
   let app = null;
   let main = null;
   let newTodoBarContent = null;
-  let spinner = <FontAwesomeIcon icon="spinner" pulse />;
+  let spinner = <label>{"Loading..."}</label>;
   main =
     todos.length > 0 ? (
       <TodoList
