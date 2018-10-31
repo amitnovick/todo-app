@@ -5,7 +5,7 @@ import React, { Component } from "react";
 /**
  * Internal dependencies
  */
-import TodoListItem from "../TodoListItem/index.js";
+import TodoListItem from "../todo-list-item/index.js";
 /**
  *  Style dependencies
  */

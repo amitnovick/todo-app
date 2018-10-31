@@ -12,7 +12,7 @@ import {
   uploadServerToggleTodo,
   uploadServerDeleteTodo
 } from "../../apiFetch.js";
-import App from "./App.js";
+import App from "./index.js";
 
 class AppContainer extends Component {
   constructor(props) {
