@@ -3,20 +3,14 @@
  */
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+import classNames from "classnames";
 /**
  * Internal dependencies
  */
 /**
  * Styled dependencies
  */
-import {
-  DeleteButton,
-  EditTitleTextbox,
-  StyledTodoListItem,
-  ToggleCompleteCheckbox,
-  TitleText,
-  ListItemControlsWrapper
-} from "./style.js";
+import "./style.css";
 
 const editTitleField = "editTitleField";
 const ENTER_KEY = 13;
@@ -26,18 +20,8 @@ class TodoListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      editTitle: this.props.todo.title,
-      liIsHovered: false, // Styling-purposed state
-      buttonIsHovered: false // Styling-purposed state
+      editTitle: this.props.todo.title
     };
-  }
-
-  handleToggleButtonIsHovered(isHovered) {
-    this.setState({ buttonIsHovered: isHovered });
-  }
-
-  handleToggleLiIsHovered(isHovered) {
-    this.setState({ liIsHovered: isHovered });
   }
 
   handleEditTitleTextChange(event) {
@@ -86,14 +70,8 @@ class TodoListItem extends Component {
   }
 
   render() {
-    const {
-      todo,
-      isLoading,
-      isBeingEdited,
-      onToggle,
-      isLastChild
-    } = this.props;
-    const { editTitle, liIsHovered, buttonIsHovered } = this.state;
+    const { todo, isLoading, isBeingEdited, onToggle } = this.props;
+    const { editTitle } = this.state;
     let content;
     if (isLoading) {
       content = (
@@ -104,7 +82,8 @@ class TodoListItem extends Component {
     } else if (isBeingEdited) {
       content = (
         <div key={todo.id}>
-          <EditTitleTextbox
+          <input
+            className="edit"
             ref={editTitleField}
             value={editTitle}
             onChange={event => this.handleEditTitleTextChange(event)}
@@ -112,45 +91,34 @@ class TodoListItem extends Component {
             onBlur={() => this.replaceTitle()}
             type="text"
             placeholder="Edited value for todo"
-            isBeingEdited={isBeingEdited}
           />
         </div>
       );
     } else {
       content = (
-        <ListItemControlsWrapper isBeingEdited={isBeingEdited}>
-          <ToggleCompleteCheckbox
+        <div className="view">
+          <input
+            className="toggle"
             type="checkbox"
             checked={todo.completed}
             onChange={() => onToggle()}
           />
-          <TitleText
-            onDoubleClick={() => this.handleTitleClick()}
-            isCompleted={todo.completed}
-          >
+          <label onDoubleClick={() => this.handleTitleClick()}>
             {todo.title + " "}
-          </TitleText>
-          <DeleteButton
-            onClick={() => this.props.onDestroy()}
-            liIsHovered={liIsHovered}
-            buttonIsHovered={buttonIsHovered}
-            onMouseEnter={() => this.handleToggleButtonIsHovered(true)}
-            onMouseLeave={() => this.handleToggleButtonIsHovered(false)}
-          >
-            {"×"}
-          </DeleteButton>
-        </ListItemControlsWrapper>
+          </label>
+          <button className="destroy" onClick={() => this.props.onDestroy()} />
+        </div>
       );
     }
     return (
-      <StyledTodoListItem
-        isLastChild={isLastChild}
-        isBeingEdited={isBeingEdited}
-        onMouseEnter={() => this.handleToggleLiIsHovered(true)}
-        onMouseLeave={() => this.handleToggleLiIsHovered(false)}
+      <li
+        className={classNames({
+          completed: todo.completed,
+          editing: isBeingEdited
+        })}
       >
         {content}
-      </StyledTodoListItem>
+      </li>
     );
   }
 }

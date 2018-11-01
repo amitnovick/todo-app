@@ -10,7 +10,7 @@ import CreateTodoTextbox from "../create-todo-textbox/index.js";
 /**
  *  Style dependencies
  */
-import { Wrapper } from "./style.js";
+import "./style.css";
 
 const App = ({
   todos,
@@ -43,10 +43,10 @@ const App = ({
       <CreateTodoTextbox createTodo={title => createTodo(title)} />
     );
   app = finishedReadingTodos ? (
-    <Wrapper>
+    <div className="todoapp">
       {newTodoBarContent}
       {main}
-    </Wrapper>
+    </div>
   ) : (
     spinner
   );

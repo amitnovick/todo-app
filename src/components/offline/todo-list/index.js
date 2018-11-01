@@ -9,7 +9,7 @@ import TodoListItem from "../todo-list-item/index.js";
 /**
  *  Style dependencies
  */
-import { ListWrapper, StyledTodoList } from "./style.js";
+import "./style.css";
 
 class TodoList extends Component {
   constructor(props) {
@@ -37,18 +37,13 @@ class TodoList extends Component {
     });
   }
 
-  /* Utility method */
-  isLastChild(i, arr) {
-    return i === arr.length - 1;
-  }
-
   render() {
     const { todos, onToggle } = this.props;
     const { titleEditItemID } = this.state;
     return (
-      <ListWrapper>
-        <StyledTodoList>
-          {todos.map((todo, i, arr) => (
+      <div className="main">
+        <ul className="todo-list">
+          {todos.map(todo => (
             <TodoListItem
               key={todo.id}
               todo={todo}
@@ -58,11 +53,10 @@ class TodoList extends Component {
               onDestroy={() => this.props.onDestroy(todo.id)}
               onCancelTitleEdit={() => this.deactivateTitleEditMode()}
               onToggle={() => onToggle(todo)}
-              isLastChild={this.isLastChild(i, arr)}
             />
           ))}
-        </StyledTodoList>
-      </ListWrapper>
+        </ul>
+      </div>
     );
   }
 }
