@@ -18,6 +18,10 @@ class AppContainer extends Component {
     };
   }
 
+  updateLocalStore(newTodos) {
+    store(this.key, newTodos);
+  }
+
   createTodo(title) {
     const shouldCreateNewTodo = title.length > 0;
     if (shouldCreateNewTodo) {
@@ -28,6 +32,7 @@ class AppContainer extends Component {
       });
 
       this.setState({ todos: newTodos });
+      this.updateLocalStore(newTodos);
     }
   }
 
@@ -36,6 +41,7 @@ class AppContainer extends Component {
       todo => (todo !== todoToSave ? todo : extend({}, todo, { title: text }))
     );
     this.setState({ todos: newTodos });
+    this.updateLocalStore(newTodos);
   }
 
   toggleTodo(todoToToggle) {
@@ -46,6 +52,7 @@ class AppContainer extends Component {
           : extend({}, todo, { completed: !todo.completed })
     );
     this.setState({ todos: newTodos });
+    this.updateLocalStore(newTodos);
   }
 
   deleteTodo(todoID) {
@@ -53,6 +60,7 @@ class AppContainer extends Component {
       candidate => candidate.id !== todoID
     );
     this.setState({ todos: newTodos });
+    this.updateLocalStore(newTodos);
   }
 
   render() {
