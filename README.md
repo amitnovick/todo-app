@@ -1,6 +1,6 @@
 A Todo app
 
-Inspired by [TodoMVC React ES6](https://github.com/feelextra/todomvc/tree/todomvc-create-react-app-es6/examples/react/src), [wp-calyso](https://github.com/Automattic/wp-calypso/tree/master/client/components).
+Inspired by [TodoMVC React ES6](https://github.com/feelextra/todomvc/tree/todomvc-create-react-app-es6/examples/react/src).
 
 ---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
