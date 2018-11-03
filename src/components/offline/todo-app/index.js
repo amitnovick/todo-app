@@ -21,20 +21,17 @@ class App extends Component {
       modalIsOpen: false
     };
 
-    this.openModal = this.openModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
+    this.toggle = this.toggle.bind(this);
   }
 
-  openModal() {
-    this.setState({ modalIsOpen: true });
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
+  toggle() {
+    this.setState({
+      modalIsOpen: !this.state.modalIsOpen
+    });
   }
 
   componentDidMount() {
-    this.openModal();
+    this.toggle();
   }
 
   render = () => {
@@ -64,8 +61,7 @@ class App extends Component {
       <div className="todoapp">
         <LoginModal
           modalIsOpen={this.state.modalIsOpen}
-          openModal={() => this.openModal()}
-          closeModal={() => this.closeModal()}
+          toggle={() => this.toggle()}
         />
         {newTodoBarContent}
         {main}
