@@ -19,13 +19,6 @@ Modal.setAppElement("#root");
 class LoginModal extends React.Component {
   constructor() {
     super();
-
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-  }
-
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = "#f00";
   }
 
   render() {
@@ -34,7 +27,6 @@ class LoginModal extends React.Component {
       <div>
         <Modal
           isOpen={modalIsOpen}
-          onAfterOpen={this.afterOpenModal}
           onRequestClose={() => closeModal()}
           style={customStyles}
           contentLabel="Example Modal"
