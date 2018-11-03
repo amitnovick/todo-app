@@ -1,5 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
+import "./style.css";
 
 const customStyles = {
   content: {
@@ -37,6 +38,8 @@ class LoginModal extends React.Component {
           onRequestClose={() => closeModal()}
           style={customStyles}
           contentLabel="Example Modal"
+          className="Modal"
+          overlayClassName="Overlay"
         >
           <h2 ref={subtitle => (this.subtitle = subtitle)}>Hello</h2>
           <button onClick={() => closeModal()}>close</button>
@@ -45,9 +48,15 @@ class LoginModal extends React.Component {
           <br />
           <br />
           <form>
-            <button style={{ backgroundColor: "papayawhip" }}>Try out</button>
+            <button
+              type="button"
+              style={{ backgroundColor: "green", color: "white" }}
+            >
+              Try out
+            </button>
             <br />
             <button
+              type="button"
               style={{ backgroundColor: "palevioletred", color: "white" }}
             >
               or Login
