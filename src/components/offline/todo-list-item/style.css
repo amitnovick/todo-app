@@ -121,6 +121,7 @@ li .destroy {
 	transition: color 0.2s ease-out;
 }
 
+
 li .destroy:hover {
 	color: #af5b5e;
 }
