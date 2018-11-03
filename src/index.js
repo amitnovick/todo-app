@@ -7,9 +7,11 @@ import ReactDOM from "react-dom";
  * Internal dependencies
  */
 import * as serviceWorker from "./serviceWorker";
-import AppContainer from "./pages/offline-container.js";
+// import AppContainer from "./pages/offline-container.js";
+import ModalApp from "./components/offline/login-modal/index.js";
 
-ReactDOM.render(<AppContainer />, document.getElementById("root"));
+// ReactDOM.render(<AppContainer />, document.getElementById("root"));
+ReactDOM.render(<ModalApp />, document.getElementById("root"));
 
 if (module.hot) module.hot.accept();
 
