@@ -5,8 +5,14 @@ import React, { Component } from "react";
 /**
  * Internal dependencies
  */
+import TodoList from "../components/offline/todo-list/index.js";
+import CreateTodoTextbox from "../components/offline/create-todo-textbox/index.js";
+import LoginModal from "../components/offline/login-modal/index.js";
 import { store, uuid, extend } from "../lib/local-store.js";
-import App from "../components/offline/todo-app/index.js";
+/**
+ * Style dependencies
+ */
+import "./style.css";
 
 class AppContainer extends Component {
   constructor(props) {
@@ -14,8 +20,17 @@ class AppContainer extends Component {
     this.key = "todo-app";
 
     this.state = {
-      todos: store(this.key) // Pass this to TodoList component
+      todos: store(this.key), // Pass this to TodoList component
+      modalIsOpen: false
     };
+
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  toggleModal() {
+    this.setState({
+      modalIsOpen: !this.state.modalIsOpen
+    });
   }
 
   updateLocalStore(newTodos) {
@@ -66,16 +81,38 @@ class AppContainer extends Component {
     this.updateLocalStore(newTodos);
   }
 
+  componentDidMount() {
+    this.toggleModal();
+  }
+
   render() {
-    return (
-      <App
-        todos={this.state.todos}
-        createTodo={title => this.createTodo(title)}
-        replaceTodoTitle={(todo, title) => this.updateTodo(todo, title)}
-        toggleTodo={todo => this.toggleTodo(todo)}
-        destroyTodo={todoID => this.deleteTodo(todoID)}
-      />
+    const { todos } = this.state;
+    let app = null;
+    let main = null;
+    let newTodoBarContent = null;
+    main =
+      todos.length > 0 ? (
+        <TodoList
+          todos={todos}
+          onDestroy={todo => this.deleteTodo(todo)}
+          replaceTitle={(todo, title) => this.updateTodo(todo, title)}
+          onToggle={todo => this.toggleTodo(todo)}
+        />
+      ) : null;
+    newTodoBarContent = (
+      <CreateTodoTextbox createTodo={title => this.createTodo(title)} />
     );
+    app = (
+      <div className="todoapp">
+        <LoginModal
+          modalIsOpen={this.state.modalIsOpen}
+          toggleModal={() => this.toggleModal()}
+        />
+        {newTodoBarContent}
+        {main}
+      </div>
+    );
+    return app;
   }
 }
 

@@ -18,19 +18,19 @@ const customStyles = {
 
 class LoginModal extends React.Component {
   render() {
-    const { modalIsOpen, toggle } = this.props;
+    const { modalIsOpen, toggleModal } = this.props;
     return (
       <div>
         <Modal
           isOpen={modalIsOpen}
-          onRequestClose={() => toggle()}
+          onRequestClose={() => toggleModal()}
           contentLabel="Example Modal"
           style={customStyles}
           // className="Modal"
           // overlayClassName="Overlay"
         >
           <button
-            onClick={() => toggle()}
+            onClick={() => toggleModal()}
             style={{
               color: "red",
               fontSize: 40
@@ -42,7 +42,7 @@ class LoginModal extends React.Component {
           <form>
             <button
               type="button"
-              onClick={() => toggle()}
+              onClick={() => toggleModal()}
               style={{
                 backgroundColor: "green",
                 color: "white",
@@ -55,7 +55,7 @@ class LoginModal extends React.Component {
             </button>
             <button
               type="button"
-              onClick={() => toggle()}
+              onClick={() => toggleModal()}
               style={{
                 backgroundColor: "palevioletred",
                 color: "white",
