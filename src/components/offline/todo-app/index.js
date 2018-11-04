@@ -49,7 +49,7 @@ class App extends Component {
       todos.length > 0 ? (
         <TodoList
           todos={todos}
-          onDestroy={todoID => destroyTodo(todoID)}
+          onDestroy={todo => destroyTodo(todo)}
           replaceTitle={(todo, title) => replaceTodoTitle(todo, title)}
           onToggle={todo => toggleTodo(todo)}
         />

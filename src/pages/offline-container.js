@@ -14,7 +14,7 @@ class AppContainer extends Component {
     this.key = "todo-app";
 
     this.state = {
-      todos: store(this.key)
+      todos: store(this.key) // Pass this to TodoList component
     };
   }
 
@@ -36,6 +36,7 @@ class AppContainer extends Component {
     }
   }
 
+  /* Pass this to TodoList component (`replaceTitle`) */
   updateTodo(todoToSave, text) {
     const newTodos = this.state.todos.map(
       todo => (todo !== todoToSave ? todo : extend({}, todo, { title: text }))
@@ -44,6 +45,7 @@ class AppContainer extends Component {
     this.updateLocalStore(newTodos);
   }
 
+  /* Pass this to TodoList component (`onToggle`) */
   toggleTodo(todoToToggle) {
     const newTodos = this.state.todos.map(
       todo =>
@@ -55,9 +57,10 @@ class AppContainer extends Component {
     this.updateLocalStore(newTodos);
   }
 
-  deleteTodo(todoID) {
+  /* Pass this to TodoList component (`onDestroy`) */
+  deleteTodo(todo) {
     const newTodos = this.state.todos.filter(
-      candidate => candidate.id !== todoID
+      candidate => candidate.id !== todo.id
     );
     this.setState({ todos: newTodos });
     this.updateLocalStore(newTodos);
