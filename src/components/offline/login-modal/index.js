@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 class LoginModal extends React.Component {
   render() {
