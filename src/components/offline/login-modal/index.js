@@ -1,22 +1,71 @@
 import React from "react";
-import { Button, Modal, ModalHeader, ModalFooter } from "reactstrap";
-// import "bootstrap/dist/css/bootstrap.min.css";
+import Modal from "react-modal";
+
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement("#root");
+Modal.defaultStyles.overlay.zIndex = 1000;
+
+const customStyles = {
+  content: {
+    top: "30%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)"
+  }
+};
 
 class LoginModal extends React.Component {
   render() {
     const { modalIsOpen, toggle } = this.props;
     return (
       <div>
-        <Modal isOpen={modalIsOpen} toggle={toggle} className="my-modal">
-          <ModalHeader toggle={toggle}>Pick mode</ModalHeader>
-          <ModalFooter>
-            <Button color="primary" onClick={toggle}>
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => toggle()}
+          contentLabel="Example Modal"
+          style={customStyles}
+          // className="Modal"
+          // overlayClassName="Overlay"
+        >
+          <button
+            onClick={() => toggle()}
+            style={{
+              color: "red",
+              fontSize: 40
+            }}
+          >
+            ×
+          </button>
+          <h2>Pick mode</h2>
+          <form>
+            <button
+              type="button"
+              onClick={() => toggle()}
+              style={{
+                backgroundColor: "green",
+                color: "white",
+                padding: "5px",
+                margin: "8px",
+                marginRight: "2px"
+              }}
+            >
               Try out
-            </Button>
-            <Button color="secondary" onClick={toggle}>
+            </button>
+            <button
+              type="button"
+              onClick={() => toggle()}
+              style={{
+                backgroundColor: "palevioletred",
+                color: "white",
+                padding: "5px",
+                margin: "8px"
+              }}
+            >
               Login
-            </Button>
-          </ModalFooter>
+            </button>
+          </form>
         </Modal>
       </div>
     );
