@@ -29,86 +29,85 @@ class AppContainer extends Component {
     this.updateTodo = this.updateTodo.bind(this);
     this.toggleTodo = this.toggleTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
-    this.callbackCreateTodo = this.callbackCreateTodo.bind(this);
-    this.callbackReadTodos = this.callbackReadTodos.bind(this);
-    this.callbackUpdateTodo = this.callbackUpdateTodo.bind(this);
-    this.callbackToggleTodo = this.callbackToggleTodo.bind(this);
-    this.callbackDeleteTodo = this.callbackDeleteTodo.bind(this);
   }
 
   createTodo(title) {
     const shouldCreateNewTodo = title.length > 0;
     if (shouldCreateNewTodo) {
       this.setState({ loadingNewTodo: true });
-      uploadServerCreateTodo(this.callbackCreateTodo, title);
+      uploadServerCreateTodo(title)
+        .then(res => {
+          const todo = res.data; // { 'id':..., 'title':..., 'completed':... }
+          this.setState({ loadingNewTodo: false });
+          const newTodos = this.state.todos.concat([todo]);
+          this.setState({ todos: newTodos });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 
   readTodos() {
     this.setState({ finishedReadingTodos: false });
-    downloadServerReadTodos(this.callbackReadTodos);
+    downloadServerReadTodos()
+      .then(res => {
+        const todos = res.data; // [ { 'id':..., 'title':..., 'completed':... }, {...}, ... ]
+        this.setState({ finishedReadingTodos: true });
+        this.setState({ todos: todos });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   updateTodo(todo, newTitle) {
     this.startLoading(todo.id);
-    uploadServerUpdateTodo(
-      this.callbackUpdateTodo,
-      newTitle,
-      todo.id,
-      todo.completed
-    );
-  }
+    uploadServerUpdateTodo(newTitle, todo.id, todo.completed)
+      .then(res => {
+        const updatedTodo = res.data; // { 'id':..., 'title':..., 'completed':... }
+        this.stopLoading(todoID);
 
-  deleteTodo(todoID) {
-    this.startLoading(todoID);
-    uploadServerDeleteTodo(this.callbackDeleteTodo, todoID);
+        const newTodos = this.state.todos.map(todo => {
+          return todo.id === todoID ? updatedTodo : todo;
+        });
+        this.setState({ todos: newTodos });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   toggleTodo(todo) {
     this.startLoading(todo.id);
-    uploadServerToggleTodo(
-      this.callbackToggleTodo,
-      todo.title,
-      !todo.completed,
-      todo.id
-    );
+    uploadServerToggleTodo(todo.title, !todo.completed, todo.id)
+      .then(res => {
+        const updatedTodo = res.data; // { 'id':..., 'title':..., 'completed':... }
+        this.stopLoading(todoID);
+
+        const newTodos = this.state.todos.map(todo => {
+          return todo.id === todoID ? updatedTodo : todo;
+        });
+        this.setState({ todos: newTodos });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
-  callbackCreateTodo(todo) {
-    this.setState({ loadingNewTodo: false });
-    const newTodos = this.state.todos.concat([todo]);
-    this.setState({ todos: newTodos });
-  }
-
-  callbackReadTodos(todos) {
-    this.setState({ finishedReadingTodos: true });
-    this.setState({ todos: todos });
-  }
-
-  callbackUpdateTodo(todoID, newTodo) {
-    this.stopLoading(todoID);
-
-    const newTodos = this.state.todos.map(todo => {
-      return todo.id === todoID ? newTodo : todo;
-    });
-    this.setState({ todos: newTodos });
-  }
-
-  callbackToggleTodo(todoID, newTodo) {
-    this.stopLoading(todoID);
-
-    const newTodos = this.state.todos.map(todo => {
-      return todo.id === todoID ? newTodo : todo;
-    });
-    this.setState({ todos: newTodos });
-  }
-
-  callbackDeleteTodo(todoID) {
-    this.stopLoading(todoID);
-    const newTodos = this.state.todos.filter(todo => {
-      return todo.id !== todoID;
-    });
-    this.setState({ todos: newTodos });
+  deleteTodo(todoID) {
+    this.startLoading(todoID);
+    uploadServerDeleteTodo(todoID)
+      .then(() => {
+        this.stopLoading(todoID);
+        const newTodos = this.state.todos.filter(todo => {
+          return todo.id !== todoID;
+        });
+        this.setState({ todos: newTodos });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   startLoading(todoID) {
