@@ -12,14 +12,14 @@ import {
   uploadServerToggleTodo,
   uploadServerDeleteTodo
 } from "../lib/rest-endpoint.js";
-import App from "../components/todo-app/index.js";
+import App from "../components/online/todo-app/index.js";
 
 class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
-      loadingTodoIDs: [],
+      loadingTodos: [],
       loadingNewTodo: false,
       finishedReadingTodos: false
     };
@@ -62,14 +62,14 @@ class AppContainer extends Component {
   }
 
   updateTodo(todo, newTitle) {
-    this.startLoading(todo.id);
+    this.startLoading(todo);
     uploadServerUpdateTodo(newTitle, todo.id, todo.completed)
       .then(res => {
         const updatedTodo = res.data; // { 'id':..., 'title':..., 'completed':... }
-        this.stopLoading(todoID);
+        this.stopLoading(todo);
 
-        const newTodos = this.state.todos.map(todo => {
-          return todo.id === todoID ? updatedTodo : todo;
+        const newTodos = this.state.todos.map(t => {
+          return t.id === todo.id ? updatedTodo : t;
         });
         this.setState({ todos: newTodos });
       })
@@ -79,14 +79,14 @@ class AppContainer extends Component {
   }
 
   toggleTodo(todo) {
-    this.startLoading(todo.id);
+    this.startLoading(todo);
     uploadServerToggleTodo(todo.title, !todo.completed, todo.id)
       .then(res => {
         const updatedTodo = res.data; // { 'id':..., 'title':..., 'completed':... }
-        this.stopLoading(todoID);
+        this.stopLoading(todo);
 
-        const newTodos = this.state.todos.map(todo => {
-          return todo.id === todoID ? updatedTodo : todo;
+        const newTodos = this.state.todos.map(t => {
+          return t.id === todo.id ? updatedTodo : t;
         });
         this.setState({ todos: newTodos });
       })
@@ -95,13 +95,13 @@ class AppContainer extends Component {
       });
   }
 
-  deleteTodo(todoID) {
-    this.startLoading(todoID);
-    uploadServerDeleteTodo(todoID)
+  deleteTodo(todo) {
+    this.startLoading(todo);
+    uploadServerDeleteTodo(todo.id)
       .then(() => {
-        this.stopLoading(todoID);
-        const newTodos = this.state.todos.filter(todo => {
-          return todo.id !== todoID;
+        this.stopLoading(todo);
+        const newTodos = this.state.todos.filter(t => {
+          return t.id !== todo.id;
         });
         this.setState({ todos: newTodos });
       })
@@ -110,16 +110,16 @@ class AppContainer extends Component {
       });
   }
 
-  startLoading(todoID) {
-    const newLoadingTodoIDs = this.state.loadingTodoIDs.concat([todoID]);
-    this.setState({ loadingTodoIDs: newLoadingTodoIDs });
+  startLoading(todo) {
+    const newLoadingTodos = this.state.loadingTodos.concat([todo]);
+    this.setState({ loadingTodos: newLoadingTodos });
   }
 
-  stopLoading(todoId) {
-    const newLoadingTodoIDs = this.state.loadingTodoIDs.filter(todoID => {
-      return todoID !== todoId;
+  stopLoading(todo) {
+    const newLoadingTodos = this.state.loadingTodos.filter(t => {
+      return t.id !== todo.id;
     });
-    this.setState({ loadingTodoIDs: newLoadingTodoIDs });
+    this.setState({ loadingTodos: newLoadingTodos });
   }
 
   componentDidMount() {
@@ -130,11 +130,11 @@ class AppContainer extends Component {
     return (
       <App
         todos={this.state.todos}
-        loadingTodoIDs={this.state.loadingTodoIDs}
+        loadingTodos={this.state.loadingTodos}
         loadingNewTodo={this.state.loadingNewTodo}
         createTodo={title => this.createTodo(title)}
         replaceTodoTitle={(todo, title) => this.updateTodo(todo, title)}
-        destroyTodo={todoID => this.deleteTodo(todoID)}
+        destroyTodo={todo => this.deleteTodo(todo)}
         toggleTodo={todo => this.toggleTodo(todo)}
         finishedReadingTodos={this.state.finishedReadingTodos}
       />

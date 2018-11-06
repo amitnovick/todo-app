@@ -37,6 +37,7 @@ class AppContainer extends Component {
     store(this.key, newTodos);
   }
 
+  /* Pass this to CreateTodoTextbox component (`createTodo`) */
   createTodo(title) {
     const shouldCreateNewTodo = title.length > 0;
     if (shouldCreateNewTodo) {

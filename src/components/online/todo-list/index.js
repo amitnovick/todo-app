@@ -16,7 +16,7 @@ class TodoList extends Component {
     super(props);
 
     this.state = {
-      titleEditItemID: null
+      editingTodo: null
     };
   }
 
@@ -27,19 +27,26 @@ class TodoList extends Component {
 
   activateTitleEditMode(todo) {
     this.setState({
-      titleEditItemID: todo.id
+      editingTodo: todo
     });
   }
 
   deactivateTitleEditMode() {
     this.setState({
-      titleEditItemID: null
+      editingTodo: null
     });
   }
 
+  isTodoLoading(todo, loadingTodos) {
+    for (let i = 0; i < loadingTodos.length; i++) {
+      if (loadingTodos[i].id === todo.id) return true;
+    }
+    return false;
+  }
+
   render() {
-    const { todos, loadingItemIDs, onToggle } = this.props;
-    const { titleEditItemID } = this.state;
+    const { todos, loadingTodos, onToggle, onDestroy } = this.props;
+    const { editingTodo } = this.state;
     return (
       <div className="main">
         <ul className="todo-list">
@@ -47,12 +54,12 @@ class TodoList extends Component {
             <TodoListItem
               key={todo.id}
               todo={todo}
-              isBeingEdited={titleEditItemID === todo.id}
+              isBeingEdited={editingTodo && editingTodo.id === todo.id}
               replaceTitle={title => this.replaceTitle(todo, title)}
               onTitleClick={() => this.activateTitleEditMode(todo)}
-              onDestroy={() => this.props.onDestroy(todo.id)}
+              onDestroy={() => onDestroy(todo)}
               onCancelTitleEdit={() => this.deactivateTitleEditMode()}
-              isLoading={loadingItemIDs.includes(todo.id)}
+              isLoading={this.isTodoLoading(todo, loadingTodos)}
               onToggle={() => onToggle(todo)}
             />
           ))}

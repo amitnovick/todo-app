@@ -14,7 +14,7 @@ import "./style.css";
 
 const App = ({
   todos,
-  loadingTodoIDs,
+  loadingTodos,
   createTodo,
   replaceTodoTitle,
   destroyTodo,
@@ -30,8 +30,8 @@ const App = ({
     todos.length > 0 ? (
       <TodoList
         todos={todos}
-        loadingItemIDs={loadingTodoIDs}
-        onDestroy={todoID => destroyTodo(todoID)}
+        loadingTodos={loadingTodos}
+        onDestroy={todo => destroyTodo(todo)}
         replaceTitle={(todo, title) => replaceTodoTitle(todo, title)}
         onToggle={todo => toggleTodo(todo)}
       />

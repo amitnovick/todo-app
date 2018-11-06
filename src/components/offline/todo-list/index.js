@@ -21,7 +21,7 @@ class TodoList extends Component {
     super(props);
 
     this.state = {
-      titleEditItemID: null,
+      editingTodo: null,
       editTitle: ""
     };
   }
@@ -38,13 +38,13 @@ class TodoList extends Component {
 
   activateTitleEditMode(todo) {
     this.setState({
-      titleEditItemID: todo.id
+      editingTodo: todo
     });
   }
 
   deactivateTitleEditMode() {
     this.setState({
-      titleEditItemID: null
+      editingTodo: null
     });
   }
 
@@ -73,7 +73,10 @@ class TodoList extends Component {
    * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
    */
   componentDidUpdate(prevProps, prevState) {
-    if (!prevState.titleEditItemID && this.state.titleEditItemID) {
+    if (
+      !(prevState.editingTodo && prevState.editingTodo.id) &&
+      (this.state.editingTodo && this.state.editingTodo.id)
+    ) {
       const node = ReactDOM.findDOMNode(this.refs.editTitleField);
       node.focus();
       node.setSelectionRange(node.value.length, node.value.length);
@@ -81,13 +84,13 @@ class TodoList extends Component {
   }
 
   render() {
-    const { titleEditItemID, editTitle } = this.state;
+    const { editingTodo, editTitle } = this.state;
     const { todos, onToggle } = this.props;
     return (
       <div className="main">
         <ul className="todo-list">
           {todos.map(todo => {
-            const isBeingEdited = titleEditItemID === todo.id;
+            const isBeingEdited = editingTodo && editingTodo.id === todo.id;
             let content;
             if (isBeingEdited) {
               content = (
