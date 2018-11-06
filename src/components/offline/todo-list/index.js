@@ -25,13 +25,13 @@ class TodoList extends Component {
       editTitle: ""
     };
   }
-  /* TodoList */
-  replaceTitle(todoToSave) {
+
+  replaceTitle(todo) {
     const editTitleValue = this.state.editTitle.trim();
-    if (editTitleValue.length === 0) this.props.onDestroy(todoToSave);
-    else if (editTitleValue !== todoToSave.title) {
-      this.props.replaceTitle(todoToSave, editTitleValue);
-      this.deactivateTitleEditMode(todoToSave);
+    if (editTitleValue.length === 0) this.props.onDestroy(todo);
+    else if (editTitleValue !== todo.title) {
+      this.props.replaceTitle(todo, editTitleValue);
+      this.deactivateTitleEditMode();
       this.setState({ editTitle: "" });
     } else this.deactivateTitleEditMode();
   }
@@ -48,7 +48,16 @@ class TodoList extends Component {
     });
   }
 
+  isTodoBeingEdited(todo) {
+    return this.state.editingTodo && todo.id === this.state.editingTodo.id;
+  }
+
   /* TodoListItem */
+  handleTitleClick(todo) {
+    this.activateTitleEditMode(todo);
+    this.setState({ editTitle: todo.title });
+  }
+
   handleEditTitleTextChange(event) {
     this.setState({ editTitle: event.target.value });
   }
@@ -59,11 +68,6 @@ class TodoList extends Component {
     } else if (event.which === ENTER_KEY) {
       this.replaceTitle(todo);
     }
-  }
-
-  handleTitleClick(todo) {
-    this.activateTitleEditMode(todo);
-    this.setState({ editTitle: todo.title });
   }
 
   /**
@@ -84,13 +88,13 @@ class TodoList extends Component {
   }
 
   render() {
-    const { editingTodo, editTitle } = this.state;
-    const { todos, onToggle } = this.props;
+    const { editTitle } = this.state;
+    const { todos, onToggle, onDestroy } = this.props;
     return (
       <div className="main">
         <ul className="todo-list">
           {todos.map(todo => {
-            const isBeingEdited = editingTodo && editingTodo.id === todo.id;
+            const isBeingEdited = this.isTodoBeingEdited(todo);
             let content;
             if (isBeingEdited) {
               content = (
@@ -121,10 +125,7 @@ class TodoList extends Component {
                   <label onDoubleClick={() => this.handleTitleClick(todo)}>
                     {todo.title + " "}
                   </label>
-                  <button
-                    className="destroy"
-                    onClick={() => this.props.onDestroy(todo)}
-                  />
+                  <button className="destroy" onClick={() => onDestroy(todo)} />
                 </div>
               );
             }
