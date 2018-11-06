@@ -12,7 +12,12 @@ import {
   uploadServerToggleTodo,
   uploadServerDeleteTodo
 } from "../lib/rest-endpoint.js";
-import App from "../components/online/todo-app/index.js";
+import TodoList from "../components/online/todo-list/index.js";
+import CreateTodoTextbox from "../components/online/create-todo-textbox/index.js";
+/**
+ *  Style dependencies
+ */
+import "./style.css";
 
 class AppContainer extends Component {
   constructor(props) {
@@ -127,18 +132,40 @@ class AppContainer extends Component {
   }
 
   render() {
-    return (
-      <App
-        todos={this.state.todos}
-        loadingTodos={this.state.loadingTodos}
-        loadingNewTodo={this.state.loadingNewTodo}
-        createTodo={title => this.createTodo(title)}
-        replaceTodoTitle={(todo, title) => this.updateTodo(todo, title)}
-        destroyTodo={todo => this.deleteTodo(todo)}
-        toggleTodo={todo => this.toggleTodo(todo)}
-        finishedReadingTodos={this.state.finishedReadingTodos}
-      />
+    const {
+      todos,
+      loadingTodos,
+      loadingNewTodo,
+      finishedReadingTodos
+    } = this.state;
+    let app = null;
+    let main = null;
+    let newTodoBarContent = null;
+    let spinner = <label>{"Loading..."}</label>;
+    main =
+      todos.length > 0 ? (
+        <TodoList
+          todos={todos}
+          loadingTodos={loadingTodos}
+          onDestroy={todo => this.deleteTodo(todo)}
+          replaceTitle={(todo, title) => this.updateTodo(todo, title)}
+          onToggle={todo => this.toggleTodo(todo)}
+        />
+      ) : null;
+    newTodoBarContent = loadingNewTodo ? (
+      spinner
+    ) : (
+      <CreateTodoTextbox createTodo={title => this.createTodo(title)} />
     );
+    app = finishedReadingTodos ? (
+      <div className="todoapp">
+        {newTodoBarContent}
+        {main}
+      </div>
+    ) : (
+      spinner
+    );
+    return app;
   }
 }
 
