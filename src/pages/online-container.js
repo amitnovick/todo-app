@@ -58,6 +58,25 @@ class AppContainer extends Component {
     });
   }
 
+  uuid = () => {
+    /*jshint bitwise:false */
+    let i, random;
+    let uuid = "";
+
+    for (i = 0; i < 32; i++) {
+      random = (Math.random() * 16) | 0;
+      if (i === 8 || i === 12 || i === 16 || i === 20) {
+        uuid += "-";
+      }
+      // eslint-disable-next-line
+      uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(
+        16
+      );
+    }
+
+    return uuid;
+  };
+
   createTodo(title) {
     const shouldCreateNewTodo = title.length > 0;
     if (shouldCreateNewTodo) {
@@ -67,7 +86,8 @@ class AppContainer extends Component {
       //   true
       // );
       // this.setState({ todos: todosAfterStartLoad });
-      uploadServerCreateTodo(title)
+      const id = this.uuid();
+      uploadServerCreateTodo(id, title)
         .then(res => {
           // const todosAfterStopLoad = this.changeLoading(
           //   todo,
@@ -75,7 +95,12 @@ class AppContainer extends Component {
           //   false
           // );
           const todosAfterStopLoad = this.state.todos; // dummy variable
-          const todoData = res.data; // { 'id':..., 'title':..., 'completed':... }
+          // const todoData = res.data; // { 'id':..., 'title':..., 'completed':... }
+          const todoData = {
+            id: id,
+            title: title,
+            completed: false
+          };
           const todoUIParamsObject = this.generateTodoUIParamsObject();
           const todo = { ...todoData, ...todoUIParamsObject };
           const newTodos = todosAfterStopLoad.concat([todo]);
