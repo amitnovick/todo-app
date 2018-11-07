@@ -88,32 +88,21 @@ class AppContainer extends Component {
 
   render() {
     const { todos } = this.state;
-    let app = null;
-    let main = null;
-    let newTodoBarContent = null;
-    main =
-      todos.length > 0 ? (
-        <TodoList
-          todos={todos}
-          onDestroy={todo => this.deleteTodo(todo)}
-          replaceTitle={(todo, title) => this.updateTodo(todo, title)}
-          onToggle={todo => this.toggleTodo(todo)}
-        />
-      ) : null;
-    newTodoBarContent = (
-      <CreateTodoTextbox createTodo={title => this.createTodo(title)} />
-    );
-    app = (
+    return (
       <div className="todoapp">
         <LoginModal
           modalIsOpen={this.state.modalIsOpen}
           toggleModal={() => this.toggleModal()}
         />
-        {newTodoBarContent}
-        {main}
+        <CreateTodoTextbox createTodo={title => this.createTodo(title)} />
+        <TodoList
+          todos={todos}
+          onDestroy={todo => this.deleteTodo(todo)}
+          onReplaceTitle={(todo, title) => this.updateTodo(todo, title)}
+          onToggle={todo => this.toggleTodo(todo)}
+        />
       </div>
     );
-    return app;
   }
 }
 

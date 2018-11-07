@@ -30,7 +30,7 @@ class TodoList extends Component {
     const editTitleValue = this.state.editTitle.trim();
     if (editTitleValue.length === 0) this.props.onDestroy(todo);
     else if (editTitleValue !== todo.title) {
-      this.props.replaceTitle(todo, editTitleValue);
+      this.props.onReplaceTitle(todo, editTitleValue);
       this.deactivateTitleEditMode();
       this.setState({ editTitle: "" });
     } else this.deactivateTitleEditMode();

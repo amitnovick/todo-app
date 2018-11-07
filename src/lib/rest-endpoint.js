@@ -16,22 +16,22 @@ export const downloadServerReadTodos = () => {
   return axios.get(API_URL);
 };
 
-export const uploadServerUpdateTodo = (newTitle, todoID, todoCompleted) => {
+export const uploadServerUpdateTodo = (todo, newTitle) => {
   const params = new URLSearchParams();
   params.append([TODO_TITLE], newTitle);
-  params.append([TODO_COMPLETED], todoCompleted);
+  params.append([TODO_COMPLETED], todo.completed);
 
-  return axios.put(`${API_URL}${todoID.toString()}${SLASH}`, params);
+  return axios.put(`${API_URL}${todo.id.toString()}${SLASH}`, params);
 };
 
-export const uploadServerToggleTodo = (title, newCompletedValue, todoID) => {
+export const uploadServerToggleTodo = todo => {
   const params = new URLSearchParams();
-  params.append([TODO_TITLE], title);
-  params.append([TODO_COMPLETED], newCompletedValue);
+  params.append([TODO_TITLE], todo.title);
+  params.append([TODO_COMPLETED], !todo.completed);
 
-  return axios.put(`${API_URL}${todoID.toString()}${SLASH}`, params);
+  return axios.put(`${API_URL}${todo.id.toString()}${SLASH}`, params);
 };
 
-export const uploadServerDeleteTodo = todoID => {
-  return axios.delete(`${API_URL}${todoID.toString()}${SLASH}`);
+export const uploadServerDeleteTodo = todo => {
+  return axios.delete(`${API_URL}${todo.id.toString()}${SLASH}`);
 };
