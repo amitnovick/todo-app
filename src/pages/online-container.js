@@ -15,6 +15,8 @@ import {
 import TodoList from "../components/online/todo-list/index.js";
 import CreateTodoTextbox from "../components/online/create-todo-textbox/index.js";
 import LoginModal from "../components/online/login-modal/index.js";
+import { uuid } from "../lib/local-store.js";
+
 /**
  *  Style dependencies
  */
@@ -58,25 +60,6 @@ class AppContainer extends Component {
     });
   }
 
-  uuid = () => {
-    /*jshint bitwise:false */
-    let i, random;
-    let uuid = "";
-
-    for (i = 0; i < 32; i++) {
-      random = (Math.random() * 16) | 0;
-      if (i === 8 || i === 12 || i === 16 || i === 20) {
-        uuid += "-";
-      }
-      // eslint-disable-next-line
-      uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(
-        16
-      );
-    }
-
-    return uuid;
-  };
-
   createTodo(title) {
     const shouldCreateNewTodo = title.length > 0;
     if (shouldCreateNewTodo) {
@@ -86,7 +69,7 @@ class AppContainer extends Component {
       //   true
       // );
       // this.setState({ todos: todosAfterStartLoad });
-      const id = this.uuid();
+      const id = uuid();
       uploadServerCreateTodo(id, title)
         .then(res => {
           // const todosAfterStopLoad = this.changeLoading(
