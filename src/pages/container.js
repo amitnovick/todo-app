@@ -7,7 +7,7 @@ import React, { Component } from "react";
  */
 import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
-import firestore from "../lib/firestore.js";
+import firestore from "../lib/firebase/firestore/index.js";
 /**
  * Style dependencies
  */

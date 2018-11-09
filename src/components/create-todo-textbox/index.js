@@ -6,7 +6,7 @@ import React, { Component } from "react";
  * Internal dependencies
  */
 /**
- *  Style dependencies
+ * Style dependencies
  */
 import "./style.css";
 

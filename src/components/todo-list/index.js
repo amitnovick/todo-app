@@ -8,7 +8,7 @@ import classNames from "classnames";
  * Internal dependencies
  */
 /**
- *  Style dependencies
+ * Style dependencies
  */
 import "./style.css";
 

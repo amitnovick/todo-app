@@ -21,4 +21,5 @@ yarn-debug.log*
 yarn-error.log*
 
 /.vscode
-/src/lib/private
+/src/lib/firebase/firestore/private
+/src/lib/firebase/oauth/private

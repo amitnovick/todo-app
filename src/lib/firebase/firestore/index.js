@@ -11,7 +11,7 @@ import "@firebase/firestore";
  * `authDomain`, `databaseURL`, `projectId`, `storageBucket`,
  * `messagingSenderId` as given by Firebase dashboard.
  */
-import config from "./private/firestore-config.js";
+import config from "./private/config.js";
 
 const app = firebase.initializeApp(config);
 const firestore = firebase.firestore(app);
