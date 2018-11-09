@@ -1,14 +1,17 @@
+/**
+ * External dependencies
+ */
 import firebase from "@firebase/app";
 import "@firebase/firestore";
-
-const config = {
-  apiKey: "AIzaSyB1lvgQogOTA_RTvzcsaPy4y_wbTz4Yluo",
-  authDomain: "quick-todo-5d32e.firebaseapp.com",
-  databaseURL: "https://quick-todo-5d32e.firebaseio.com",
-  projectId: "quick-todo-5d32e",
-  storageBucket: "quick-todo-5d32e.appspot.com",
-  messagingSenderId: "938996535704"
-};
+/**
+ * Internal dependencies
+ */
+/**
+ * @param {object} config Object literal with properties: `apiKey`,
+ * `authDomain`, `databaseURL`, `projectId`, `storageBucket`,
+ * `messagingSenderId` as given by Firebase dashboard.
+ */
+import config from "./private/firestore-config.js";
 
 const app = firebase.initializeApp(config);
 const firestore = firebase.firestore(app);
