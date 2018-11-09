@@ -5,10 +5,9 @@ import React, { Component } from "react";
 /**
  * Internal dependencies
  */
-import TodoList from "../components/offline/todo-list/index.js";
-import CreateTodoTextbox from "../components/offline/create-todo-textbox/index.js";
-import LoginModal from "../components/offline/login-modal/index.js";
-import { store, uuid, extend } from "../lib/local-store.js";
+import TodoList from "../components/todo-list/index.js";
+import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
+import { store, uuid } from "../lib/local-store.js";
 /**
  * Style dependencies
  */
@@ -20,17 +19,8 @@ class AppContainer extends Component {
     this.key = "todo-app";
 
     this.state = {
-      todos: store(this.key), // Pass this to TodoList component
-      modalIsOpen: false
+      todos: store(this.key) // Pass this to TodoList component
     };
-
-    this.toggleModal = this.toggleModal.bind(this);
-  }
-
-  toggleModal() {
-    this.setState({
-      modalIsOpen: !this.state.modalIsOpen
-    });
   }
 
   updateLocalStore(newTodos) {
@@ -44,7 +34,8 @@ class AppContainer extends Component {
       const newTodos = this.state.todos.concat({
         id: uuid(),
         title: title,
-        completed: false
+        completed: false,
+        createdAt: new Date().toISOString()
       });
 
       this.setState({ todos: newTodos });
@@ -52,28 +43,23 @@ class AppContainer extends Component {
     }
   }
 
-  /* Pass this to TodoList component (`replaceTitle`) */
-  updateTodo(todoToSave, text) {
+  editTodo(todoToSave, text) {
     const newTodos = this.state.todos.map(
-      todo => (todo !== todoToSave ? todo : extend({}, todo, { title: text }))
+      todo => (todo !== todoToSave ? todo : { ...todo, title: text })
     );
     this.setState({ todos: newTodos });
     this.updateLocalStore(newTodos);
   }
 
-  /* Pass this to TodoList component (`onToggle`) */
   toggleTodo(todoToToggle) {
     const newTodos = this.state.todos.map(
       todo =>
-        todo !== todoToToggle
-          ? todo
-          : extend({}, todo, { completed: !todo.completed })
+        todo !== todoToToggle ? todo : { ...todo, completed: !todo.completed }
     );
     this.setState({ todos: newTodos });
     this.updateLocalStore(newTodos);
   }
 
-  /* Pass this to TodoList component (`onDestroy`) */
   deleteTodo(todo) {
     const newTodos = this.state.todos.filter(
       candidate => candidate.id !== todo.id
@@ -82,23 +68,15 @@ class AppContainer extends Component {
     this.updateLocalStore(newTodos);
   }
 
-  componentDidMount() {
-    this.toggleModal();
-  }
-
   render() {
     const { todos } = this.state;
     return (
       <div className="todoapp">
-        <LoginModal
-          modalIsOpen={this.state.modalIsOpen}
-          toggleModal={() => this.toggleModal()}
-        />
         <CreateTodoTextbox createTodo={title => this.createTodo(title)} />
         <TodoList
           todos={todos}
-          onDestroy={todo => this.deleteTodo(todo)}
-          onReplaceTitle={(todo, title) => this.updateTodo(todo, title)}
+          onDelete={todo => this.deleteTodo(todo)}
+          onEdit={(todo, title) => this.editTodo(todo, title)}
           onToggle={todo => this.toggleTodo(todo)}
         />
       </div>

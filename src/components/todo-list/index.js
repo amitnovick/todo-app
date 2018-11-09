@@ -28,9 +28,9 @@ class TodoList extends Component {
 
   replaceTitle(todo) {
     const editTitleValue = this.state.editTitle.trim();
-    if (editTitleValue.length === 0) this.props.onDestroy(todo);
+    if (editTitleValue.length === 0) this.props.onDelete(todo);
     else if (editTitleValue !== todo.title) {
-      this.props.onReplaceTitle(todo, editTitleValue);
+      this.props.onEdit(todo, editTitleValue);
       this.deactivateTitleEditMode();
       this.setState({ editTitle: "" });
     } else this.deactivateTitleEditMode();
@@ -46,15 +46,6 @@ class TodoList extends Component {
     this.setState({
       editingTodo: null
     });
-  }
-
-  isTodoLoading(todo) {
-    return (
-      todo.isLoadingCreate ||
-      todo.isLoadingUpdate ||
-      todo.isLoadingToggle ||
-      todo.isLoadingDelete
-    );
   }
 
   isTodoBeingEdited(todo) {
@@ -98,17 +89,14 @@ class TodoList extends Component {
 
   render() {
     const { editTitle } = this.state;
-    const { todos, onToggle, onDestroy } = this.props;
-    const spinner = <label>{"Loading..."}</label>;
+    const { todos, onToggle, onDelete } = this.props;
     return (
       <div className="main">
         <ul className="todo-list">
           {todos.map(todo => {
             const isBeingEdited = this.isTodoBeingEdited(todo);
             let content;
-            if (this.isTodoLoading(todo)) {
-              content = <div key={todo.id}>{spinner}</div>;
-            } else if (isBeingEdited) {
+            if (isBeingEdited) {
               content = (
                 <div key={todo.id}>
                   <input
@@ -137,7 +125,7 @@ class TodoList extends Component {
                   <label onDoubleClick={() => this.handleTitleClick(todo)}>
                     {todo.title + " "}
                   </label>
-                  <button className="destroy" onClick={() => onDestroy(todo)} />
+                  <button className="destroy" onClick={() => onDelete(todo)} />
                 </div>
               );
             }

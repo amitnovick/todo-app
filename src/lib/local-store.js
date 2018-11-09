@@ -23,16 +23,3 @@ export const store = (namespace, data = undefined) => {
     return localStorage.setItem(namespace, JSON.stringify(data));
   }
 };
-
-export function extend() {
-  let newObj = {};
-  for (let i = 0; i < arguments.length; i++) {
-    const obj = arguments[i];
-    for (let key in obj) {
-      if (obj.hasOwnProperty(key)) {
-        newObj[key] = obj[key];
-      }
-    }
-  }
-  return newObj;
-}
