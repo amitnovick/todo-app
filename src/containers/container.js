@@ -16,15 +16,21 @@ import { auth } from "../store/firebase/oauth.js";
 import "./style.css";
 
 const TODOS = "todos";
-const KEY = "todo-app";
 
-class FirestoreContainer extends Component {
+class Container extends Component {
   constructor(props) {
     super(props);
+    this.key = "todo-app";
+
     this.state = {
       todos: [],
-      isAuthenticated: true
+      isAuthenticated: null
     };
+
+    this.createTodo = this.createTodo.bind(this);
+    this.editTodo = this.editTodo.bind(this);
+    this.toggleTodo = this.toggleTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
   }
 
   updateLocalStore(newTodos) {
@@ -108,7 +114,6 @@ class FirestoreContainer extends Component {
   componentDidMount() {
     auth.getAuth().onAuthStateChanged(user => {
       if (user) {
-        this.setState({ isAuthenticated: true });
         firestore.collection(TODOS).onSnapshot(snapshot => {
           let todos = [];
           snapshot.forEach(doc => {
@@ -126,10 +131,10 @@ class FirestoreContainer extends Component {
 
           todos.sort(timeCreated);
           // Anytime the state of our database changes, we update state
-          this.setState({ todos });
+          this.setState({ todos, isAuthenticated: true });
         });
       } else {
-        this.setState({ todos: store(KEY) });
+        this.setState({ todos: store(this.key), isAuthenticated: false });
       }
     });
   }
@@ -151,4 +156,4 @@ class FirestoreContainer extends Component {
   }
 }
 
-export default FirestoreContainer;
+export default Container;
