@@ -3,13 +3,19 @@
  */
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 /**
  * Internal dependencies
  */
 import * as serviceWorker from "./serviceWorker";
-import AppContainer from "./containers/container.js";
+import App from "./components/routing/App.js";
 
-ReactDOM.render(<AppContainer />, document.getElementById("root"));
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById("root")
+);
 
 if (module.hot) module.hot.accept();
 

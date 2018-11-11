@@ -7,7 +7,7 @@ import React, { Component } from "react";
  */
 import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
-import firestore from "../lib/firebase/firestore/index.js";
+import firestore from "../store/firebase/firestore/index.js";
 /**
  * Style dependencies
  */
@@ -15,7 +15,7 @@ import "./style.css";
 
 const TODOS = "todos";
 
-class AppContainer extends Component {
+class FirestoreContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -94,4 +94,4 @@ class AppContainer extends Component {
   }
 }
 
-export default AppContainer;
+export default FirestoreContainer;

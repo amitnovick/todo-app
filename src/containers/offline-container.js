@@ -7,13 +7,13 @@ import React, { Component } from "react";
  */
 import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
-import { store, uuid } from "../lib/local-store.js";
+import { store, uuid } from "../store/local-store.js";
 /**
  * Style dependencies
  */
 import "./style.css";
 
-class AppContainer extends Component {
+class OfflineContainer extends Component {
   constructor(props) {
     super(props);
     this.key = "todo-app";
@@ -84,4 +84,4 @@ class AppContainer extends Component {
   }
 }
 
-export default AppContainer;
+export default OfflineContainer;
