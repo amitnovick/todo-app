@@ -1,6 +1,6 @@
 const config = {
-  apiKey: "AIzaSyBRWHNFMHxGhezbXpHNg2kGClh6UjwKbDk",
-  authDomain: "react-firebase-oauth-b1c79.firebase.com"
+  apiKey: "AIzaSyB1lvgQogOTA_RTvzcsaPy4y_wbTz4Yluo",
+  authDomain: "quick-todo-5d32e.firebaseapp.com"
 };
 
 export default config;

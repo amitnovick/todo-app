@@ -43,18 +43,17 @@ class OfflineContainer extends Component {
     }
   }
 
-  editTodo(todoToSave, text) {
+  editTodo(todo, newTitle) {
     const newTodos = this.state.todos.map(
-      todo => (todo !== todoToSave ? todo : { ...todo, title: text })
+      t => (t !== todo ? t : { ...t, title: newTitle })
     );
     this.setState({ todos: newTodos });
     this.updateLocalStore(newTodos);
   }
 
-  toggleTodo(todoToToggle) {
+  toggleTodo(todo) {
     const newTodos = this.state.todos.map(
-      todo =>
-        todo !== todoToToggle ? todo : { ...todo, completed: !todo.completed }
+      t => (t !== todo ? t : { ...t, completed: !t.completed })
     );
     this.setState({ todos: newTodos });
     this.updateLocalStore(newTodos);

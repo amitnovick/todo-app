@@ -1,20 +1,9 @@
-/**
- * External dependencies
- */
 import firebase from "@firebase/app";
 import "@firebase/firestore";
-/**
- * Internal dependencies
- */
-/**
- * @param {object} config Object literal with properties: `apiKey`,
- * `authDomain`, `databaseURL`, `projectId`, `storageBucket`,
- * `messagingSenderId` as given by Firebase dashboard.
- */
-import config from "./private/config.js";
 
-const app = firebase.initializeApp(config);
-const firestore = firebase.firestore(app);
+import firebaseApp from "./firebase.js";
+
+const firestore = firebase.firestore(firebaseApp);
 const settings = { timestampsInSnapshots: true };
 firestore.settings(settings);
 
