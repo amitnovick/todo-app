@@ -7,7 +7,7 @@ import ReactDOM from "react-dom";
  * Internal dependencies
  */
 import * as serviceWorker from "./serviceWorker";
-import AppContainer from "./pages/container.js";
+import AppContainer from "./containers/container.js";
 
 ReactDOM.render(<AppContainer />, document.getElementById("root"));
 
