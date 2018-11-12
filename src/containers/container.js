@@ -7,9 +7,9 @@ import React, { Component } from "react";
  */
 import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
-import firestore from "../store/firebase/firestore.js";
+import firestore from "../store/firestore.js";
 import { store, uuid } from "../store/local-store.js";
-import { auth } from "../store/firebase/oauth.js";
+import { auth } from "../firebase/oauth.js";
 /**
  * Style dependencies
  */
@@ -24,7 +24,7 @@ class Container extends Component {
 
     this.state = {
       todos: [],
-      isAuthenticated: null
+      isAuthenticated: false
     };
 
     this.createTodo = this.createTodo.bind(this);
@@ -103,9 +103,7 @@ class Container extends Component {
         .doc(todo.id)
         .delete();
     } else {
-      const newTodos = this.state.todos.filter(
-        candidate => candidate.id !== todo.id
-      );
+      const newTodos = this.state.todos.filter(t => t.id !== todo.id);
       this.setState({ todos: newTodos });
       this.updateLocalStore(newTodos);
     }
@@ -134,16 +132,15 @@ class Container extends Component {
           this.setState({ todos, isAuthenticated: true });
         });
       } else {
-        this.setState({ todos: store(this.key), isAuthenticated: false });
+        this.setState({ todos: store(this.key) });
       }
     });
   }
 
   render() {
-    const { todos, isAuthenticated } = this.state;
+    const { todos } = this.state;
     return (
       <div className="todoapp">
-        <label>{isAuthenticated ? "Logged-in" : "Disconnected"}</label>
         <CreateTodoTextbox createTodo={title => this.createTodo(title)} />
         <TodoList
           todos={todos}

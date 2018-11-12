@@ -1,5 +1,9 @@
 import React from "react";
 import Modal from "react-modal";
+import { withRouter } from "react-router-dom";
+
+import { auth } from "../../firebase/oauth.js";
+import buttonList from "./initialButtonList.js";
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
@@ -12,25 +16,61 @@ const customStyles = {
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
+    textAlign: "center"
   }
 };
 
 class LoginModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.authHandler = this.authHandler.bind(this);
+  }
+
+  authHandler(authData) {
+    if (authData) {
+      this.props.history.push(this.props.location["pathname"]);
+    }
+  }
+
+  /**
+   * Authenticates the user with a social media provider.
+   * Either creates a new user account in Firebase or links
+   * a different provider to the same user account
+   */
+  authenticate() {
+    const providerOAuth = buttonList["github"].provider();
+
+    if (!auth.getAuth().currentUser) {
+      auth
+        .getAuth()
+        .signInWithPopup(providerOAuth)
+        .then(this.authHandler)
+        .catch(err => console.error(err));
+    } else {
+      auth
+        .getAuth()
+        .currentUser.linkWithPopup(providerOAuth)
+        .then(this.authHandler)
+        .catch(err => console.error(err));
+    }
+  }
+
   render() {
-    const { modalIsOpen, toggleModal } = this.props;
+    const { isModalOpen, toggleLoginModal } = this.props;
     return (
       <div>
         <Modal
-          isOpen={modalIsOpen}
-          onRequestClose={() => toggleModal()}
+          isOpen={isModalOpen}
+          onRequestClose={() => toggleLoginModal()}
           contentLabel="Example Modal"
           style={customStyles}
           // className="Modal"
           // overlayClassName="Overlay"
         >
           <button
-            onClick={() => toggleModal()}
+            onClick={() => toggleLoginModal()}
             style={{
               color: "red",
               fontSize: 40
@@ -38,32 +78,21 @@ class LoginModal extends React.Component {
           >
             ×
           </button>
-          <h2>Pick mode</h2>
+          <h2>Login with</h2>
           <form>
             <button
               type="button"
-              onClick={() => toggleModal()}
+              onClick={() => this.authenticate()}
               style={{
-                backgroundColor: "green",
+                backgroundColor: "black",
                 color: "white",
                 padding: "5px",
                 margin: "8px",
-                marginRight: "2px"
+                marginRight: "2px",
+                border: "solid"
               }}
             >
-              Try out
-            </button>
-            <button
-              type="button"
-              onClick={() => toggleModal()}
-              style={{
-                backgroundColor: "palevioletred",
-                color: "white",
-                padding: "5px",
-                margin: "8px"
-              }}
-            >
-              Login
+              GitHub
             </button>
           </form>
         </Modal>
@@ -72,4 +101,4 @@ class LoginModal extends React.Component {
   }
 }
 
-export default LoginModal;
+export default withRouter(LoginModal);

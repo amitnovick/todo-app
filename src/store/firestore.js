@@ -1,7 +1,7 @@
 import firebase from "@firebase/app";
 import "@firebase/firestore";
 
-import firebaseApp from "./firebase.js";
+import firebaseApp from "../firebase/firebase.js";
 
 const firestore = firebase.firestore(firebaseApp);
 const settings = { timestampsInSnapshots: true };
