@@ -9,7 +9,7 @@ import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
 import firestore from "../store/firestore.js";
 import { store, uuid } from "../store/local-store.js";
-import { auth } from "../firebase/oauth.js";
+import { auth } from "../auth/oauth.js";
 /**
  * Style dependencies
  */

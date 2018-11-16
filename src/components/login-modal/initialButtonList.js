@@ -1,4 +1,4 @@
-import { auth } from "../../firebase/oauth.js";
+import { auth } from "../../auth/oauth.js";
 
 /**
  * Initial state of the Social Buttons

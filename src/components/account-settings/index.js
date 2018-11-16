@@ -1,5 +1,5 @@
 import React from "react";
-import { auth } from "../../firebase/oauth.js";
+import { auth } from "../../auth/oauth.js";
 
 class AccountSettings extends React.Component {
   constructor(props) {

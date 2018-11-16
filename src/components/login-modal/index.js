@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 import { withRouter } from "react-router-dom";
 
-import { auth } from "../../firebase/oauth.js";
+import { auth } from "../../auth/oauth.js";
 import buttonList from "./initialButtonList.js";
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)

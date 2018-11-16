@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-import firebaseApp from "./firebase.js";
+import firebaseApp from "../firebase/firebase.js";
 
 export const getAuth = () => {
   return firebaseApp.auth();

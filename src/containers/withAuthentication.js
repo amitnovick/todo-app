@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { auth } from "../firebase/oauth.js";
+import { auth } from "../auth/oauth.js";
 
 /**
  * HOC that verifies user is authenticated before returning the
