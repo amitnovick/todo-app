@@ -29,6 +29,8 @@ class LoginModal extends React.Component {
   }
 
   authHandler(authData) {
+    this.props.updateAuthentication();
+    this.props.closeLoginModal();
     if (authData) {
       this.props.history.push(this.props.location["pathname"]);
     }
@@ -58,19 +60,19 @@ class LoginModal extends React.Component {
   }
 
   render() {
-    const { isModalOpen, toggleLoginModal } = this.props;
+    const { isModalOpen, openLoginModal, closeLoginModal } = this.props;
     return (
       <div>
         <Modal
           isOpen={isModalOpen}
-          onRequestClose={() => toggleLoginModal()}
+          onRequestClose={() => closeLoginModal()}
           contentLabel="Example Modal"
           style={customStyles}
           // className="Modal"
           // overlayClassName="Overlay"
         >
           <button
-            onClick={() => toggleLoginModal()}
+            onClick={() => openLoginModal()}
             style={{
               color: "red",
               fontSize: 40

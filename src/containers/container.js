@@ -9,10 +9,7 @@ import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
 import firestore from "../store/firestore.js";
 import { store, uuid } from "../store/local-store.js";
-import { auth } from "../auth/oauth.js";
-/**
- * Style dependencies
- */
+
 import "./style.css";
 
 const TODOS = "todos";
@@ -23,14 +20,15 @@ class Container extends Component {
     this.key = "todo-app";
 
     this.state = {
-      todos: [],
-      isAuthenticated: false
+      todos: []
     };
 
     this.createTodo = this.createTodo.bind(this);
     this.editTodo = this.editTodo.bind(this);
     this.toggleTodo = this.toggleTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+
+    this.mountStore = this.mountStore.bind(this);
   }
 
   updateLocalStore(newTodos) {
@@ -38,7 +36,7 @@ class Container extends Component {
   }
 
   createTodo(title) {
-    if (this.state.isAuthenticated) {
+    if (this.props.isAuthenticated) {
       const shouldCreateNewTodo = title.length > 0;
       if (!shouldCreateNewTodo) return;
       firestore.collection(TODOS).add({
@@ -63,7 +61,7 @@ class Container extends Component {
   }
 
   editTodo(todo, newTitle) {
-    if (this.state.isAuthenticated) {
+    if (this.props.isAuthenticated) {
       firestore
         .collection(TODOS)
         .doc(todo.id)
@@ -80,7 +78,7 @@ class Container extends Component {
   }
 
   toggleTodo(todo) {
-    if (this.state.isAuthenticated) {
+    if (this.props.isAuthenticated) {
       firestore
         .collection(TODOS)
         .doc(todo.id)
@@ -97,7 +95,7 @@ class Container extends Component {
   }
 
   deleteTodo(todo) {
-    if (this.state.isAuthenticated) {
+    if (this.props.isAuthenticated) {
       firestore
         .collection(TODOS)
         .doc(todo.id)
@@ -109,32 +107,39 @@ class Container extends Component {
     }
   }
 
-  componentDidMount() {
-    auth.getAuth().onAuthStateChanged(user => {
-      if (user) {
-        firestore.collection(TODOS).onSnapshot(snapshot => {
-          let todos = [];
-          snapshot.forEach(doc => {
-            const todo = doc.data();
-            todo.id = doc.id;
-            todos.push(todo);
-          });
-
-          const timeCreated = (todoA, todoB) => {
-            return (
-              new Date(todoA.createdAt).getTime() -
-              new Date(todoB.createdAt).getTime()
-            );
-          };
-
-          todos.sort(timeCreated);
-          // Anytime the state of our database changes, we update state
-          this.setState({ todos, isAuthenticated: true });
+  mountStore() {
+    if (this.props.isAuthenticated) {
+      firestore.collection(TODOS).onSnapshot(snapshot => {
+        let todos = [];
+        snapshot.forEach(doc => {
+          const todo = doc.data();
+          todo.id = doc.id;
+          todos.push(todo);
         });
-      } else {
-        this.setState({ todos: store(this.key) });
-      }
-    });
+
+        const timeCreated = (todoA, todoB) => {
+          return (
+            new Date(todoA.createdAt).getTime() -
+            new Date(todoB.createdAt).getTime()
+          );
+        };
+
+        todos.sort(timeCreated);
+        // Anytime the state of our database changes, we update state
+        this.setState({ todos });
+      });
+    } else {
+      this.setState({ todos: store(this.key) });
+    }
+  }
+
+  componentDidMount() {
+    this.mountStore();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.isAuthenticated !== this.props.isAuthenticated)
+      this.mountStore();
   }
 
   render() {

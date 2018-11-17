@@ -1,15 +1,7 @@
-/**
- * External dependencies
- */
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
-/**
- * Internal dependencies
- */
-/**
- * Style dependencies
- */
+
 import "./style.css";
 
 const editTitleField = "editTitleField";

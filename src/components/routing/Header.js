@@ -1,25 +1,34 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import withAuthentication from "../../containers/withAuthentication.js";
+
 import AccountControl from "../account-control/index.js";
 
-const Header = () => {
-  const AuthAccountControl = withAuthentication(AccountControl);
+const NavBar = ({ isAuthenticated, updateAuthentication }) => (
+  <nav>
+    <ul>
+      <li>
+        <Link to="/">App</Link>
+      </li>
+      <li>
+        <Link to="/about">About</Link>
+      </li>
+      <li>
+        <AccountControl
+          isAuthenticated={isAuthenticated}
+          updateAuthentication={updateAuthentication}
+        />
+      </li>
+    </ul>
+  </nav>
+);
+
+const Header = ({ isAuthenticated, updateAuthentication }) => {
   return (
     <header>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">App</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <AuthAccountControl />
-          </li>
-        </ul>
-      </nav>
+      <NavBar
+        isAuthenticated={isAuthenticated}
+        updateAuthentication={updateAuthentication}
+      />
     </header>
   );
 };

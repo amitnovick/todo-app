@@ -1,19 +1,14 @@
-/**
- * External dependencies
- */
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-/**
- * Internal dependencies
- */
+import { BrowserRouter as Router } from "react-router-dom";
+
 import * as serviceWorker from "./serviceWorker";
-import App from "./components/routing/App.js";
+import AuthContainer from "./containers/AuthContainer.js";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Router>
+    <AuthContainer />
+  </Router>,
   document.getElementById("root")
 );
 

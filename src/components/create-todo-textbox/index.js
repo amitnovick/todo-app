@@ -1,13 +1,5 @@
-/**
- * External dependencies
- */
 import React, { Component } from "react";
-/**
- * Internal dependencies
- */
-/**
- * Style dependencies
- */
+
 import "./style.css";
 
 const ENTER_KEY = 13;

@@ -3,10 +3,16 @@ import React from "react";
 import Header from "../routing/Header.js";
 import Main from "../routing/Main.js";
 
-const App = () => (
+const App = ({ isAuthenticated, updateAuthentication }) => (
   <div>
-    <Header />
-    <Main />
+    <Header
+      isAuthenticated={isAuthenticated}
+      updateAuthentication={updateAuthentication}
+    />
+    <Main
+      isAuthenticated={isAuthenticated}
+      updateAuthentication={updateAuthentication}
+    />
   </div>
 );
 

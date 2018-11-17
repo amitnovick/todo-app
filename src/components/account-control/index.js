@@ -9,20 +9,21 @@ class AccountControl extends Component {
 
     this.state = { isModalOpen: false };
 
-    this.toggleLoginModal = this.toggleLoginModal.bind(this);
+    this.openLoginModal = this.openLoginModal.bind(this);
+    this.closeLoginModal = this.closeLoginModal.bind(this);
   }
 
   openLoginModal() {
     this.setState({ isModalOpen: true });
   }
 
-  toggleLoginModal() {
-    this.setState({ isModalOpen: !this.state.isModalOpen });
+  closeLoginModal() {
+    this.setState({ isModalOpen: false });
   }
 
   render() {
     const { isModalOpen } = this.state;
-    const { isAuthenticated } = this.props;
+    const { isAuthenticated, updateAuthentication } = this.props;
     return isAuthenticated ? (
       <Link to="/account">Account Settings</Link>
     ) : (
@@ -30,7 +31,9 @@ class AccountControl extends Component {
         <button onClick={() => this.openLoginModal()}>Login</button>
         <LoginModal
           isModalOpen={isModalOpen}
-          toggleLoginModal={this.toggleLoginModal}
+          openLoginModal={this.toggleLoginModal}
+          closeLoginModal={this.closeLoginModal}
+          updateAuthentication={updateAuthentication}
         />
       </div>
     );

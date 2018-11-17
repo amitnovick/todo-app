@@ -1,11 +1,6 @@
-/**
- * External dependencies
- */
 import firebase from "@firebase/app";
 import "firebase/auth";
-/**
- * Internal dependencies
- */
+
 /**
  * @param {object} config Object literal with properties: `apiKey`,
  * `authDomain`, `databaseURL`, `projectId`, `storageBucket`,

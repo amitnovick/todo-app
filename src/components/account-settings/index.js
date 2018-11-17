@@ -1,4 +1,6 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+
 import { auth } from "../../auth/oauth.js";
 
 class AccountSettings extends React.Component {
@@ -21,4 +23,4 @@ class AccountSettings extends React.Component {
   }
 }
 
-export default AccountSettings;
+export default withRouter(AccountSettings);
