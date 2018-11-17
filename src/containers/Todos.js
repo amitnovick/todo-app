@@ -1,10 +1,5 @@
-/**
- * External dependencies
- */
-import React, { Component } from "react";
-/**
- * Internal dependencies
- */
+import React from "react";
+
 import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
 import firestore from "../store/firestore.js";
@@ -14,7 +9,7 @@ import "./style.css";
 
 const TODOS = "todos";
 
-class Container extends Component {
+class Container extends React.Component {
   constructor(props) {
     super(props);
     this.key = "todo-app";

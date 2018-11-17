@@ -1,12 +1,12 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 
-import Container from "../../containers/container.js";
-import About from "../about/index.js";
-import AccountSettings from "../account-settings/index.js";
-import { AuthContext } from "../../containers/AuthContainer.js";
+import Container from "../containers/Todos.js";
+import About from "../components/about/index.js";
+import AccountSettings from "../components/account-settings/index.js";
+import { AuthContext } from "../containers/AuthContainer.js";
 
-const PageBody = () => (
+const Body = () => (
   <main>
     <Switch>
       <Route
@@ -24,4 +24,4 @@ const PageBody = () => (
   </main>
 );
 
-export default PageBody;
+export default Body;
