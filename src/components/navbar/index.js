@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 
 import AccountControl from "../account-control/index.js";
 
+import "./style.css";
+
 const NavBar = () => (
   <nav>
-    <ul>
+    <ul className="navbar">
       <li>
-        <Link to="/">App</Link>
+        <Link to="/">Edit todos</Link>
       </li>
       <li>
         <Link to="/about">About</Link>

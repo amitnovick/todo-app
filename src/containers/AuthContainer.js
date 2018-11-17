@@ -1,7 +1,7 @@
 import React from "react";
 
 import { auth } from "../auth/oauth.js";
-import App from "../components/routing/App.js";
+import Page from "../components/page/index.js";
 
 export const AuthContext = React.createContext();
 
@@ -33,7 +33,7 @@ class AuthContainer extends React.Component {
     const { isAuthenticated } = this.state;
     return (
       <AuthContext.Provider value={isAuthenticated}>
-        <App />
+        <Page />
       </AuthContext.Provider>
     );
   }

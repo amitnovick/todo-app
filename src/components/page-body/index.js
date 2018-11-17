@@ -6,7 +6,7 @@ import About from "../about/index.js";
 import AccountSettings from "../account-settings/index.js";
 import { AuthContext } from "../../containers/AuthContainer.js";
 
-const Main = () => (
+const PageBody = () => (
   <main>
     <Switch>
       <Route
@@ -24,4 +24,4 @@ const Main = () => (
   </main>
 );
 
-export default Main;
+export default PageBody;

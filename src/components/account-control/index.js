@@ -28,13 +28,12 @@ class AccountControl extends Component {
       <AuthContext.Consumer>
         {isAuthenticated =>
           isAuthenticated ? (
-            <Link to="/account">Account Settings</Link>
+            <Link to="/account">My Settings</Link>
           ) : (
             <div>
               <button onClick={() => this.openLoginModal()}>Login</button>
               <LoginModal
                 isModalOpen={isModalOpen}
-                openLoginModal={this.openLoginModal}
                 closeLoginModal={this.closeLoginModal}
                 isAuthenticated={isAuthenticated}
               />

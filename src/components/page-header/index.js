@@ -2,7 +2,7 @@ import React from "react";
 
 import NavBar from "../navbar/index.js";
 
-const Header = () => {
+const PageHeader = () => {
   return (
     <header>
       <NavBar />
@@ -10,4 +10,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default PageHeader;

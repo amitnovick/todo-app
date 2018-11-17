@@ -59,7 +59,7 @@ class LoginModal extends React.Component {
   }
 
   render() {
-    const { isModalOpen, openLoginModal, closeLoginModal } = this.props;
+    const { isModalOpen, closeLoginModal } = this.props;
     return (
       <div>
         <Modal
@@ -69,7 +69,7 @@ class LoginModal extends React.Component {
           style={customStyles}
         >
           <button
-            onClick={() => openLoginModal()}
+            onClick={() => closeLoginModal()}
             style={{
               color: "red",
               fontSize: 40
