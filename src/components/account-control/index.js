@@ -23,7 +23,7 @@ class AccountControl extends Component {
 
   render() {
     const { isModalOpen } = this.state;
-    const { isAuthenticated, updateAuthentication } = this.props;
+    const { isAuthenticated } = this.props;
     return isAuthenticated ? (
       <Link to="/account">Account Settings</Link>
     ) : (
@@ -33,7 +33,6 @@ class AccountControl extends Component {
           isModalOpen={isModalOpen}
           openLoginModal={this.toggleLoginModal}
           closeLoginModal={this.closeLoginModal}
-          updateAuthentication={updateAuthentication}
         />
       </div>
     );

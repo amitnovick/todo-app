@@ -10,34 +10,26 @@ class AuthContainer extends React.Component {
       isAuthenticated: false
     };
 
-    this.updateAuthentication = this.updateAuthentication.bind(this);
+    this.subscribeToAuthChanges = this.subscribeToAuthChanges.bind(this);
   }
 
-  updateAuthentication() {
-    if (!auth.getAuth()) this.setState({ isAuthenticated: false });
-    else {
-      auth.getAuth().onAuthStateChanged(user => {
-        if (user) {
-          this.setState({ isAuthenticated: true });
-        } else {
-          this.setState({ isAuthenticated: false });
-        }
-      });
-    }
+  subscribeToAuthChanges() {
+    auth.getAuth().onAuthStateChanged(user => {
+      if (user) {
+        this.setState({ isAuthenticated: true });
+      } else {
+        this.setState({ isAuthenticated: false });
+      }
+    });
   }
 
   componentDidMount() {
-    this.updateAuthentication();
+    this.subscribeToAuthChanges();
   }
 
   render() {
     const { isAuthenticated } = this.state;
-    return (
-      <App
-        isAuthenticated={isAuthenticated}
-        updateAuthentication={this.updateAuthentication}
-      />
-    );
+    return <App isAuthenticated={isAuthenticated} />;
   }
 }
 

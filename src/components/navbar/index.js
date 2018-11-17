@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import AccountControl from "../account-control/index.js";
 
-const NavBar = ({ isAuthenticated, updateAuthentication }) => (
+const NavBar = ({ isAuthenticated }) => (
   <nav>
     <ul>
       <li>
@@ -13,10 +13,7 @@ const NavBar = ({ isAuthenticated, updateAuthentication }) => (
         <Link to="/about">About</Link>
       </li>
       <li>
-        <AccountControl
-          isAuthenticated={isAuthenticated}
-          updateAuthentication={updateAuthentication}
-        />
+        <AccountControl isAuthenticated={isAuthenticated} />
       </li>
     </ul>
   </nav>

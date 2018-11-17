@@ -29,7 +29,6 @@ class LoginModal extends React.Component {
   }
 
   authHandler(authData) {
-    this.props.updateAuthentication();
     this.props.closeLoginModal();
     if (authData) {
       this.props.history.push(this.props.location["pathname"]);
