@@ -43,16 +43,16 @@ class LoginModal extends React.Component {
   authenticate() {
     const providerOAuth = buttonList["github"].provider();
 
-    if (!auth.getAuth().currentUser) {
+    if (this.props.isAuthenticated) {
       auth
         .getAuth()
-        .signInWithPopup(providerOAuth)
+        .currentUser.linkWithPopup(providerOAuth)
         .then(this.authHandler)
         .catch(err => console.error(err));
     } else {
       auth
         .getAuth()
-        .currentUser.linkWithPopup(providerOAuth)
+        .signInWithPopup(providerOAuth)
         .then(this.authHandler)
         .catch(err => console.error(err));
     }

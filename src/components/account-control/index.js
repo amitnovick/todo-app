@@ -36,6 +36,7 @@ class AccountControl extends Component {
                 isModalOpen={isModalOpen}
                 openLoginModal={this.openLoginModal}
                 closeLoginModal={this.closeLoginModal}
+                isAuthenticated={isAuthenticated}
               />
             </div>
           )
