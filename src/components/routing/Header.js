@@ -2,10 +2,10 @@ import React from "react";
 
 import NavBar from "../navbar/index.js";
 
-const Header = ({ isAuthenticated }) => {
+const Header = () => {
   return (
     <header>
-      <NavBar isAuthenticated={isAuthenticated} />
+      <NavBar />
     </header>
   );
 };

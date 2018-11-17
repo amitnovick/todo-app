@@ -3,6 +3,8 @@ import React from "react";
 import { auth } from "../auth/oauth.js";
 import App from "../components/routing/App.js";
 
+export const AuthContext = React.createContext();
+
 class AuthContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -29,7 +31,11 @@ class AuthContainer extends React.Component {
 
   render() {
     const { isAuthenticated } = this.state;
-    return <App isAuthenticated={isAuthenticated} />;
+    return (
+      <AuthContext.Provider value={isAuthenticated}>
+        <App />
+      </AuthContext.Provider>
+    );
   }
 }
 

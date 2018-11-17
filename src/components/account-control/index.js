@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import LoginModal from "../login-modal/index.js";
+import { AuthContext } from "../../containers/AuthContainer.js";
 
 class AccountControl extends Component {
   constructor(props) {
@@ -23,18 +24,23 @@ class AccountControl extends Component {
 
   render() {
     const { isModalOpen } = this.state;
-    const { isAuthenticated } = this.props;
-    return isAuthenticated ? (
-      <Link to="/account">Account Settings</Link>
-    ) : (
-      <div>
-        <button onClick={() => this.openLoginModal()}>Login</button>
-        <LoginModal
-          isModalOpen={isModalOpen}
-          openLoginModal={this.toggleLoginModal}
-          closeLoginModal={this.closeLoginModal}
-        />
-      </div>
+    return (
+      <AuthContext.Consumer>
+        {isAuthenticated =>
+          isAuthenticated ? (
+            <Link to="/account">Account Settings</Link>
+          ) : (
+            <div>
+              <button onClick={() => this.openLoginModal()}>Login</button>
+              <LoginModal
+                isModalOpen={isModalOpen}
+                openLoginModal={this.openLoginModal}
+                closeLoginModal={this.closeLoginModal}
+              />
+            </div>
+          )
+        }
+      </AuthContext.Consumer>
     );
   }
 }

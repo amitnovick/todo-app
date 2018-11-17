@@ -67,8 +67,6 @@ class LoginModal extends React.Component {
           onRequestClose={() => closeLoginModal()}
           contentLabel="Example Modal"
           style={customStyles}
-          // className="Modal"
-          // overlayClassName="Overlay"
         >
           <button
             onClick={() => openLoginModal()}
