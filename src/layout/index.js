@@ -1,6 +1,6 @@
 import React from "react";
 
-import Header from "./header.js";
+import Header from "./Header.js";
 import Body from "./Body.js";
 
 const Layout = () => (
