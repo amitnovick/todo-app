@@ -32,10 +32,14 @@ class AuthContainer extends React.Component {
   render() {
     const { isAuthenticated } = this.state;
     return (
-      <AuthContext.Provider value={{ isAuthenticated }}>
+      <AuthContext.Provider value={{ isAuthenticated, signOut: this.signOut }}>
         <Layout />
       </AuthContext.Provider>
     );
+  }
+
+  signOut() {
+    auth.getAuth().signOut();
   }
 }
 

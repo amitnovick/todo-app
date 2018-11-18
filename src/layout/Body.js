@@ -21,7 +21,14 @@ const Body = () => (
         )}
       />
       <Route path="/about" component={About} />
-      <Route path="/account" component={AccountSettings} />
+      <Route
+        path="/account"
+        render={() => (
+          <AuthContext.Consumer>
+            {context => <AccountSettings signOut={context.signOut} />}
+          </AuthContext.Consumer>
+        )}
+      />
     </Switch>
   </main>
 );

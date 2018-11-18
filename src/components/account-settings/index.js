@@ -1,7 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import { auth } from "../../auth/oauth.js";
 import { AuthContext } from "../../containers/AuthContainer.js";
 
 class AccountSettings extends React.Component {
@@ -11,7 +10,7 @@ class AccountSettings extends React.Component {
     this.handleLogOut = this.handleLogOut.bind(this);
   }
   handleLogOut() {
-    auth.getAuth().signOut();
+    this.props.signOut();
     this.props.history.push("/");
   }
   render() {
