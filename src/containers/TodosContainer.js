@@ -4,6 +4,7 @@ import TodoList from "../components/todo-list/index.js";
 import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
 import firestore from "../firebase/store/firestore.js";
 import { store, uuid } from "../store/local-store.js";
+import withAuthContext from "../containers/withAuthContext";
 
 import "./style.css";
 
@@ -153,4 +154,4 @@ class Container extends React.Component {
   }
 }
 
-export default Container;
+export default withAuthContext(Container);

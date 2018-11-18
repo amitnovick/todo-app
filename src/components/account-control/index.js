@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import LoginModal from "../login-modal/index.js";
-import { AuthContext } from "../../containers/AuthContainer.js";
+import withAuthContext from "../../containers/withAuthContext";
 
 class AccountControl extends Component {
   constructor(props) {
@@ -24,25 +24,18 @@ class AccountControl extends Component {
 
   render() {
     const { isModalOpen } = this.state;
-    return (
-      <AuthContext.Consumer>
-        {context =>
-          context.isAuthenticated ? (
-            <Link to="/account">My Settings</Link>
-          ) : (
-            <div>
-              <button onClick={() => this.openLoginModal()}>Login</button>
-              <LoginModal
-                isModalOpen={isModalOpen}
-                closeLoginModal={this.closeLoginModal}
-                isAuthenticated={context.isAuthenticated}
-              />
-            </div>
-          )
-        }
-      </AuthContext.Consumer>
+    return this.props.isAuthenticated ? (
+      <Link to="/account">My Settings</Link>
+    ) : (
+      <div>
+        <button onClick={() => this.openLoginModal()}>Login</button>
+        <LoginModal
+          isModalOpen={isModalOpen}
+          closeLoginModal={this.closeLoginModal}
+        />
+      </div>
     );
   }
 }
 
-export default AccountControl;
+export default withAuthContext(AccountControl);

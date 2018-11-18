@@ -4,6 +4,7 @@ import { withRouter } from "react-router-dom";
 
 import { auth } from "../../auth/oauth.js";
 import buttonList from "./initialButtonList.js";
+import withAuthContext from "../../containers/withAuthContext.js";
 
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 Modal.setAppElement("#root");
@@ -100,4 +101,4 @@ class LoginModal extends React.Component {
   }
 }
 
-export default withRouter(LoginModal);
+export default withAuthContext(withRouter(LoginModal));

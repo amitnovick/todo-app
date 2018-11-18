@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import { AuthContext } from "../../containers/AuthContainer.js";
+import withAuthContext from "../../containers/withAuthContext";
 
 class AccountSettings extends React.Component {
   constructor(props) {
@@ -14,21 +14,15 @@ class AccountSettings extends React.Component {
     this.props.history.push("/");
   }
   render() {
-    return (
-      <AuthContext.Consumer>
-        {context =>
-          context.isAuthenticated ? (
-            <div>
-              <h1>Account Settings</h1>
-              <button onClick={() => this.handleLogOut()}>Logout</button>
-            </div>
-          ) : (
-            <h1>Access Denied</h1>
-          )
-        }
-      </AuthContext.Consumer>
+    return this.props.isAuthenticated ? (
+      <div>
+        <h1>Account Settings</h1>
+        <button onClick={() => this.handleLogOut()}>Logout</button>
+      </div>
+    ) : (
+      <h1>Access Denied</h1>
     );
   }
 }
 
-export default withRouter(AccountSettings);
+export default withAuthContext(withRouter(AccountSettings));
