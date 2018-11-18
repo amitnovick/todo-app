@@ -17,8 +17,8 @@ class AccountSettings extends React.Component {
   render() {
     return (
       <AuthContext.Consumer>
-        {isAuthenticated =>
-          isAuthenticated ? (
+        {context =>
+          context.isAuthenticated ? (
             <div>
               <h1>Account Settings</h1>
               <button onClick={() => this.handleLogOut()}>Logout</button>

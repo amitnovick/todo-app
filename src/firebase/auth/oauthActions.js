@@ -1,4 +1,4 @@
-import firebaseApp from "../firebase/firebase.js";
+import firebaseApp from "../index.js";
 
 export const getAuth = () => {
   return firebaseApp.auth();

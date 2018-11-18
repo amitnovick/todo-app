@@ -1,4 +1,4 @@
-import firebaseApp from "../firebase/firebase.js";
-import * as auth from "./oauthActions.js";
+import firebaseApp from "../firebase/index.js";
+import * as auth from "../firebase/auth/oauthActions.js";
 
 export { firebaseApp, auth };

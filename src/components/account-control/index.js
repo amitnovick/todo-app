@@ -26,8 +26,8 @@ class AccountControl extends Component {
     const { isModalOpen } = this.state;
     return (
       <AuthContext.Consumer>
-        {isAuthenticated =>
-          isAuthenticated ? (
+        {context =>
+          context.isAuthenticated ? (
             <Link to="/account">My Settings</Link>
           ) : (
             <div>
@@ -35,7 +35,7 @@ class AccountControl extends Component {
               <LoginModal
                 isModalOpen={isModalOpen}
                 closeLoginModal={this.closeLoginModal}
-                isAuthenticated={isAuthenticated}
+                isAuthenticated={context.isAuthenticated}
               />
             </div>
           )

@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 
-import Container from "../containers/Todos.js";
+import TodosContainer from "../containers/TodosContainer.js";
 import About from "../components/about/index.js";
 import AccountSettings from "../components/account-settings/index.js";
 import { AuthContext } from "../containers/AuthContainer.js";
@@ -14,7 +14,9 @@ const Body = () => (
         path="/"
         render={() => (
           <AuthContext.Consumer>
-            {isAuthenticated => <Container isAuthenticated={isAuthenticated} />}
+            {context => (
+              <TodosContainer isAuthenticated={context.isAuthenticated} />
+            )}
           </AuthContext.Consumer>
         )}
       />
