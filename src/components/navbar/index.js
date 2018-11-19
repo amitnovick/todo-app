@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import AccountControl from "../account-control/index.js";
+import AccountControl from "../account-control/index";
 
 import "./style.css";
 

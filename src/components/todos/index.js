@@ -1,16 +1,13 @@
 import React from "react";
 
-import TodoList from "../components/todo-list/index.js";
-import CreateTodoTextbox from "../components/create-todo-textbox/index.js";
-import firestore from "../firebase/store/firestore.js";
-import { store, uuid } from "../store/local-store.js";
-import withAuthContext from "../containers/withAuthContext";
-
-import "./style.css";
+import firestore from "../../firebase/store/firestore.js";
+import { store, uuid } from "../../store/local-store.js";
+import withAuthContext from "../../containers/withAuthContext";
+import Todos from "./presentational.js";
 
 const TODOS = "todos";
 
-class Container extends React.Component {
+class TodosContainer extends React.Component {
   constructor(props) {
     super(props);
     this.key = "todo-app";
@@ -18,20 +15,13 @@ class Container extends React.Component {
     this.state = {
       todos: []
     };
-
-    this.createTodo = this.createTodo.bind(this);
-    this.editTodo = this.editTodo.bind(this);
-    this.toggleTodo = this.toggleTodo.bind(this);
-    this.deleteTodo = this.deleteTodo.bind(this);
-
-    this.mountStore = this.mountStore.bind(this);
   }
 
-  updateLocalStore(newTodos) {
+  updateLocalStore = newTodos => {
     store(this.key, newTodos);
-  }
+  };
 
-  createTodo(title) {
+  createTodo = title => {
     if (this.props.isAuthenticated) {
       const shouldCreateNewTodo = title.length > 0;
       if (!shouldCreateNewTodo) return;
@@ -54,9 +44,9 @@ class Container extends React.Component {
         this.updateLocalStore(newTodos);
       }
     }
-  }
+  };
 
-  editTodo(todo, newTitle) {
+  editTodo = (todo, newTitle) => {
     if (this.props.isAuthenticated) {
       firestore
         .collection(TODOS)
@@ -71,9 +61,9 @@ class Container extends React.Component {
       this.setState({ todos: newTodos });
       this.updateLocalStore(newTodos);
     }
-  }
+  };
 
-  toggleTodo(todo) {
+  toggleTodo = todo => {
     if (this.props.isAuthenticated) {
       firestore
         .collection(TODOS)
@@ -88,9 +78,9 @@ class Container extends React.Component {
       this.setState({ todos: newTodos });
       this.updateLocalStore(newTodos);
     }
-  }
+  };
 
-  deleteTodo(todo) {
+  deleteTodo = todo => {
     if (this.props.isAuthenticated) {
       firestore
         .collection(TODOS)
@@ -101,9 +91,9 @@ class Container extends React.Component {
       this.setState({ todos: newTodos });
       this.updateLocalStore(newTodos);
     }
-  }
+  };
 
-  mountStore() {
+  mountStore = () => {
     if (this.props.isAuthenticated) {
       firestore.collection(TODOS).onSnapshot(snapshot => {
         let todos = [];
@@ -127,31 +117,29 @@ class Container extends React.Component {
     } else {
       this.setState({ todos: store(this.key) });
     }
-  }
+  };
 
   componentDidMount() {
     this.mountStore();
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.isAuthenticated !== this.props.isAuthenticated)
-      this.mountStore();
-  }
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.isAuthenticated !== this.props.isAuthenticated)
+  //     this.mountStore();
+  // }
 
   render() {
-    const { todos } = this.state;
     return (
-      <div className="todoapp">
-        <CreateTodoTextbox createTodo={title => this.createTodo(title)} />
-        <TodoList
-          todos={todos}
-          onDelete={todo => this.deleteTodo(todo)}
-          onEdit={(todo, title) => this.editTodo(todo, title)}
-          onToggle={todo => this.toggleTodo(todo)}
-        />
-      </div>
+      <Todos
+        {...this.props}
+        {...this.state}
+        createTodo={this.createTodo}
+        editTodo={this.editTodo}
+        toggleTodo={this.toggleTodo}
+        deleteTodo={this.deleteTodo}
+      />
     );
   }
 }
 
-export default withAuthContext(Container);
+export default withAuthContext(TodosContainer);

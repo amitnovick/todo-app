@@ -1,14 +1,11 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
-import classNames from "classnames";
+import React from "react";
 
-import "./style.css";
+import TodoList from "./presentational.js";
 
-const editTitleField = "editTitleField";
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
 
-class TodoList extends Component {
+class TodoListContainer extends React.Component {
   constructor(props) {
     super(props);
 
@@ -16,9 +13,11 @@ class TodoList extends Component {
       editingTodo: null,
       editTitle: ""
     };
+
+    this.inputRef = React.createRef();
   }
 
-  replaceTitle(todo) {
+  replaceTitle = todo => {
     const editTitleValue = this.state.editTitle.trim();
     if (editTitleValue.length === 0) this.props.onDelete(todo);
     else if (editTitleValue !== todo.title) {
@@ -26,117 +25,65 @@ class TodoList extends Component {
       this.deactivateTitleEditMode();
       this.setState({ editTitle: "" });
     } else this.deactivateTitleEditMode();
-  }
+  };
 
-  activateTitleEditMode(todo) {
+  activateTitleEditMode = todo => {
     this.setState({
       editingTodo: todo
     });
-  }
+  };
 
-  deactivateTitleEditMode() {
+  deactivateTitleEditMode = () => {
     this.setState({
       editingTodo: null
     });
-  }
+  };
 
-  isTodoBeingEdited(todo) {
+  isTodoBeingEdited = todo => {
     return this.state.editingTodo && todo.id === this.state.editingTodo.id;
-  }
+  };
 
   /* TodoListItem */
-  handleTitleClick(todo) {
+  handleTitleClick = todo => {
     this.activateTitleEditMode(todo);
     this.setState({ editTitle: todo.title });
-  }
+  };
 
-  handleEditTitleTextChange(event) {
+  handleEditTitleTextChange = event => {
     this.setState({ editTitle: event.target.value });
-  }
+  };
 
-  handleEditTitleKeyDown(event, todo) {
+  handleEditTitleKeyDown = (event, todo) => {
     if (event.which === ESCAPE_KEY) {
       this.deactivateTitleEditMode();
     } else if (event.which === ENTER_KEY) {
       this.replaceTitle(todo);
     }
-  }
+  };
 
-  /**
-   * Safely manipulate the DOM after updating the state when invoking
-   * `this.activateTitleEditMode()` method above.
-   * For more info refer to notes at https://facebook.github.io/react/docs/component-api.html#setstate
-   * and https://facebook.github.io/react/docs/component-specs.html#updating-componentdidupdate
-   */
   componentDidUpdate(prevProps, prevState) {
     if (
       !(prevState.editingTodo && prevState.editingTodo.id) &&
       (this.state.editingTodo && this.state.editingTodo.id)
     ) {
-      const node = ReactDOM.findDOMNode(this.refs.editTitleField);
-      node.focus();
-      node.setSelectionRange(node.value.length, node.value.length);
+      this.inputRef.current.focus();
     }
   }
 
   render() {
-    const { editTitle } = this.state;
-    const { todos, onToggle, onDelete } = this.props;
     return (
-      <div className="main">
-        <ul className="todo-list">
-          {todos.map(todo => {
-            const isBeingEdited = this.isTodoBeingEdited(todo);
-            let content;
-            if (isBeingEdited) {
-              content = (
-                <div key={todo.id}>
-                  <input
-                    className="edit"
-                    ref={editTitleField}
-                    value={editTitle}
-                    onChange={event => this.handleEditTitleTextChange(event)}
-                    onKeyDown={event =>
-                      this.handleEditTitleKeyDown(event, todo)
-                    }
-                    onBlur={() => this.replaceTitle(todo)}
-                    type="text"
-                    placeholder="Edited value for todo"
-                  />
-                </div>
-              );
-            } else {
-              content = (
-                <div className="view">
-                  <input
-                    className="toggle"
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => onToggle(todo)}
-                  />
-                  <label onDoubleClick={() => this.handleTitleClick(todo)}>
-                    {todo.title + " "}
-                  </label>
-                  <button className="destroy" onClick={() => onDelete(todo)} />
-                </div>
-              );
-            }
-            return (
-              <li
-                key={todo.id}
-                className={classNames({
-                  completed: todo.completed,
-                  editing: isBeingEdited
-                })}
-              >
-                {content}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <TodoList
+        {...this.props}
+        {...this.state}
+        isTodoBeingEdited={this.isTodoBeingEdited}
+        handleEditTitleTextChange={this.handleEditTitleTextChange}
+        handleEditTitleKeyDown={this.handleEditTitleKeyDown}
+        handleTitleClick={this.handleTitleClick}
+        replaceTitle={this.replaceTitle}
+        inputRef={this.inputRef}
+      />
     );
   }
 }
 
-export default TodoList;
+export default TodoListContainer;

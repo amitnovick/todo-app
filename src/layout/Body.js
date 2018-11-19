@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 
-import TodosContainer from "../containers/TodosContainer.js";
+import TodosContainer from "../components/todos/index.js";
 import About from "../components/about/index.js";
 import AccountSettings from "../components/account-settings/index.js";
 
