@@ -8,6 +8,7 @@ const withAuthContext = Component => props => (
       <Component
         {...props}
         isAuthenticated={context.isAuthenticated}
+        isAwaitingResponse={context.isAwaitingResponse}
         signOut={context.signOut}
       />
     )}

@@ -5,8 +5,9 @@ import withAuthContext from "../../containers/withAuthContext";
 import AccountSettings from "./presentational.js";
 
 class AccountSettingContainer extends React.Component {
-  handleLogOut = () => {
+  handleLogOut = async () => {
     this.props.signOut();
+    await window.location.reload();
     this.props.history.push("/");
   };
 

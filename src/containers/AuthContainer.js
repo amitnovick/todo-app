@@ -9,30 +9,33 @@ class AuthContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuthenticated: false
+      isAuthenticated: false,
+      isAwaitingResponse: true
     };
-
-    this.subscribeToAuthChanges = this.subscribeToAuthChanges.bind(this);
   }
 
-  subscribeToAuthChanges() {
-    auth.getAuth().onAuthStateChanged(user => {
+  subscribeToAuthChanges = async () => {
+    this.setState({ isAwaitingResponse: true });
+    await auth.getAuth().onAuthStateChanged(user => {
       if (user) {
         this.setState({ isAuthenticated: true });
       } else {
         this.setState({ isAuthenticated: false });
       }
+      this.setState({ isAwaitingResponse: false });
     });
-  }
+  };
 
   componentDidMount() {
     this.subscribeToAuthChanges();
   }
 
   render() {
-    const { isAuthenticated } = this.state;
+    const { isAuthenticated, isAwaitingResponse } = this.state;
     return (
-      <AuthContext.Provider value={{ isAuthenticated, signOut: this.signOut }}>
+      <AuthContext.Provider
+        value={{ isAuthenticated, isAwaitingResponse, signOut: this.signOut }}
+      >
         <Layout />
       </AuthContext.Provider>
     );
