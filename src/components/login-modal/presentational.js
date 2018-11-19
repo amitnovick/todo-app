@@ -18,11 +18,12 @@ const customStyles = {
 };
 
 const LoginModal = ({
-  // container state
+  // grandparent state
   isModalOpen,
-  // container methods
+  // grandparent methods
   closeLoginModal,
-  authenticate
+  // container methods
+  doEffect
 }) => {
   return (
     <div>
@@ -45,7 +46,7 @@ const LoginModal = ({
         <form>
           <button
             type="button"
-            onClick={() => authenticate()}
+            onClick={() => doEffect()}
             style={{
               backgroundColor: "black",
               color: "white",

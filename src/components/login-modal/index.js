@@ -39,7 +39,7 @@ class LoginModalContainer extends React.Component {
   };
 
   render() {
-    return <LoginModal {...this.props} authenticate={this.authenticate} />;
+    return <LoginModal {...this.props} doEffect={this.authenticate} />;
   }
 }
 

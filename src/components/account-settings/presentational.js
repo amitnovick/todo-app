@@ -4,12 +4,12 @@ const AccountSettings = ({
   // grandparent state
   isAuthenticated,
   // container methods
-  handleLogOut
+  doEffect
 }) =>
   isAuthenticated ? (
     <div>
       <h1>Account Settings</h1>
-      <button onClick={() => handleLogOut()}>Logout</button>
+      <button onClick={() => doEffect()}>Logout</button>
     </div>
   ) : (
     <h1>Access Denied</h1>

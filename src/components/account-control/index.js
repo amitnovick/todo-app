@@ -1,9 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
+import LoginModal from "../login-modal/index.js";
 import withAuthContext from "../../containers/withAuthContext";
-import AccountControl from "./presentational.js";
 
-class AccountControlContainer extends React.Component {
+class AccountControl extends React.Component {
   constructor(props) {
     super(props);
 
@@ -19,15 +20,20 @@ class AccountControlContainer extends React.Component {
   };
 
   render() {
-    return (
-      <AccountControl
-        {...this.props}
-        {...this.state}
-        openLoginModal={this.openLoginModal}
-        closeLoginModal={this.closeLoginModal}
-      />
+    const { isModalOpen } = this.state;
+    const { isAuthenticated } = this.props;
+    return isAuthenticated ? (
+      <Link to="/account">My Settings</Link>
+    ) : (
+      <div>
+        <button onClick={() => this.openLoginModal()}>Login</button>
+        <LoginModal
+          isModalOpen={isModalOpen}
+          closeLoginModal={this.closeLoginModal}
+        />
+      </div>
     );
   }
 }
 
-export default withAuthContext(AccountControlContainer);
+export default withAuthContext(AccountControl);

@@ -1,11 +1,13 @@
 import React from "react";
 
-import TodoList from "./presentational.js";
+import classNames from "classnames";
+
+import "./style.css";
 
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
 
-class TodoListContainer extends React.Component {
+class TodoList extends React.Component {
   constructor(props) {
     super(props);
 
@@ -71,19 +73,63 @@ class TodoListContainer extends React.Component {
   }
 
   render() {
+    const { onToggle, onDelete, todos } = this.props;
+    const { editTitle } = this.state;
     return (
-      <TodoList
-        {...this.props}
-        {...this.state}
-        isTodoBeingEdited={this.isTodoBeingEdited}
-        handleEditTitleTextChange={this.handleEditTitleTextChange}
-        handleEditTitleKeyDown={this.handleEditTitleKeyDown}
-        handleTitleClick={this.handleTitleClick}
-        replaceTitle={this.replaceTitle}
-        inputRef={this.inputRef}
-      />
+      <div className="main">
+        <ul className="todo-list">
+          {todos.map(todo => {
+            const isBeingEdited = this.isTodoBeingEdited(todo);
+            let content;
+            if (isBeingEdited) {
+              content = (
+                <div key={todo.id}>
+                  <input
+                    className="edit"
+                    ref={this.inputRef}
+                    value={editTitle}
+                    onChange={event => this.handleEditTitleTextChange(event)}
+                    onKeyDown={event =>
+                      this.handleEditTitleKeyDown(event, todo)
+                    }
+                    onBlur={() => this.replaceTitle(todo)}
+                    type="text"
+                    placeholder="Edited value for todo"
+                  />
+                </div>
+              );
+            } else {
+              content = (
+                <div className="view">
+                  <input
+                    className="toggle"
+                    type="checkbox"
+                    checked={todo.completed}
+                    onChange={() => onToggle(todo)}
+                  />
+                  <label onDoubleClick={() => this.handleTitleClick(todo)}>
+                    {todo.title + " "}
+                  </label>
+                  <button className="destroy" onClick={() => onDelete(todo)} />
+                </div>
+              );
+            }
+            return (
+              <li
+                key={todo.id}
+                className={classNames({
+                  completed: todo.completed,
+                  editing: isBeingEdited
+                })}
+              >
+                {content}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     );
   }
 }
 
-export default TodoListContainer;
+export default TodoList;

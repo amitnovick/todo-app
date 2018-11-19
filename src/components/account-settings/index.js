@@ -12,7 +12,13 @@ class AccountSettingContainer extends React.Component {
   };
 
   render() {
-    return <AccountSettings {...this.props} handleLogOut={this.handleLogOut} />;
+    return (
+      <AccountSettings
+        {...this.props}
+        handleLogOut={this.handleLogOut}
+        doEffect={this.handleLogOut}
+      />
+    );
   }
 }
 
