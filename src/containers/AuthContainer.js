@@ -1,6 +1,6 @@
 import React from "react";
 
-import { auth } from "../auth/oauth.js";
+import { auth } from "../firebase/auth/oauth.js";
 import Layout from "../layout/index.js";
 
 export const AuthContext = React.createContext();

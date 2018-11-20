@@ -1,7 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import { auth } from "../../auth/oauth.js";
+import { auth } from "../../firebase/auth/oauth.js";
 import buttonList from "../../firebase/auth/initialButtonList.js";
 import withAuthContext from "../../containers/withAuthContext.js";
 import LoginModal from "./presentational.js";

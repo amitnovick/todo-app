@@ -1,5 +1,4 @@
-import firebase from "@firebase/app";
-import "firebase/auth";
+import firebase from "firebase/app";
 
 /**
  * @param {object} config Object literal with properties: `apiKey`,

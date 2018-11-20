@@ -1,3 +1,5 @@
+import "firebase/auth"; // required for the `firebaseApp.auth` method
+
 import firebaseApp from "../index.js";
 
 export const getAuth = () => {

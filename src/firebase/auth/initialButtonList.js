@@ -1,4 +1,4 @@
-import { auth } from "../../auth/oauth.js";
+import { auth } from "./oauth.js";
 
 /**
  * Initial state of the Social Buttons
