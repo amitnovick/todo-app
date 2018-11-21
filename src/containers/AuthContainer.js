@@ -1,6 +1,6 @@
 import React from "react";
 
-import { auth } from "../firebase/auth/oauth.js";
+import auth from "../firebase/auth.js";
 import Layout from "../layout/index.js";
 
 export const AuthContext = React.createContext();
@@ -16,7 +16,7 @@ class AuthContainer extends React.Component {
 
   subscribeToAuthChanges = async () => {
     this.setState({ isAwaitingResponse: true });
-    await auth.getAuth().onAuthStateChanged(user => {
+    await auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ isAuthenticated: true });
       } else {
@@ -24,6 +24,10 @@ class AuthContainer extends React.Component {
       }
       this.setState({ isAwaitingResponse: false });
     });
+  };
+
+  signOut = () => {
+    auth.signOut();
   };
 
   componentDidMount() {
@@ -39,10 +43,6 @@ class AuthContainer extends React.Component {
         <Layout />
       </AuthContext.Provider>
     );
-  }
-
-  signOut() {
-    auth.getAuth().signOut();
   }
 }
 

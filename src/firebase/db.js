@@ -1,9 +1,8 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
+import "firebase/firestore"; // required for the `firebase.firestore` method
 
-import firebaseApp from "../index.js";
+import firebaseApp from "./initializeApp.js";
 
-const firestore = firebase.firestore(firebaseApp);
+const firestore = firebaseApp.firestore(firebaseApp);
 const settings = { timestampsInSnapshots: true };
 firestore.settings(settings);
 

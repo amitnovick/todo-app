@@ -1,6 +1,6 @@
 import React from "react";
 
-import firestore from "../../firebase/store/firestore.js";
+import firestore from "../../firebase/db.js";
 import { store, uuid } from "../../store/local-store.js";
 import withAuthContext from "../../containers/withAuthContext";
 import Todos from "./presentational.js";
