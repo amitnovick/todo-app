@@ -8,7 +8,7 @@ import AccountSettings from "../pages/account/index.js";
 import "./body.css";
 
 const Body = () => (
-  <main class="body">
+  <main className="body">
     <Switch>
       <Route exact path="/" component={TodosContainer} />
       <Route path="/about" component={About} />
