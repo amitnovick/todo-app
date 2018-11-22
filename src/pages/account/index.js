@@ -1,5 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
+import { Button } from "reactstrap";
 
 import withAuthContext from "../../containers/withAuthContext";
 
@@ -15,7 +16,7 @@ class AccountPage extends React.Component {
     return isAuthenticated ? (
       <div>
         <h1>Account Settings</h1>
-        <button onClick={() => this.handleLogOut()}>Logout</button>
+        <Button onClick={() => this.handleLogOut()}>Logout</Button>
       </div>
     ) : (
       <h1>Access Denied</h1>

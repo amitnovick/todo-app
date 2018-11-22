@@ -11,3 +11,10 @@
 	-moz-osx-font-smoothing: grayscale;
 	font-weight: 300;
 }
+
+/* This class selector solves issue of Modal injecting
+ padding-right of 15px which screws up styling
+  https://stackoverflow.com/a/38909520 */
+.modal-open {
+  padding-right: 0px !important;
+}

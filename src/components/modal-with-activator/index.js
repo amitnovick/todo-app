@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "reactstrap";
 
 import LoginModal from "../login-modal/index.js";
 
@@ -20,7 +21,9 @@ class ModalWithActivator extends React.Component {
     const { isModalOpen } = this.state;
     return (
       <div>
-        <button onClick={() => this.openLoginModal()}>Login</button>
+        <Button color="info" onClick={() => this.openLoginModal()}>
+          Sign-in
+        </Button>
         <LoginModal
           isModalOpen={isModalOpen}
           closeLoginModal={this.closeLoginModal}
