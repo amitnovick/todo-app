@@ -5,8 +5,10 @@ import TodosContainer from "../pages/todos/index.js";
 import About from "../pages/about/index.js";
 import AccountSettings from "../pages/account/index.js";
 
+import "./body.css";
+
 const Body = () => (
-  <main>
+  <main class="body">
     <Switch>
       <Route exact path="/" component={TodosContainer} />
       <Route path="/about" component={About} />

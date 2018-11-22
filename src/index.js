@@ -5,6 +5,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import * as serviceWorker from "./serviceWorker";
 import AuthContainer from "./containers/AuthContainer.js";
 
+import "bootstrap/dist/css/bootstrap.min.css";
+
 ReactDOM.render(
   <Router>
     <AuthContainer />
