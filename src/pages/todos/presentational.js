@@ -1,7 +1,7 @@
 import React from "react";
 
-import TodoList from "../todo-list/index.js";
-import CreateTodoTextbox from "../create-todo-textbox/index.js";
+import TodoList from "../../components/todo-list/index.js";
+import CreateTodoTextbox from "../../components/create-todo-textbox/index.js";
 
 import "./style.css";
 
@@ -16,7 +16,7 @@ const Todos = ({
 }) => {
   return (
     <div className="todoapp">
-      <CreateTodoTextbox createTodo={title => createTodo(title)} />
+      <CreateTodoTextbox onSubmit={title => createTodo(title)} />
       <TodoList
         todos={todos}
         onDelete={todo => deleteTodo(todo)}

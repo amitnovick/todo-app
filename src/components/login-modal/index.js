@@ -1,8 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import auth from "../../firebase/auth.js";
-import buttonList from "./initialButtonList.js";
+import auth, { provider } from "../../firebase/auth.js";
 import withAuthContext from "../../containers/withAuthContext.js";
 import LoginModal from "./presentational.js";
 
@@ -21,23 +20,22 @@ class LoginModalContainer extends React.Component {
    * a different provider to the same user account
    */
   authenticate = () => {
-    const providerOAuth = buttonList["github"].provider();
-
+    const providerObject = provider();
     if (this.props.isAuthenticated) {
       auth.currentUser
-        .linkWithPopup(providerOAuth)
+        .linkWithPopup(providerObject)
         .then(this.authHandler)
         .catch(err => console.error(err));
     } else {
       auth
-        .signInWithPopup(providerOAuth)
+        .signInWithPopup(providerObject)
         .then(this.authHandler)
         .catch(err => console.error(err));
     }
   };
 
   render() {
-    return <LoginModal {...this.props} doEffect={this.authenticate} />;
+    return <LoginModal {...this.props} buttonClick={this.authenticate} />;
   }
 }
 

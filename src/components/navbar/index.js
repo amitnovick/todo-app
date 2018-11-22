@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import AccountControl from "../account-control/index";
+import ModalWithActivator from "../modal-with-activator/index";
+import withAuthContext from "../../containers/withAuthContext";
 
 import "./style.css";
 
-const NavBar = () => (
+const NavBar = ({ isAuthenticated }) => (
   <nav>
     <ul className="navbar">
       <li>
@@ -15,10 +16,14 @@ const NavBar = () => (
         <Link to="/about">About</Link>
       </li>
       <li>
-        <AccountControl />
+        {isAuthenticated ? (
+          <Link to="/account">My Settings</Link>
+        ) : (
+          <ModalWithActivator />
+        )}
       </li>
     </ul>
   </nav>
 );
 
-export default NavBar;
+export default withAuthContext(NavBar);

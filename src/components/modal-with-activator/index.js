@@ -1,13 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import LoginModal from "../login-modal/index.js";
-import withAuthContext from "../../containers/withAuthContext";
 
-class AccountControl extends React.Component {
+class ModalWithActivator extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = { isModalOpen: false };
   }
 
@@ -21,10 +18,7 @@ class AccountControl extends React.Component {
 
   render() {
     const { isModalOpen } = this.state;
-    const { isAuthenticated } = this.props;
-    return isAuthenticated ? (
-      <Link to="/account">My Settings</Link>
-    ) : (
+    return (
       <div>
         <button onClick={() => this.openLoginModal()}>Login</button>
         <LoginModal
@@ -36,4 +30,4 @@ class AccountControl extends React.Component {
   }
 }
 
-export default withAuthContext(AccountControl);
+export default ModalWithActivator;

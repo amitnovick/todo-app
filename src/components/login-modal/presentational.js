@@ -23,7 +23,7 @@ const LoginModal = ({
   // grandparent methods
   closeLoginModal,
   // container methods
-  doEffect
+  buttonClick
 }) => {
   return (
     <div>
@@ -46,7 +46,7 @@ const LoginModal = ({
         <form>
           <button
             type="button"
-            onClick={() => doEffect()}
+            onClick={() => buttonClick()}
             style={{
               backgroundColor: "black",
               color: "white",

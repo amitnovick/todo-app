@@ -6,6 +6,10 @@ export const githubOAuth = () => {
   return new firebaseApp.firebase_.auth.GithubAuthProvider();
 };
 
-const auth = firebaseApp.auth();
+export const provider = () => {
+  const provider = githubOAuth();
+  provider.addScope("user");
+  return provider;
+};
 
-export default auth;
+export default firebaseApp.auth();
