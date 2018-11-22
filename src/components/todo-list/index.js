@@ -94,7 +94,6 @@ class TodoList extends React.Component {
                     }
                     onBlur={() => this.replaceTitle(todo)}
                     type="text"
-                    placeholder="Edited value for todo"
                   />
                 </div>
               );
@@ -107,7 +106,10 @@ class TodoList extends React.Component {
                     checked={todo.completed}
                     onChange={() => onToggle(todo)}
                   />
-                  <label onDoubleClick={() => this.handleTitleClick(todo)}>
+                  <label
+                    className="todo-title"
+                    onDoubleClick={() => this.handleTitleClick(todo)}
+                  >
                     {todo.title + " "}
                   </label>
                   <button className="destroy" onClick={() => onDelete(todo)} />
@@ -117,10 +119,13 @@ class TodoList extends React.Component {
             return (
               <li
                 key={todo.id}
-                className={classNames({
-                  completed: todo.completed,
-                  editing: isBeingEdited
-                })}
+                className={
+                  "todo-list-item " +
+                  classNames({
+                    completed: todo.completed,
+                    editing: isBeingEdited
+                  })
+                }
               >
                 {content}
               </li>
