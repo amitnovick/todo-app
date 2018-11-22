@@ -5,8 +5,6 @@ import TodosContainer from "../pages/todos/index.js";
 import About from "../pages/about/index.js";
 import AccountSettings from "../pages/account/index.js";
 
-import "./body.css";
-
 const Body = () => (
   <main className="body">
     <Switch>
