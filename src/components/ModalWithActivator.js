@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "reactstrap";
 
-import LoginModal from "../LoginModal";
+import LoginModal from "./LoginModal";
 
 class ModalWithActivator extends React.Component {
   constructor(props) {
