@@ -1,7 +1,7 @@
 import React from "react";
 
-import Header from "./Header.js";
-import Body from "./Body.js";
+import Header from "./Header";
+import Body from "./Body";
 import withAuthContext from "../containers/withAuthContext";
 
 const Layout = props =>

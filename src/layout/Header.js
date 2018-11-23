@@ -1,6 +1,6 @@
 import React from "react";
 
-import NavBar from "../components/navbar/index.js";
+import NavBar from "../components/NavBar";
 
 const Header = () => {
   return (

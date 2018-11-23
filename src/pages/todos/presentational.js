@@ -1,7 +1,7 @@
 import React from "react";
 
-import TodoList from "../../components/todo-list/index.js";
-import CreateTodoTextbox from "../../components/create-todo-textbox/index.js";
+import TodoList from "../../components/TodoList";
+import CreateTodoTextbox from "../../components/CreateTodoTextbox";
 
 import "./style.css";
 
