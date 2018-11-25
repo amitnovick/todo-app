@@ -15,12 +15,10 @@ class AuthContainer extends React.Component {
 
   subscribeToAuthChanges = async () => {
     this.setState({ isAwaitingAuth: true });
-    await auth.onAuthStateChanged(user => {
-      if (user) {
-        this.setState({ isAuthenticated: true });
-      } else {
-        this.setState({ isAuthenticated: false });
-      }
+    this.listener = await auth.onAuthStateChanged(user => {
+      user
+        ? this.setState({ isAuthenticated: true })
+        : this.setState({ isAuthenticated: false });
       this.setState({ isAwaitingAuth: false });
     });
   };
@@ -31,6 +29,10 @@ class AuthContainer extends React.Component {
 
   componentDidMount() {
     this.subscribeToAuthChanges();
+  }
+
+  componentWillUnmount() {
+    this.listener();
   }
 
   render() {
