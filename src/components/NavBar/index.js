@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import ModalWithActivator from "../ModalWithActivator";
-import withAuthContext from "../../containers/withAuthContext";
+import withAuthContext from "../../containers/AuthContainer/withAuthContext";
 
 import "./style.css";
 

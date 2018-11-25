@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AuthContext } from "./AuthContainer.js";
+import { AuthContext } from "./index.js";
 
 const withAuthContext = Component => props => (
   <AuthContext.Consumer>
@@ -8,7 +8,7 @@ const withAuthContext = Component => props => (
       <Component
         {...props}
         isAuthenticated={context.isAuthenticated}
-        isAwaitingResponse={context.isAwaitingResponse}
+        isAwaitingAuth={context.isAwaitingAuth}
         signOut={context.signOut}
       />
     )}

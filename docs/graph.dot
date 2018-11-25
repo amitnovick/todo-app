@@ -1,0 +1,42 @@
+# http://www.graphviz.org/content/cluster
+
+digraph G {
+    // // Import relations
+    // "index" -> {"AuthContainer", "TodosContainer","Layout"}
+    // "Layout" -> "Body"
+    // "Layout" -> "Header"
+    // "Body" -> "Todos"
+    // "Body" -> "TodosContainer/withTodosContext"
+    // "Todos" -> "TodosContainer/withTodosContext"
+    // "TodosContainer/withTodosContext" -> "AuthContainer/withAuthContext"
+    // "Header" -> "NavBar"
+    
+    // Composition relation
+    edge [color="red" label="parent of"]
+    "AuthContainer" -> "TodosContainer"
+    "TodosContainer" -> "Layout"
+    "Layout" -> "Body"
+    "Layout" -> "Header"
+    "Header" -> "NavBar"
+    
+    // Context relation
+    edge [color="blue", label="proides context to"]
+    "TodosContainer" -> "TodosContainer/withTodosContext"
+    "AuthContainer" -> "AuthContainer/withAuthContext"
+    
+    // HOC node marking
+    "AuthContainer/withAuthContext" [color="green"]
+    "TodosContainer/withTodosContext" [color="green"]
+    
+    // HOC wrap relation
+    edge [label="wrapped by", color="purple"]
+    "Body" -> "TodosContainer/withTodosContext" 
+    "Todos" -> "TodosContainer/withTodosContext"
+    "TodosContainer/withTodosContext" -> "AuthContainer/withAuthContext"
+    "NavBar" -> "AuthContainer/withAuthContext"
+    "TodosContainer" -> "AuthContainer/withAuthContext"
+    
+    // Routing relation
+    edge [label="routes to", color="brown"]
+    "Body" -> "Todos"
+}

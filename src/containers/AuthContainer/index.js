@@ -1,7 +1,6 @@
 import React from "react";
 
-import auth from "../firebase/auth.js";
-import Layout from "../layout/index.js";
+import auth from "../../firebase/auth.js";
 
 export const AuthContext = React.createContext();
 
@@ -10,19 +9,19 @@ class AuthContainer extends React.Component {
     super(props);
     this.state = {
       isAuthenticated: false,
-      isAwaitingResponse: true
+      isAwaitingAuth: true
     };
   }
 
   subscribeToAuthChanges = async () => {
-    this.setState({ isAwaitingResponse: true });
+    this.setState({ isAwaitingAuth: true });
     await auth.onAuthStateChanged(user => {
       if (user) {
         this.setState({ isAuthenticated: true });
       } else {
         this.setState({ isAuthenticated: false });
       }
-      this.setState({ isAwaitingResponse: false });
+      this.setState({ isAwaitingAuth: false });
     });
   };
 
@@ -35,12 +34,12 @@ class AuthContainer extends React.Component {
   }
 
   render() {
-    const { isAuthenticated, isAwaitingResponse } = this.state;
+    const { isAuthenticated, isAwaitingAuth } = this.state;
     return (
       <AuthContext.Provider
-        value={{ isAuthenticated, isAwaitingResponse, signOut: this.signOut }}
+        value={{ isAuthenticated, isAwaitingAuth, signOut: this.signOut }}
       >
-        <Layout />
+        {this.props.children}
       </AuthContext.Provider>
     );
   }

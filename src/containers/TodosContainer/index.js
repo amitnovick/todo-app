@@ -2,30 +2,30 @@ import React from "react";
 
 import firestore from "../../firebase/db.js";
 import { store, uuid } from "../../store/local-store.js";
-import withAuthContext from "../../containers/withAuthContext";
-import Todos from "./presentational.js";
+import withAuthContext from "../AuthContainer/withAuthContext";
+
+export const TodosContext = React.createContext();
 
 const TODOS = "todos";
 
 class TodosContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.key = "todo-app";
-
     this.state = {
-      todos: []
+      todos: [],
+      isAwaitingTodos: true
     };
   }
 
-  updateLocalStore = newTodos => {
-    store(this.key, newTodos);
+  updateLocalStore = async newTodos => {
+    await store(TODOS, newTodos);
   };
 
-  createTodo = title => {
+  createTodo = async title => {
     if (this.props.isAuthenticated) {
       const shouldCreateNewTodo = title.length > 0;
       if (!shouldCreateNewTodo) return;
-      firestore.collection(TODOS).add({
+      await firestore.collection(TODOS).add({
         title: title,
         completed: false,
         createdAt: new Date().toISOString()
@@ -41,14 +41,14 @@ class TodosContainer extends React.Component {
         });
 
         this.setState({ todos: newTodos });
-        this.updateLocalStore(newTodos);
+        await this.updateLocalStore(newTodos);
       }
     }
   };
 
-  editTodo = (todo, newTitle) => {
+  editTodo = async (todo, newTitle) => {
     if (this.props.isAuthenticated) {
-      firestore
+      await firestore
         .collection(TODOS)
         .doc(todo.id)
         .update({
@@ -59,13 +59,13 @@ class TodosContainer extends React.Component {
         t => (t !== todo ? t : { ...t, title: newTitle })
       );
       this.setState({ todos: newTodos });
-      this.updateLocalStore(newTodos);
+      await this.updateLocalStore(newTodos);
     }
   };
 
-  toggleTodo = todo => {
+  toggleTodo = async todo => {
     if (this.props.isAuthenticated) {
-      firestore
+      await firestore
         .collection(TODOS)
         .doc(todo.id)
         .update({
@@ -76,26 +76,30 @@ class TodosContainer extends React.Component {
         t => (t !== todo ? t : { ...t, completed: !t.completed })
       );
       this.setState({ todos: newTodos });
-      this.updateLocalStore(newTodos);
+      await this.updateLocalStore(newTodos);
     }
   };
 
-  deleteTodo = todo => {
+  deleteTodo = async todo => {
     if (this.props.isAuthenticated) {
-      firestore
+      await firestore
         .collection(TODOS)
         .doc(todo.id)
         .delete();
     } else {
       const newTodos = this.state.todos.filter(t => t.id !== todo.id);
       this.setState({ todos: newTodos });
-      this.updateLocalStore(newTodos);
+      await this.updateLocalStore(newTodos);
     }
   };
 
-  mountStore = () => {
+  mountStore = async () => {
     if (this.props.isAuthenticated) {
-      firestore.collection(TODOS).onSnapshot(snapshot => {
+      await firestore.collection(TODOS).onSnapshot(snapshot => {
+        if (this.isUnmounted) {
+          return;
+        }
+
         let todos = [];
         snapshot.forEach(doc => {
           const todo = doc.data();
@@ -115,12 +119,23 @@ class TodosContainer extends React.Component {
         this.setState({ todos });
       });
     } else {
-      this.setState({ todos: store(this.key) });
+      const todos = await store(TODOS);
+      this.setState({ todos });
     }
+    this.setState({ isAwaitingTodos: false });
   };
 
   componentDidMount() {
     this.mountStore();
+  }
+
+  /* 
+  Added to attempt solving:
+  > Warning: Can't call setState (or forceUpdate) on an unmounted component.
+  > This is a no-op, but it indicates a memory leak in your application.
+  Solution by https://stackoverflow.com/a/51247126 */
+  componentWillUnmount() {
+    this.isUnmounted = true;
   }
 
   // componentDidUpdate(prevProps) {
@@ -129,15 +144,20 @@ class TodosContainer extends React.Component {
   // }
 
   render() {
+    const { todos, isAwaitingTodos } = this.state;
     return (
-      <Todos
-        {...this.props}
-        {...this.state}
-        createTodo={this.createTodo}
-        editTodo={this.editTodo}
-        toggleTodo={this.toggleTodo}
-        deleteTodo={this.deleteTodo}
-      />
+      <TodosContext.Provider
+        value={{
+          todos,
+          isAwaitingTodos,
+          createTodo: this.createTodo,
+          editTodo: this.editTodo,
+          toggleTodo: this.toggleTodo,
+          deleteTodo: this.deleteTodo
+        }}
+      >
+        {this.props.children}
+      </TodosContext.Provider>
     );
   }
 }

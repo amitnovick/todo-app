@@ -1,7 +1,8 @@
 import React from "react";
 
-import TodoList from "../../components/TodoList";
-import CreateTodoTextbox from "../../components/CreateTodoTextbox";
+import TodoList from "../TodoList";
+import CreateTodoTextbox from "../CreateTodoTextbox";
+import withTodosContext from "../../containers/TodosContainer/withTodosContext";
 
 import "./style.css";
 
@@ -27,4 +28,4 @@ const Todos = ({
   );
 };
 
-export default Todos;
+export default withTodosContext(Todos);

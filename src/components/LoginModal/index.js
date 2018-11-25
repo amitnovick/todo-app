@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 
 import auth, { provider } from "../../firebase/auth.js";
-import withAuthContext from "../../containers/withAuthContext.js";
+import withAuthContext from "../../containers/AuthContainer/withAuthContext.js";
 import LoginModal from "./presentational.js";
 
 class LoginModalContainer extends React.Component {
@@ -21,7 +21,7 @@ class LoginModalContainer extends React.Component {
    */
   authenticate = () => {
     const providerObject = provider();
-    if (this.props.isAuthenticated) {
+    if (this.props.isAwaitingAuth) {
       auth.currentUser
         .linkWithPopup(providerObject)
         .then(this.authHandler)
