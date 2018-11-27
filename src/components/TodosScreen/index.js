@@ -4,7 +4,6 @@ import "./style.css";
 
 import TodoList from "../TodoList";
 import CreateTodoTextbox from "../CreateTodoTextbox";
-import withTodosContext from "../../containers/TodosContainer/withTodosContext";
 
 const Todos = ({
   // container state
@@ -28,4 +27,4 @@ const Todos = ({
   );
 };
 
-export default withTodosContext(Todos);
+export default Todos;

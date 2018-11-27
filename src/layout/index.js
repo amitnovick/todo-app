@@ -2,20 +2,21 @@ import React from "react";
 
 import Header from "./Header";
 import Body from "./Body";
-import withAuthContext from "../containers/AuthContainer/withAuthContext";
+import { AuthContext } from "../containers/AuthContainer";
 
-/*
- `isAwaitingAuth` is for Header component
- `isAwaitingTodos` is for Body component
- */
-const Layout = props =>
-  props.isAwaitingAuth || props.isAwaitingTodos ? (
-    <h1>Loading Page</h1>
-  ) : (
-    <div>
-      <Header />
-      <Body />
-    </div>
-  );
+const Layout = () => (
+  <AuthContext.Consumer>
+    {authContext =>
+      authContext.isAwaitingAuth ? (
+        <h1>Loading Page</h1>
+      ) : (
+        <div>
+          <Header />
+          <Body />
+        </div>
+      )
+    }
+  </AuthContext.Consumer>
+);
 
-export default withAuthContext(Layout);
+export default Layout;

@@ -2,7 +2,6 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { Button } from "reactstrap";
 
-import withAuthContext from "../../containers/AuthContainer/withAuthContext";
 import { signOut } from "../../firebase/auth.js";
 
 class AccountScreen extends React.Component {
@@ -25,4 +24,4 @@ class AccountScreen extends React.Component {
   }
 }
 
-export default withAuthContext(withRouter(AccountScreen));
+export default withRouter(AccountScreen);

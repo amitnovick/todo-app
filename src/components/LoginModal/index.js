@@ -6,7 +6,6 @@ import {
   launchProviderSignInPopupForRecognizedUser,
   launchProviderSignInPopupForUnrecognizedUser
 } from "../../firebase/auth.js";
-import withAuthContext from "../../containers/AuthContainer/withAuthContext.js";
 import LoginModal from "./presentational.js";
 
 class LoginModalContainer extends React.Component {
@@ -41,4 +40,4 @@ class LoginModalContainer extends React.Component {
   }
 }
 
-export default withAuthContext(withRouter(LoginModalContainer));
+export default withRouter(LoginModalContainer);

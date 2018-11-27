@@ -2,7 +2,6 @@ import React from "react";
 
 import firestore from "../../firebase/db.js";
 import { store, uuid } from "../../store/local-store.js";
-import withAuthContext from "../AuthContainer/withAuthContext";
 
 export const TodosContext = React.createContext();
 
@@ -168,4 +167,4 @@ class TodosContainer extends React.Component {
   }
 }
 
-export default withAuthContext(TodosContainer);
+export default TodosContainer;
