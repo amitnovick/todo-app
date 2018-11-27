@@ -3,10 +3,11 @@ import { withRouter } from "react-router-dom";
 import { Button } from "reactstrap";
 
 import withAuthContext from "../../containers/AuthContainer/withAuthContext";
+import { signOut } from "../../firebase/auth.js";
 
-class AccountPage extends React.Component {
+class AccountScreen extends React.Component {
   handleLogOut = async () => {
-    this.props.signOut();
+    signOut();
     await window.location.reload();
     this.props.history.push("/");
   };
@@ -24,4 +25,4 @@ class AccountPage extends React.Component {
   }
 }
 
-export default withAuthContext(withRouter(AccountPage));
+export default withAuthContext(withRouter(AccountScreen));

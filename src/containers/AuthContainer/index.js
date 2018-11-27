@@ -1,6 +1,6 @@
 import React from "react";
 
-import auth from "../../firebase/auth.js";
+import { onAuthStateChanged } from "../../firebase/auth.js";
 
 export const AuthContext = React.createContext();
 
@@ -9,22 +9,24 @@ class AuthContainer extends React.Component {
     super(props);
     this.state = {
       isAuthenticated: false,
-      isAwaitingAuth: true
+      isAwaitingAuth: true,
+      userID: null
     };
   }
 
   subscribeToAuthChanges = async () => {
     this.setState({ isAwaitingAuth: true });
-    this.listener = await auth.onAuthStateChanged(user => {
-      user
-        ? this.setState({ isAuthenticated: true })
-        : this.setState({ isAuthenticated: false });
+    const doAfterAuth = user => {
+      if (user) {
+        this.setState({ isAuthenticated: true });
+        this.setState({ userID: user.uid });
+      } else {
+        this.setState({ isAuthenticated: false });
+        this.setState({ userID: null });
+      }
       this.setState({ isAwaitingAuth: false });
-    });
-  };
-
-  signOut = () => {
-    auth.signOut();
+    };
+    this.listener = await onAuthStateChanged(doAfterAuth);
   };
 
   componentDidMount() {
@@ -36,11 +38,9 @@ class AuthContainer extends React.Component {
   }
 
   render() {
-    const { isAuthenticated, isAwaitingAuth } = this.state;
+    const { isAuthenticated, isAwaitingAuth, userID } = this.state;
     return (
-      <AuthContext.Provider
-        value={{ isAuthenticated, isAwaitingAuth, signOut: this.signOut }}
-      >
+      <AuthContext.Provider value={{ isAuthenticated, isAwaitingAuth, userID }}>
         {this.props.children}
       </AuthContext.Provider>
     );

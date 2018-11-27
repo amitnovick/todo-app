@@ -7,6 +7,7 @@ import withAuthContext from "../AuthContainer/withAuthContext";
 export const TodosContext = React.createContext();
 
 const TODOS = "todos";
+const userIdToCollectionMap = userID => `todos-${userID}`;
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -25,20 +26,23 @@ class TodosContainer extends React.Component {
     if (this.props.isAuthenticated) {
       const shouldCreateNewTodo = title.length > 0;
       if (!shouldCreateNewTodo) return;
-      await firestore.collection(TODOS).add({
+      const todo = {
         title: title,
         completed: false,
         createdAt: new Date().toISOString()
-      });
+      };
+      const todosCollection = userIdToCollectionMap(this.props.userID);
+      await firestore.collection(todosCollection).add(todo);
     } else {
       const shouldCreateNewTodo = title.length > 0;
       if (shouldCreateNewTodo) {
-        const newTodos = this.state.todos.concat({
+        const todo = {
           id: uuid(),
           title: title,
           completed: false,
           createdAt: new Date().toISOString()
-        });
+        };
+        const newTodos = this.state.todos.concat(todo);
 
         this.setState({ todos: newTodos });
         await this.updateLocalStore(newTodos);
@@ -48,16 +52,18 @@ class TodosContainer extends React.Component {
 
   editTodo = async (todo, newTitle) => {
     if (this.props.isAuthenticated) {
+      const todoChange = {
+        title: newTitle
+      };
+      const todosCollection = userIdToCollectionMap(this.props.userID);
       await firestore
-        .collection(TODOS)
+        .collection(todosCollection)
         .doc(todo.id)
-        .update({
-          title: newTitle
-        });
+        .update(todoChange);
     } else {
-      const newTodos = this.state.todos.map(
-        t => (t !== todo ? t : { ...t, title: newTitle })
-      );
+      const todoChangeFunction = t =>
+        t !== todo ? t : { ...t, title: newTitle };
+      const newTodos = this.state.todos.map(todoChangeFunction);
       this.setState({ todos: newTodos });
       await this.updateLocalStore(newTodos);
     }
@@ -65,16 +71,18 @@ class TodosContainer extends React.Component {
 
   toggleTodo = async todo => {
     if (this.props.isAuthenticated) {
+      const todoChange = {
+        completed: !todo.completed
+      };
+      const todosCollection = userIdToCollectionMap(this.props.userID);
       await firestore
-        .collection(TODOS)
+        .collection(todosCollection)
         .doc(todo.id)
-        .update({
-          completed: !todo.completed
-        });
+        .update(todoChange);
     } else {
-      const newTodos = this.state.todos.map(
-        t => (t !== todo ? t : { ...t, completed: !t.completed })
-      );
+      const todoChangeFunction = t =>
+        t !== todo ? t : { ...t, completed: !t.completed };
+      const newTodos = this.state.todos.map(todoChangeFunction);
       this.setState({ todos: newTodos });
       await this.updateLocalStore(newTodos);
     }
@@ -82,12 +90,14 @@ class TodosContainer extends React.Component {
 
   deleteTodo = async todo => {
     if (this.props.isAuthenticated) {
+      const todosCollection = userIdToCollectionMap(this.props.userID);
       await firestore
-        .collection(TODOS)
+        .collection(todosCollection)
         .doc(todo.id)
         .delete();
     } else {
-      const newTodos = this.state.todos.filter(t => t.id !== todo.id);
+      const todoChangeFunction = t => t.id !== todo.id;
+      const newTodos = this.state.todos.filter(todoChangeFunction);
       this.setState({ todos: newTodos });
       await this.updateLocalStore(newTodos);
     }
@@ -95,7 +105,8 @@ class TodosContainer extends React.Component {
 
   mountStore = async () => {
     if (this.props.isAuthenticated) {
-      await firestore.collection(TODOS).onSnapshot(snapshot => {
+      const todosCollection = userIdToCollectionMap(this.props.userID);
+      await firestore.collection(todosCollection).onSnapshot(snapshot => {
         if (this.isUnmounted) {
           return;
         }
@@ -137,11 +148,6 @@ class TodosContainer extends React.Component {
   componentWillUnmount() {
     this.isUnmounted = true;
   }
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.isAuthenticated !== this.props.isAuthenticated)
-  //     this.mountStore();
-  // }
 
   render() {
     const { todos, isAwaitingTodos } = this.state;

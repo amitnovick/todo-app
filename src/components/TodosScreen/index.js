@@ -1,10 +1,10 @@
 import React from "react";
 
+import "./style.css";
+
 import TodoList from "../TodoList";
 import CreateTodoTextbox from "../CreateTodoTextbox";
 import withTodosContext from "../../containers/TodosContainer/withTodosContext";
-
-import "./style.css";
 
 const Todos = ({
   // container state
