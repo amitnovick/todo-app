@@ -1,7 +1,7 @@
 import React from "react";
 
-import firestore from "../../firebase/db.js";
-import { store, uuid } from "../../store/local-store.js";
+import firestore from "../firebase/db.js";
+import { store, uuid } from "../store/local-store.js";
 
 export const TodosContext = React.createContext();
 

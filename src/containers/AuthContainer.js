@@ -1,6 +1,6 @@
 import React from "react";
 
-import { onAuthStateChanged } from "../../firebase/auth.js";
+import firebaseApp from "../firebase/initializeApp.js";
 
 export const AuthContext = React.createContext();
 
@@ -26,7 +26,7 @@ class AuthContainer extends React.Component {
       }
       this.setState({ isAwaitingAuth: false });
     };
-    this.listener = await onAuthStateChanged(doAfterAuth);
+    this.listener = await firebaseApp.auth().onAuthStateChanged(doAfterAuth);
   };
 
   componentDidMount() {
