@@ -7,7 +7,6 @@ import { signOut } from "../../firebase/auth.js";
 class AccountScreen extends React.Component {
   handleLogOut = async () => {
     signOut();
-    await window.location.reload();
     this.props.history.push("/");
   };
 

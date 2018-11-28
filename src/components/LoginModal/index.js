@@ -6,14 +6,6 @@ import firebaseApp from "../../firebase/initializeApp.js";
 import LoginModal from "./presentational.js";
 
 class LoginModalContainer extends React.Component {
-  authHandler = authData => {
-    this.props.closeLoginModal();
-    if (authData) {
-      // window.location.reload();
-      this.props.history.push("/");
-    }
-  };
-
   /**
    * Authenticates the user with a social media provider.
    * Either creates a new user account in Firebase or links
@@ -26,13 +18,11 @@ class LoginModalContainer extends React.Component {
       firebaseApp
         .auth()
         .linkWithPopup(providerObject)
-        .then(this.authHandler)
         .catch(err => console.error(err));
     } else {
       firebaseApp
         .auth()
         .signInWithPopup(providerObject)
-        .then(this.authHandler)
         .catch(err => console.error(err));
     }
   };
