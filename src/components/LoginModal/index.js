@@ -9,8 +9,8 @@ class LoginModalContainer extends React.Component {
   authHandler = authData => {
     this.props.closeLoginModal();
     if (authData) {
-      // this.props.history.push(this.props.location["pathname"]);
-      window.location.reload();
+      // window.location.reload();
+      this.props.history.push("/");
     }
   };
 
