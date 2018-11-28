@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 
 import TodosScreen from "../components/TodosScreen";
 import AboutScreen from "../components/AboutScreen";
@@ -16,6 +16,7 @@ const Body = () => (
       <Route exact path="/about" component={AboutScreen} />
       <Route exact path="/account" component={AccountScreenAdapter} />
       <Route exact path="/demo" component={TodosScreenDemoAdapter} />
+      <Route render={() => <h1>Not found</h1>} />
     </Switch>
   </main>
 );
@@ -50,6 +51,12 @@ const TodosScreenDemoAdapter = () => (
 
 const AccountScreenAdapter = () => (
   <AuthContext.Consumer>
-    {authContext => <AccountScreen {...authContext} />}
+    {authContext =>
+      authContext.isAuthenticated ? (
+        <AccountScreen {...authContext} />
+      ) : (
+        <Redirect to="/" />
+      )
+    }
   </AuthContext.Consumer>
 );
