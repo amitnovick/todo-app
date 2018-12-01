@@ -16,15 +16,21 @@ const Body = () => (
   <main className="body">
     <Route
       render={({ location }) => (
-        <TransitionGroup>
-          <CSSTransition key={location.key} timeout={300} classNames="fade">
-            <Switch location={location}>
-              <Route exact path="/" component={HomeScreenCloudAdapter} />
-              <Route exact path="/about" component={AboutScreen} />
-              <Route exact path="/account" component={AccountScreenAdapter} />
-              <Route exact path="/demo" component={TodosScreenDemoAdapter} />
-              <Route render={() => <h1>Not found</h1>} />
-            </Switch>
+        <TransitionGroup className="transition-group">
+          <CSSTransition
+            key={location.key}
+            timeout={{ enter: 300, exit: 300 }}
+            classNames="fade"
+          >
+            <section className="route-section">
+              <Switch location={location}>
+                <Route exact path="/" component={HomeScreenCloudAdapter} />
+                <Route exact path="/about" component={AboutScreen} />
+                <Route exact path="/account" component={AccountScreenAdapter} />
+                <Route exact path="/demo" component={TodosScreenDemoAdapter} />
+                <Route render={() => <h1>Not found</h1>} />
+              </Switch>
+            </section>
           </CSSTransition>
         </TransitionGroup>
       )}
