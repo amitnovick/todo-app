@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import styled from "styled-components";
 
 import "./style.css";
 
@@ -12,8 +13,15 @@ import TodosContainerCloud from "../../containers/TodosContainerCloud";
 import TodosContext from "../../containers/TodosContext";
 import { AuthContext } from "../../containers/AuthContainer";
 
+const StyledMain = styled.main`
+  min-width: 230px;
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 0;
+`;
+
 const Body = () => (
-  <main className="body">
+  <StyledMain>
     <Route
       render={({ location }) => (
         <TransitionGroup className="transition-group">
@@ -35,7 +43,7 @@ const Body = () => (
         </TransitionGroup>
       )}
     />
-  </main>
+  </StyledMain>
 );
 
 export default Body;
