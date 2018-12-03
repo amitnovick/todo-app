@@ -23,7 +23,7 @@ class ModalWithActivator extends React.Component {
     return (
       <div>
         <Button color="info" onClick={() => this.openLoginModal()}>
-          Sign-in
+          Sign In
         </Button>
         <AuthContext.Consumer>
           {authContext => (

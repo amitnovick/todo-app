@@ -48,17 +48,17 @@ const NavList = ({ isAuthenticated }) =>
     <Nav className="ml-auto" navbar>
       <NavItem>
         <NavLink tag={Link} to="/">
-          Edit todos
+          App
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink tag={Link} to="/about">
-          About
+          Features
         </NavLink>
       </NavItem>
       <NavItem>
         <NavLink tag={Link} to="/account">
-          My Account
+          Account
         </NavLink>
       </NavItem>
     </Nav>
@@ -72,7 +72,7 @@ const NavList = ({ isAuthenticated }) =>
       </NavItem>
       <NavItem>
         <NavLink tag={Link} to="/about">
-          About
+          Features
         </NavLink>
       </NavItem>
       <NavItem>
