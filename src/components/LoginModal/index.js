@@ -11,20 +11,26 @@ class LoginModalContainer extends React.Component {
    * Either creates a new user account in Firebase or links
    * a different provider to the same user account
    */
+
   authenticate = () => {
     const providerObject = provider();
+
+    const redirectUserToFullAppFromDemo = () => {
+      if (this.props.location.pathname === "/demo")
+        this.props.history.push("/");
+    };
 
     if (firebaseApp.auth().currentUser) {
       firebaseApp
         .auth()
         .linkWithPopup(providerObject)
-        .then(() => this.props.history.push("/"))
+        .then(redirectUserToFullAppFromDemo)
         .catch(err => console.error(err));
     } else {
       firebaseApp
         .auth()
         .signInWithPopup(providerObject)
-        .then(() => this.props.history.push("/"))
+        .then(redirectUserToFullAppFromDemo)
         .catch(err => console.error(err));
     }
 
