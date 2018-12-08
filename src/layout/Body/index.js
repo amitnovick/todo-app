@@ -1,19 +1,27 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import styled from "styled-components";
 
 import "./style.css";
 
-import TodosScreen from "../../components/TodosScreen";
-import AboutScreen from "../../components/AboutScreen";
-import AccountScreen from "../../components/AccountScreen";
-import TodosContainerDemo from "../../containers/TodosContainerDemo";
-import TodosContainerCloud from "../../containers/TodosContainerCloud";
-import TodosContext from "../../containers/TodosContext";
-import { AuthContext } from "../../containers/AuthContainer";
+import TodosScreen from "../../components/TodosScreen/index.js";
+import AboutScreen from "../../components/AboutScreen.js";
+import AccountScreen from "../../components/AccountScreen.js";
+import TodosContainerDemo from "../../containers/TodosContainerDemo.js";
+import TodosContainerCloud from "../../containers/TodosContainerCloud.js";
+import TodosContext from "../../containers/TodosContext.js";
+import { AuthContext } from "../../containers/AuthContainer.js";
+
+const StyledMain = styled.main`
+  min-width: 230px;
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 0;
+`;
 
 const Body = () => (
-  <main className="body">
+  <StyledMain>
     <Route
       render={({ location }) => (
         <TransitionGroup className="transition-group">
@@ -35,7 +43,7 @@ const Body = () => (
         </TransitionGroup>
       )}
     />
-  </main>
+  </StyledMain>
 );
 
 export default Body;
@@ -52,8 +60,8 @@ const HomeScreenCloudAdapter = () => (
           </TodosContext.Consumer>
         </TodosContainerCloud>
       ) : (
-        <h1>Welcome</h1>
-      )
+            <h1>Welcome</h1>
+          )
     }
   </AuthContext.Consumer>
 );
@@ -72,8 +80,8 @@ const AccountScreenAdapter = () => (
       authContext.isAuthenticated ? (
         <AccountScreen {...authContext} />
       ) : (
-        <Redirect to="/" />
-      )
+          <Redirect to="/" />
+        )
     }
   </AuthContext.Consumer>
 );
