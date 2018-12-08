@@ -21,59 +21,6 @@ export const StyledInputEdit = styled.input`
   margin: 0 0 0 43px;
 `;
 
-// export const StyledInputEdit = styled.input`
-//   bottom: 0px;
-//   box-shadow: rgba(0, 0, 0, 0.2) 0px -1px 5px 0px inset;
-//   color: rgb(33, 37, 41);
-//   display: block;
-//   height: 59px;
-//   left: 0px;
-//   position: relative;
-//   right: 0px;
-//   text-decoration: none solid rgb(33, 37, 41);
-//   text-size-adjust: 100%;
-//   top: 0px;
-//   width: 506px;
-//   z-index: 2;
-//   column-rule-color: rgb(33, 37, 41);
-//   perspective-origin: 253px 29.5px;
-//   transform-origin: 253px 29.5px;
-//   caret-color: rgb(33, 37, 41);
-//   border: 1px solid rgb(153, 153, 153);
-//   font: normal normal 400 normal 24px / 33.6px -apple-system, BlinkMacSystemFont,
-//     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-//     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-//   list-style: none outside none;
-//   margin: 0px 0px 0px 43px;
-//   outline: rgb(33, 37, 41) none 0px;
-//   padding: 12px 16px;
-// `;
-
-// export const StyledCheckbox = styled.input`
-//   bottom: 0px;
-//   cursor: default;
-//   display: block;
-//   height: 58px;
-//   left: 0px;
-//   opacity: 0;
-//   position: absolute;
-//   right: 510px;
-//   text-align: center;
-//   text-size-adjust: 100%;
-//   top: 0px;
-//   width: 40px;
-//   perspective-origin: 20px 29px;
-//   transform-origin: 20px 29px;
-//   background: rgba(0, 0, 0, 0) none repeat scroll 0% 0% / auto padding-box
-//     border-box;
-//   border: 0px none rgb(0, 0, 0);
-//   font: normal normal 400 normal 24px / 36px -apple-system, BlinkMacSystemFont,
-//     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji",
-//     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-//   list-style: none outside none;
-//   padding: 0px;
-// `;
-
 export const StyledInputCheckbox = styled.input`
   /* .todo-list-item .toggle */
   text-align: center;

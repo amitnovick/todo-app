@@ -18,13 +18,26 @@ class LoginModalContainer extends React.Component {
       firebaseApp
         .auth()
         .linkWithPopup(providerObject)
+        .then(() => this.props.history.push("/"))
         .catch(err => console.error(err));
     } else {
       firebaseApp
         .auth()
         .signInWithPopup(providerObject)
+        .then(() => this.props.history.push("/"))
         .catch(err => console.error(err));
     }
+
+    /*
+    TODO: Implement this instead! somehow?
+
+    const signInFunction = firebaseApp.auth().currentUser
+      ? firebaseApp.auth().linkWithPopup
+      : firebaseApp.auth().signInWithPopup;
+    signInFunction(providerObject)
+      .then(() => this.props.history.push("/"))
+      .catch(err => console.error(err));
+     */
   };
 
   render() {
