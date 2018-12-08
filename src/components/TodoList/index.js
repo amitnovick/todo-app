@@ -83,8 +83,8 @@ class TodoList extends React.Component {
     const { onToggle, onDelete, todos } = this.props;
     const { editTitle } = this.state;
     return (
-      <StyledDiv className="main">
-        <StyledUnorderedList className="todo-list">
+      <StyledDiv>
+        <StyledUnorderedList>
           {todos.map(todo => {
             const isBeingEdited = this.isTodoBeingEdited(todo);
             let content;
@@ -92,7 +92,6 @@ class TodoList extends React.Component {
               content = (
                 <div key={todo.id}>
                   <StyledInputEdit
-                    className="edit"
                     ref={this.inputRef}
                     value={editTitle}
                     onChange={event => this.handleEditTitleTextChange(event)}
@@ -106,15 +105,13 @@ class TodoList extends React.Component {
               );
             } else {
               content = (
-                <div className="view">
+                <div>
                   <StyledInputCheckbox
-                    className="toggle"
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => onToggle(todo)}
                   />
                   <StyledLabelTitle
-                    className="todo-title"
                     isCompleted={todo.completed}
                     onDoubleClick={() => this.handleTitleClick(todo)}
                   >

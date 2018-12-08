@@ -1,9 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import styled from "styled-components";
-
-import "./style.css";
+import { CSSTransition } from "react-transition-group";
 
 import TodosScreen from "../../components/TodosScreen/index.js";
 import AboutScreen from "../../components/AboutScreen.js";
@@ -12,25 +9,20 @@ import TodosContainerDemo from "../../containers/TodosContainerDemo.js";
 import TodosContainerCloud from "../../containers/TodosContainerCloud.js";
 import TodosContext from "../../containers/TodosContext.js";
 import { AuthContext } from "../../containers/AuthContainer.js";
-
-const StyledMain = styled.main`
-  min-width: 230px;
-  max-width: 550px;
-  margin: 0 auto;
-  padding: 0;
-`;
+import { StyledMain, StyledTransitionGroup, StyledSection } from "./style.js";
+import "./style.css";
 
 const Body = () => (
   <StyledMain>
     <Route
       render={({ location }) => (
-        <TransitionGroup className="transition-group">
+        <StyledTransitionGroup>
           <CSSTransition
             key={location.key}
             timeout={{ enter: 300, exit: 300 }}
             classNames="fade"
           >
-            <section className="route-section">
+            <StyledSection>
               <Switch location={location}>
                 <Route exact path="/" component={HomeScreenCloudAdapter} />
                 <Route exact path="/about" component={AboutScreen} />
@@ -38,9 +30,9 @@ const Body = () => (
                 <Route exact path="/demo" component={TodosScreenDemoAdapter} />
                 <Route render={() => <h1>Not found</h1>} />
               </Switch>
-            </section>
+            </StyledSection>
           </CSSTransition>
-        </TransitionGroup>
+        </StyledTransitionGroup>
       )}
     />
   </StyledMain>
@@ -60,8 +52,8 @@ const HomeScreenCloudAdapter = () => (
           </TodosContext.Consumer>
         </TodosContainerCloud>
       ) : (
-            <h1>Welcome</h1>
-          )
+        <h1>Welcome</h1>
+      )
     }
   </AuthContext.Consumer>
 );
@@ -80,8 +72,8 @@ const AccountScreenAdapter = () => (
       authContext.isAuthenticated ? (
         <AccountScreen {...authContext} />
       ) : (
-          <Redirect to="/" />
-        )
+        <Redirect to="/" />
+      )
     }
   </AuthContext.Consumer>
 );
