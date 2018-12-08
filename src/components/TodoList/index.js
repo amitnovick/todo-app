@@ -1,5 +1,4 @@
 import React from "react";
-import classNames from "classnames";
 
 import "./style.css";
 import {
@@ -129,16 +128,7 @@ class TodoList extends React.Component {
               );
             }
             return (
-              <StyledListItem
-                key={todo.id}
-                className={
-                  "todo-list-item " +
-                  classNames({
-                    completed: todo.completed,
-                    editing: isBeingEdited
-                  })
-                }
-              >
+              <StyledListItem key={todo.id} className="todo-list-item">
                 {content}
               </StyledListItem>
             );
