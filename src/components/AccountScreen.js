@@ -2,7 +2,7 @@ import React from "react";
 import { withRouter } from "react-router-dom";
 import { Button } from "reactstrap";
 
-import { signOut } from "../../firebase/auth.js";
+import { signOut } from "../firebase/auth.js";
 
 class AccountScreen extends React.Component {
   handleLogOut = async () => {

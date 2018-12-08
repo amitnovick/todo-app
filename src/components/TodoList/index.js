@@ -2,6 +2,15 @@ import React from "react";
 import classNames from "classnames";
 
 import "./style.css";
+import {
+  StyledInputEdit,
+  StyledInputCheckbox,
+  StyledButtonDestroy,
+  StyledLabelTitle,
+  StyledListItem,
+  StyledUnorderedList,
+  StyledDiv
+} from "./style.js";
 
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
@@ -75,15 +84,15 @@ class TodoList extends React.Component {
     const { onToggle, onDelete, todos } = this.props;
     const { editTitle } = this.state;
     return (
-      <div className="main">
-        <ul className="todo-list">
+      <StyledDiv className="main">
+        <StyledUnorderedList className="todo-list">
           {todos.map(todo => {
             const isBeingEdited = this.isTodoBeingEdited(todo);
             let content;
             if (isBeingEdited) {
               content = (
                 <div key={todo.id}>
-                  <input
+                  <StyledInputEdit
                     className="edit"
                     ref={this.inputRef}
                     value={editTitle}
@@ -99,24 +108,28 @@ class TodoList extends React.Component {
             } else {
               content = (
                 <div className="view">
-                  <input
+                  <StyledInputCheckbox
                     className="toggle"
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => onToggle(todo)}
                   />
-                  <label
+                  <StyledLabelTitle
                     className="todo-title"
+                    isCompleted={todo.completed}
                     onDoubleClick={() => this.handleTitleClick(todo)}
                   >
                     {todo.title + " "}
-                  </label>
-                  <button className="destroy" onClick={() => onDelete(todo)} />
+                  </StyledLabelTitle>
+                  <StyledButtonDestroy
+                    className="destroy"
+                    onClick={() => onDelete(todo)}
+                  />
                 </div>
               );
             }
             return (
-              <li
+              <StyledListItem
                 key={todo.id}
                 className={
                   "todo-list-item " +
@@ -127,11 +140,11 @@ class TodoList extends React.Component {
                 }
               >
                 {content}
-              </li>
+              </StyledListItem>
             );
           })}
-        </ul>
-      </div>
+        </StyledUnorderedList>
+      </StyledDiv>
     );
   }
 }

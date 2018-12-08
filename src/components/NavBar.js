@@ -10,8 +10,8 @@ import {
   Collapse
 } from "reactstrap";
 
-import ModalWithActivator from "../ModalWithActivator";
-import { AuthContext } from "../../containers/AuthContainer";
+import ModalWithActivator from "./ModalWithActivator";
+import { AuthContext } from "../containers/AuthContainer";
 
 class NavBar extends React.Component {
   state = { isOpen: false };
