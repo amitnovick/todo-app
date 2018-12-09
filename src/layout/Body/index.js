@@ -26,10 +26,11 @@ const Body = () => (
               <Switch location={location}>
                 <Route exact path="/" render={() => <h1>Welcome</h1>} />
                 <Route exact path="/features" component={AboutScreen} />
-                <Route exact path="/account" component={AccountScreenAdapter} />
                 <Route exact path="/demo" component={TodosScreenDemoAdapter} />
-                <Route exact path="/app" component={TodosScreenCloudAdapter} />
-                <Route render={() => <h1>Not found</h1>} />
+                <UserRoute path="/app" component={TodosScreenCloudAdapter} />
+                <UserRoute path="/account" component={AccountScreen} />
+                <GuestRoute path="/signin" component={SignInScreen} />
+                <Route component={NotFoundScreen} />
               </Switch>
             </StyledSection>
           </CSSTransition>
@@ -41,21 +42,19 @@ const Body = () => (
 
 export default Body;
 
+const NotFoundScreen = () => <h1>Not found</h1>;
+
+const SignInScreen = () => <h1>Sign-in</h1>;
+
 const TodosScreenCloudAdapter = () => (
   <AuthContext.Consumer>
-    {authContext =>
-      authContext.isAwaitingAuth ? (
-        <h1>Loading Todos</h1>
-      ) : authContext.isAuthenticated ? (
-        <TodosContainerCloud userId={authContext.userId}>
-          <TodosContext.Consumer>
-            {todosContext => <TodosScreen {...todosContext} />}
-          </TodosContext.Consumer>
-        </TodosContainerCloud>
-      ) : (
-        <h1>Not authenticated yet...</h1>
-      )
-    }
+    {authContext => (
+      <TodosContainerCloud userId={authContext.userId}>
+        <TodosContext.Consumer>
+          {todosContext => <TodosScreen {...todosContext} />}
+        </TodosContext.Consumer>
+      </TodosContainerCloud>
+    )}
   </AuthContext.Consumer>
 );
 
@@ -67,19 +66,34 @@ const TodosScreenDemoAdapter = () => (
   </TodosContainerDemo>
 );
 
-const AccountScreenAdapter = () => (
+const UserRoute = ({ path, component: Component }) => (
   <AuthContext.Consumer>
-    {authContext =>
-      authContext.isAuthenticated ? (
-        <AccountScreen />
-      ) : (
-        <Redirect from="/account" to="/" />
-      )
-    // authContext.isAuthenticated ? (
-    //   <AccountScreen />
-    // ) : (
-    //   <h1>Unauthoried Access</h1>
-    // )
-    }
+    {authContext => (
+      <Route
+        exact
+        path={path}
+        render={() =>
+          authContext.isAuthenticated ? (
+            <Component />
+          ) : (
+            <Redirect to="/signin" />
+          )
+        }
+      />
+    )}
+  </AuthContext.Consumer>
+);
+
+const GuestRoute = ({ path, component: Component }) => (
+  <AuthContext.Consumer>
+    {authContext => (
+      <Route
+        exact
+        path={path}
+        render={() =>
+          !authContext.isAuthenticated ? <Component /> : <Redirect to="/" />
+        }
+      />
+    )}
   </AuthContext.Consumer>
 );
