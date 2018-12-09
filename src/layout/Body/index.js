@@ -8,7 +8,7 @@ import AccountScreen from "../../components/AccountScreen.js";
 import TodosContainerDemo from "../../containers/TodosContainerDemo.js";
 import TodosContainerCloud from "../../containers/TodosContainerCloud.js";
 import TodosContext from "../../containers/TodosContext.js";
-import { AuthContext } from "../../containers/AuthContainer.js";
+import AuthContext from "../../containers/AuthContext.js";
 import { StyledMain, StyledTransitionGroup, StyledSection } from "./style.js";
 import "./style.css";
 
@@ -24,10 +24,11 @@ const Body = () => (
           >
             <StyledSection>
               <Switch location={location}>
-                <Route exact path="/" component={HomeScreenCloudAdapter} />
-                <Route exact path="/about" component={AboutScreen} />
+                <Route exact path="/" render={() => <h1>Welcome</h1>} />
+                <Route exact path="/features" component={AboutScreen} />
                 <Route exact path="/account" component={AccountScreenAdapter} />
                 <Route exact path="/demo" component={TodosScreenDemoAdapter} />
+                <Route exact path="/app" component={TodosScreenCloudAdapter} />
                 <Route render={() => <h1>Not found</h1>} />
               </Switch>
             </StyledSection>
@@ -40,19 +41,19 @@ const Body = () => (
 
 export default Body;
 
-const HomeScreenCloudAdapter = () => (
+const TodosScreenCloudAdapter = () => (
   <AuthContext.Consumer>
     {authContext =>
       authContext.isAwaitingAuth ? (
         <h1>Loading Todos</h1>
       ) : authContext.isAuthenticated ? (
-        <TodosContainerCloud {...authContext}>
+        <TodosContainerCloud userId={authContext.userId}>
           <TodosContext.Consumer>
             {todosContext => <TodosScreen {...todosContext} />}
           </TodosContext.Consumer>
         </TodosContainerCloud>
       ) : (
-        <h1>Welcome</h1>
+        <h1>Not authenticated yet...</h1>
       )
     }
   </AuthContext.Consumer>
@@ -70,10 +71,15 @@ const AccountScreenAdapter = () => (
   <AuthContext.Consumer>
     {authContext =>
       authContext.isAuthenticated ? (
-        <AccountScreen {...authContext} />
+        <AccountScreen />
       ) : (
-        <Redirect to="/" />
+        <Redirect from="/account" to="/" />
       )
+    // authContext.isAuthenticated ? (
+    //   <AccountScreen />
+    // ) : (
+    //   <h1>Unauthoried Access</h1>
+    // )
     }
   </AuthContext.Consumer>
 );

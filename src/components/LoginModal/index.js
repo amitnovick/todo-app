@@ -1,9 +1,11 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 
-import { provider } from "../../firebase/auth.js";
-import firebaseApp from "../../firebase/initializeApp.js";
 import LoginModal from "./presentational.js";
+import {
+  linkWithPopup,
+  signInWithPopup
+} from "../../firebase/authInterface.js";
 
 class LoginModalContainer extends React.Component {
   /**
@@ -13,37 +15,23 @@ class LoginModalContainer extends React.Component {
    */
 
   authenticate = () => {
-    const providerObject = provider();
+    /* TODO: The redirection responsibility would complect
+     this function. find better way to compose the desired flow */
 
-    const redirectUserToFullAppFromDemo = () => {
-      if (this.props.location.pathname === "/demo")
-        this.props.history.push("/");
-    };
+    // const redirectUserToFullAppFromDemo = () => {
+    //   if (this.props.location.pathname === "/demo")
+    //     this.props.history.push("/");
+    // };
 
-    if (firebaseApp.auth().currentUser) {
-      firebaseApp
-        .auth()
-        .linkWithPopup(providerObject)
-        .then(redirectUserToFullAppFromDemo)
+    if (this.props.isAuthenticated) {
+      linkWithPopup()
+        // .then(redirectUserToFullAppFromDemo)
         .catch(err => console.error(err));
     } else {
-      firebaseApp
-        .auth()
-        .signInWithPopup(providerObject)
-        .then(redirectUserToFullAppFromDemo)
+      signInWithPopup()
+        // .then(redirectUserToFullAppFromDemo)
         .catch(err => console.error(err));
     }
-
-    /*
-    TODO: Implement this instead! somehow?
-
-    const signInFunction = firebaseApp.auth().currentUser
-      ? firebaseApp.auth().linkWithPopup
-      : firebaseApp.auth().signInWithPopup;
-    signInFunction(providerObject)
-      .then(() => this.props.history.push("/"))
-      .catch(err => console.error(err));
-     */
   };
 
   render() {

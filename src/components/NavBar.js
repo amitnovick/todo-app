@@ -10,8 +10,8 @@ import {
   Collapse
 } from "reactstrap";
 
-import ModalWithActivator from "./ModalWithActivator";
-import { AuthContext } from "../containers/AuthContainer";
+import ModalWithActivator from "./ModalWithActivator.js";
+import AuthContext from "../containers/AuthContext.js";
 
 class NavBar extends React.Component {
   state = { isOpen: false };
@@ -47,12 +47,12 @@ const NavList = ({ isAuthenticated }) =>
   isAuthenticated ? (
     <Nav className="ml-auto" navbar>
       <NavItem>
-        <NavLink tag={Link} to="/">
+        <NavLink tag={Link} to="/app">
           App
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink tag={Link} to="/about">
+        <NavLink tag={Link} to="/features">
           Features
         </NavLink>
       </NavItem>
@@ -71,7 +71,7 @@ const NavList = ({ isAuthenticated }) =>
         </NavLink>
       </NavItem>
       <NavItem>
-        <NavLink tag={Link} to="/about">
+        <NavLink tag={Link} to="/features">
           Features
         </NavLink>
       </NavItem>
