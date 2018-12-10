@@ -24,5 +24,8 @@ export const signInWithPopup = () => {
 };
 
 export const signOut = () => {
-  firebaseApp.auth().signOut();
+  firebaseApp
+    .auth()
+    .signOut()
+    .catch(err => console.log(err));
 };

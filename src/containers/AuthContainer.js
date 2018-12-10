@@ -8,9 +8,9 @@ class AuthContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isAuthenticated: false,
       isAwaitingAuth: true,
-      userId: null
+      user: null,
+      isAuthenticated: false
     };
   }
 
@@ -18,11 +18,9 @@ class AuthContainer extends React.Component {
     this.setState({ isAwaitingAuth: true });
     const doAfterAuth = user => {
       if (user) {
-        this.setState({ isAuthenticated: true });
-        this.setState({ userId: user.uid });
+        this.setState({ user: user, isAuthenticated: true });
       } else {
-        this.setState({ isAuthenticated: false });
-        this.setState({ userId: null });
+        this.setState({ user: null, isAuthenticated: false });
       }
       this.setState({ isAwaitingAuth: false });
     };

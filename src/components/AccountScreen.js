@@ -1,11 +1,10 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
 import { Button } from "reactstrap";
 
 import { signOut } from "../firebase/authInterface.js";
 
 class AccountScreen extends React.Component {
-  handleLogOut = async () => {
+  handleLogOut = () => {
     signOut();
   };
 
@@ -19,4 +18,4 @@ class AccountScreen extends React.Component {
   }
 }
 
-export default withRouter(AccountScreen);
+export default AccountScreen;

@@ -49,7 +49,7 @@ const SignInScreen = () => <h1>Sign-in</h1>;
 const TodosScreenCloudAdapter = () => (
   <AuthContext.Consumer>
     {authContext => (
-      <TodosContainerCloud userId={authContext.userId}>
+      <TodosContainerCloud userId={authContext.user.uid}>
         <TodosContext.Consumer>
           {todosContext => <TodosScreen {...todosContext} />}
         </TodosContext.Consumer>
