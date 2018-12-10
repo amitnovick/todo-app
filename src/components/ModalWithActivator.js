@@ -1,8 +1,7 @@
 import React from "react";
 import { Button } from "reactstrap";
 
-import LoginModal from "./LoginModal";
-import AuthContext from "../containers/Auth/AuthContext.js";
+import LoginModal from "./LoginModal.js";
 
 class ModalWithActivator extends React.Component {
   constructor(props) {
@@ -25,15 +24,10 @@ class ModalWithActivator extends React.Component {
         <Button color="info" onClick={() => this.openLoginModal()}>
           Sign In
         </Button>
-        <AuthContext.Consumer>
-          {authContext => (
-            <LoginModal
-              isModalOpen={isModalOpen}
-              closeLoginModal={this.closeLoginModal}
-              isAuthenticated={authContext.isAuthenticated}
-            />
-          )}
-        </AuthContext.Consumer>
+        <LoginModal
+          isModalOpen={isModalOpen}
+          closeLoginModal={this.closeLoginModal}
+        />
       </div>
     );
   }

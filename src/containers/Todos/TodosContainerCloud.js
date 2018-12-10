@@ -2,6 +2,7 @@ import React from "react";
 
 import TodosContext from "./TodosContext.js";
 import realtimeDb from "../../firebase/initializeRealtimeDb.js";
+import withAuthentication from "../Auth/withAuthentication.js";
 
 const mapUserIdToCollection = userId => `todos-${userId}`;
 
@@ -22,7 +23,7 @@ class TodosContainer extends React.Component {
       completed: false,
       createdAt: new Date().toISOString()
     };
-    const userId = this.props.userId;
+    const userId = this.props.user.uid;
     const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb.collection(todosCollection).add(todo);
   };
@@ -31,7 +32,7 @@ class TodosContainer extends React.Component {
     const todoChange = {
       title: newTitle
     };
-    const userId = this.props.userId;
+    const userId = this.props.user.uid;
     const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb
       .collection(todosCollection)
@@ -43,7 +44,7 @@ class TodosContainer extends React.Component {
     const todoChange = {
       completed: !todo.completed
     };
-    const userId = this.props.userId;
+    const userId = this.props.user.uid;
     const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb
       .collection(todosCollection)
@@ -52,7 +53,7 @@ class TodosContainer extends React.Component {
   };
 
   deleteTodo = async todo => {
-    const userId = this.props.userId;
+    const userId = this.props.user.uid;
     const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb
       .collection(todosCollection)
@@ -61,7 +62,7 @@ class TodosContainer extends React.Component {
   };
 
   _mountStore = async () => {
-    const userId = this.props.userId;
+    const userId = this.props.user.uid;
     const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb.collection(todosCollection).onSnapshot(snapshot => {
       if (this.isUnmounted) {
@@ -121,4 +122,4 @@ class TodosContainer extends React.Component {
   }
 }
 
-export default TodosContainer;
+export default withAuthentication(TodosContainer);

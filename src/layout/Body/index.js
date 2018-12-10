@@ -24,7 +24,7 @@ const Body = () => (
           >
             <StyledSection>
               <Switch location={location}>
-                <Route exact path="/" render={() => <h1>Welcome</h1>} />
+                <Route exact path="/" component={HomeScreen} />
                 <Route exact path="/features" component={AboutScreen} />
                 <Route exact path="/demo" component={TodosScreenDemoAdapter} />
                 <UserRoute path="/app" component={TodosScreenCloudAdapter} />
@@ -42,20 +42,18 @@ const Body = () => (
 
 export default Body;
 
+const HomeScreen = () => <h1>Welcome</h1>;
+
 const NotFoundScreen = () => <h1>Not found</h1>;
 
 const SignInScreen = () => <h1>Sign-in</h1>;
 
 const TodosScreenCloudAdapter = () => (
-  <AuthContext.Consumer>
-    {authContext => (
-      <TodosContainerCloud userId={authContext.user.uid}>
-        <TodosContext.Consumer>
-          {todosContext => <TodosScreen {...todosContext} />}
-        </TodosContext.Consumer>
-      </TodosContainerCloud>
-    )}
-  </AuthContext.Consumer>
+  <TodosContainerCloud>
+    <TodosContext.Consumer>
+      {todosContext => <TodosScreen {...todosContext} />}
+    </TodosContext.Consumer>
+  </TodosContainerCloud>
 );
 
 const TodosScreenDemoAdapter = () => (
