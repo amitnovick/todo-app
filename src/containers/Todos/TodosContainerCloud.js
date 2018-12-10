@@ -1,7 +1,7 @@
 import React from "react";
 
-import TodosContext from "./TodosContext";
-import realtimeDb from "../firebase/initializeRealtimeDb.js";
+import TodosContext from "./TodosContext.js";
+import realtimeDb from "../../firebase/initializeRealtimeDb.js";
 
 const mapUserIdToCollection = userId => `todos-${userId}`;
 

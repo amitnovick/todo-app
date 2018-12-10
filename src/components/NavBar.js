@@ -11,7 +11,7 @@ import {
 } from "reactstrap";
 
 import ModalWithActivator from "./ModalWithActivator.js";
-import AuthContext from "../containers/AuthContext.js";
+import AuthContext from "../containers/Auth/AuthContext.js";
 
 class NavBar extends React.Component {
   state = { isOpen: false };

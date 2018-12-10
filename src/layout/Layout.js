@@ -1,8 +1,8 @@
 import React from "react";
 
-import Header from "./Header";
-import Body from "./Body";
-import AuthContext from "../containers/AuthContext.js";
+import Header from "./Header.js";
+import Body from "./Body/index.js";
+import AuthContext from "../containers/Auth/AuthContext.js";
 
 const Layout = () => (
   <AuthContext.Consumer>

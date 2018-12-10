@@ -2,7 +2,7 @@ import React from "react";
 import "firebase/auth"; // required for the `firebase.auth` method
 
 import AuthContext from "./AuthContext.js";
-import firebaseApp from "../firebase/initializeFirebaseApp.js";
+import firebaseApp from "../../firebase/initializeFirebaseApp.js";
 
 class AuthContainer extends React.Component {
   constructor(props) {

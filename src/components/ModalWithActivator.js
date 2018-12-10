@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "reactstrap";
 
 import LoginModal from "./LoginModal";
-import AuthContext from "../containers/AuthContext.js";
+import AuthContext from "../containers/Auth/AuthContext.js";
 
 class ModalWithActivator extends React.Component {
   constructor(props) {

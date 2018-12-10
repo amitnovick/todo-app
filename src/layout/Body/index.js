@@ -5,10 +5,10 @@ import { CSSTransition } from "react-transition-group";
 import TodosScreen from "../../components/TodosScreen/index.js";
 import AboutScreen from "../../components/AboutScreen.js";
 import AccountScreen from "../../components/AccountScreen.js";
-import TodosContainerDemo from "../../containers/TodosContainerDemo.js";
-import TodosContainerCloud from "../../containers/TodosContainerCloud.js";
-import TodosContext from "../../containers/TodosContext.js";
-import AuthContext from "../../containers/AuthContext.js";
+import TodosContainerDemo from "../../containers/Todos/TodosContainerDemo.js";
+import TodosContainerCloud from "../../containers/Todos/TodosContainerCloud.js";
+import TodosContext from "../../containers/Todos/TodosContext.js";
+import AuthContext from "../../containers/Auth/AuthContext.js";
 import { StyledMain, StyledTransitionGroup, StyledSection } from "./style.js";
 import "./style.css";
 
