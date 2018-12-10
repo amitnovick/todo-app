@@ -2,18 +2,25 @@ import "firebase/auth"; // required dependency for the `.auth()` accessor
 
 import firebaseApp from "./initializeFirebaseApp.js";
 
-const _authenticateWithGithub = async () => {
-  return await new firebaseApp.firebase_.auth.GithubAuthProvider();
+const _authenticateWithGithub = () => {
+  const provider = new firebaseApp.firebase_.auth.GithubAuthProvider();
+  return provider;
 };
 
-export const linkWithPopup = async () => {
-  const provider = await _authenticateWithGithub();
-  firebaseApp.auth().linkWithPopup(provider);
+export const linkWithPopup = () => {
+  const provider = _authenticateWithGithub();
+  firebaseApp
+    .auth()
+    .linkWithPopup(provider)
+    .catch(err => console.log(err));
 };
 
-export const signInWithPopup = async () => {
-  const provider = await _authenticateWithGithub();
-  firebaseApp.auth().signInWithPopup(provider);
+export const signInWithPopup = () => {
+  const provider = _authenticateWithGithub();
+  firebaseApp
+    .auth()
+    .signInWithPopup(provider)
+    .catch(err => console.log(err));
 };
 
 export const signOut = () => {

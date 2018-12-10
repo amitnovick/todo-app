@@ -15,22 +15,10 @@ class LoginModalContainer extends React.Component {
    */
 
   authenticate = () => {
-    /* TODO: The redirection responsibility would complect
-     this function. find better way to compose the desired flow */
-
-    // const redirectUserToFullAppFromDemo = () => {
-    //   if (this.props.location.pathname === "/demo")
-    //     this.props.history.push("/");
-    // };
-
-    if (this.props.isAuthenticated) {
-      linkWithPopup()
-        // .then(redirectUserToFullAppFromDemo)
-        .catch(err => console.error(err));
+    if (this.props.isSignedIn) {
+      linkWithPopup();
     } else {
-      signInWithPopup()
-        // .then(redirectUserToFullAppFromDemo)
-        .catch(err => console.error(err));
+      signInWithPopup();
     }
   };
 
