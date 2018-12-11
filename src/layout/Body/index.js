@@ -21,7 +21,6 @@ const Body = () => (
             key={location.key}
             timeout={{ enter: 300, exit: 300 }}
             classNames="fade"
-            appear={true}
           >
             <StyledSection>
               <Switch location={location}>
