@@ -1,7 +1,7 @@
 import React from "react";
 
-import { store, uuid } from "../store/local-store.js";
-import TodosContext from "./TodosContext";
+import { store, uuid } from "../../utils.js";
+import TodosContext from "./TodosContext.js";
 
 const TODOS = "todos";
 

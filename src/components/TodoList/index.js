@@ -1,7 +1,15 @@
 import React from "react";
-import classNames from "classnames";
 
 import "./style.css";
+import {
+  StyledInputEdit,
+  StyledInputCheckbox,
+  StyledButtonDestroy,
+  StyledLabelTitle,
+  StyledListItem,
+  StyledUnorderedList,
+  StyledDiv
+} from "./style.js";
 
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
@@ -75,16 +83,15 @@ class TodoList extends React.Component {
     const { onToggle, onDelete, todos } = this.props;
     const { editTitle } = this.state;
     return (
-      <div className="main">
-        <ul className="todo-list">
+      <StyledDiv>
+        <StyledUnorderedList>
           {todos.map(todo => {
             const isBeingEdited = this.isTodoBeingEdited(todo);
             let content;
             if (isBeingEdited) {
               content = (
                 <div key={todo.id}>
-                  <input
-                    className="edit"
+                  <StyledInputEdit
                     ref={this.inputRef}
                     value={editTitle}
                     onChange={event => this.handleEditTitleTextChange(event)}
@@ -98,40 +105,33 @@ class TodoList extends React.Component {
               );
             } else {
               content = (
-                <div className="view">
-                  <input
-                    className="toggle"
+                <div>
+                  <StyledInputCheckbox
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => onToggle(todo)}
                   />
-                  <label
-                    className="todo-title"
+                  <StyledLabelTitle
+                    isCompleted={todo.completed}
                     onDoubleClick={() => this.handleTitleClick(todo)}
                   >
                     {todo.title + " "}
-                  </label>
-                  <button className="destroy" onClick={() => onDelete(todo)} />
+                  </StyledLabelTitle>
+                  <StyledButtonDestroy
+                    className="destroy"
+                    onClick={() => onDelete(todo)}
+                  />
                 </div>
               );
             }
             return (
-              <li
-                key={todo.id}
-                className={
-                  "todo-list-item " +
-                  classNames({
-                    completed: todo.completed,
-                    editing: isBeingEdited
-                  })
-                }
-              >
+              <StyledListItem key={todo.id} className="todo-list-item">
                 {content}
-              </li>
+              </StyledListItem>
             );
           })}
-        </ul>
-      </div>
+        </StyledUnorderedList>
+      </StyledDiv>
     );
   }
 }

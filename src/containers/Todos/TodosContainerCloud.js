@@ -1,10 +1,10 @@
 import React from "react";
 
-import firestore from "../firebase/db.js";
-import firebaseApp from "../firebase/initializeApp.js";
-import TodosContext from "./TodosContext";
+import TodosContext from "./TodosContext.js";
+import realtimeDb from "../../firebase/initializeRealtimeDb.js";
+import withAuthentication from "../Auth/withAuthentication.js";
 
-const mapUserIdToCollection = userID => `todos-${userID}`;
+const mapUserIdToCollection = userId => `todos-${userId}`;
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -23,18 +23,18 @@ class TodosContainer extends React.Component {
       completed: false,
       createdAt: new Date().toISOString()
     };
-    const userID = firebaseApp.auth().currentUser.uid;
-    const todosCollection = mapUserIdToCollection(userID);
-    await firestore.collection(todosCollection).add(todo);
+    const userId = this.props.user.uid;
+    const todosCollection = mapUserIdToCollection(userId);
+    await realtimeDb.collection(todosCollection).add(todo);
   };
 
   editTodo = async (todo, newTitle) => {
     const todoChange = {
       title: newTitle
     };
-    const userID = firebaseApp.auth().currentUser.uid;
-    const todosCollection = mapUserIdToCollection(userID);
-    await firestore
+    const userId = this.props.user.uid;
+    const todosCollection = mapUserIdToCollection(userId);
+    await realtimeDb
       .collection(todosCollection)
       .doc(todo.id)
       .update(todoChange);
@@ -44,27 +44,27 @@ class TodosContainer extends React.Component {
     const todoChange = {
       completed: !todo.completed
     };
-    const userID = firebaseApp.auth().currentUser.uid;
-    const todosCollection = mapUserIdToCollection(userID);
-    await firestore
+    const userId = this.props.user.uid;
+    const todosCollection = mapUserIdToCollection(userId);
+    await realtimeDb
       .collection(todosCollection)
       .doc(todo.id)
       .update(todoChange);
   };
 
   deleteTodo = async todo => {
-    const userID = firebaseApp.auth().currentUser.uid;
-    const todosCollection = mapUserIdToCollection(userID);
-    await firestore
+    const userId = this.props.user.uid;
+    const todosCollection = mapUserIdToCollection(userId);
+    await realtimeDb
       .collection(todosCollection)
       .doc(todo.id)
       .delete();
   };
 
-  mountStore = async () => {
-    const userID = firebaseApp.auth().currentUser.uid;
-    const todosCollection = mapUserIdToCollection(userID);
-    await firestore.collection(todosCollection).onSnapshot(snapshot => {
+  _mountStore = async () => {
+    const userId = this.props.user.uid;
+    const todosCollection = mapUserIdToCollection(userId);
+    await realtimeDb.collection(todosCollection).onSnapshot(snapshot => {
       if (this.isUnmounted) {
         return;
       }
@@ -91,7 +91,7 @@ class TodosContainer extends React.Component {
   };
 
   componentDidMount() {
-    this.mountStore();
+    this._mountStore();
   }
 
   /* 
@@ -122,4 +122,4 @@ class TodosContainer extends React.Component {
   }
 }
 
-export default TodosContainer;
+export default withAuthentication(TodosContainer);

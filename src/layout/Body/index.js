@@ -1,61 +1,59 @@
 import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
 
+import TodosScreen from "../../components/TodosScreen/index.js";
+import AboutScreen from "../../components/AboutScreen.js";
+import AccountScreen from "../../components/AccountScreen.js";
+import TodosContainerDemo from "../../containers/Todos/TodosContainerDemo.js";
+import TodosContainerCloud from "../../containers/Todos/TodosContainerCloud.js";
+import TodosContext from "../../containers/Todos/TodosContext.js";
+import AuthContext from "../../containers/Auth/AuthContext.js";
+import { StyledMain, StyledTransitionGroup, StyledSection } from "./style.js";
 import "./style.css";
 
-import TodosScreen from "../../components/TodosScreen";
-import AboutScreen from "../../components/AboutScreen";
-import AccountScreen from "../../components/AccountScreen";
-import TodosContainerDemo from "../../containers/TodosContainerDemo";
-import TodosContainerCloud from "../../containers/TodosContainerCloud";
-import TodosContext from "../../containers/TodosContext";
-import { AuthContext } from "../../containers/AuthContainer";
-
 const Body = () => (
-  <main className="body">
+  <StyledMain>
     <Route
       render={({ location }) => (
-        <TransitionGroup className="transition-group">
+        <StyledTransitionGroup>
           <CSSTransition
             key={location.key}
             timeout={{ enter: 300, exit: 300 }}
             classNames="fade"
           >
-            <section className="route-section">
+            <StyledSection>
               <Switch location={location}>
-                <Route exact path="/" component={HomeScreenCloudAdapter} />
-                <Route exact path="/about" component={AboutScreen} />
-                <Route exact path="/account" component={AccountScreenAdapter} />
+                <Route exact path="/" component={HomeScreen} />
+                <Route exact path="/features" component={AboutScreen} />
                 <Route exact path="/demo" component={TodosScreenDemoAdapter} />
-                <Route render={() => <h1>Not found</h1>} />
+                <UserRoute path="/app" component={TodosScreenCloudAdapter} />
+                <UserRoute path="/account" component={AccountScreen} />
+                <GuestRoute path="/signin" component={SignInScreen} />
+                <Route component={NotFoundScreen} />
               </Switch>
-            </section>
+            </StyledSection>
           </CSSTransition>
-        </TransitionGroup>
+        </StyledTransitionGroup>
       )}
     />
-  </main>
+  </StyledMain>
 );
 
 export default Body;
 
-const HomeScreenCloudAdapter = () => (
-  <AuthContext.Consumer>
-    {authContext =>
-      authContext.isAwaitingAuth ? (
-        <h1>Loading Todos</h1>
-      ) : authContext.isAuthenticated ? (
-        <TodosContainerCloud {...authContext}>
-          <TodosContext.Consumer>
-            {todosContext => <TodosScreen {...todosContext} />}
-          </TodosContext.Consumer>
-        </TodosContainerCloud>
-      ) : (
-        <h1>Welcome</h1>
-      )
-    }
-  </AuthContext.Consumer>
+const HomeScreen = () => <h1>Welcome</h1>;
+
+const NotFoundScreen = () => <h1>Not found</h1>;
+
+const SignInScreen = () => <h1>Sign-in</h1>;
+
+const TodosScreenCloudAdapter = () => (
+  <TodosContainerCloud>
+    <TodosContext.Consumer>
+      {todosContext => <TodosScreen {...todosContext} />}
+    </TodosContext.Consumer>
+  </TodosContainerCloud>
 );
 
 const TodosScreenDemoAdapter = () => (
@@ -66,14 +64,34 @@ const TodosScreenDemoAdapter = () => (
   </TodosContainerDemo>
 );
 
-const AccountScreenAdapter = () => (
+const UserRoute = ({ path, component: Component }) => (
   <AuthContext.Consumer>
-    {authContext =>
-      authContext.isAuthenticated ? (
-        <AccountScreen {...authContext} />
-      ) : (
-        <Redirect to="/" />
-      )
-    }
+    {authContext => (
+      <Route
+        exact
+        path={path}
+        render={() =>
+          authContext.isAuthenticated ? (
+            <Component />
+          ) : (
+            <Redirect to="/signin" />
+          )
+        }
+      />
+    )}
+  </AuthContext.Consumer>
+);
+
+const GuestRoute = ({ path, component: Component }) => (
+  <AuthContext.Consumer>
+    {authContext => (
+      <Route
+        exact
+        path={path}
+        render={() =>
+          !authContext.isAuthenticated ? <Component /> : <Redirect to="/" />
+        }
+      />
+    )}
   </AuthContext.Consumer>
 );

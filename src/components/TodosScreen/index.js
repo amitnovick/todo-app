@@ -1,9 +1,8 @@
 import React from "react";
 
-import "./style.css";
-
 import TodoList from "../TodoList";
 import CreateTodoTextbox from "../CreateTodoTextbox";
+import { StyledDiv } from "./style.js";
 
 const Todos = ({
   // container state
@@ -15,7 +14,7 @@ const Todos = ({
   deleteTodo
 }) => {
   return (
-    <div className="todoapp">
+    <StyledDiv className="todoapp">
       <CreateTodoTextbox onSubmit={title => createTodo(title)} />
       <TodoList
         todos={todos}
@@ -23,7 +22,7 @@ const Todos = ({
         onEdit={(todo, title) => editTodo(todo, title)}
         onToggle={todo => toggleTodo(todo)}
       />
-    </div>
+    </StyledDiv>
   );
 };
 
