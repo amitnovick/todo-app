@@ -4,8 +4,6 @@ import TodosContext from "./TodosContext.js";
 import realtimeDb from "../../firebase/initializeRealtimeDb.js";
 import withAuthentication from "../Auth/withAuthentication.js";
 
-const mapUserIdToCollection = userId => `todos-${userId}`;
-
 class TodosContainer extends React.Component {
   constructor(props) {
     super(props);
@@ -23,19 +21,15 @@ class TodosContainer extends React.Component {
       completed: false,
       createdAt: new Date().toISOString()
     };
-    const userId = this.props.user.uid;
-    const todosCollection = mapUserIdToCollection(userId);
-    await realtimeDb.collection(todosCollection).add(todo);
+    await realtimeDb.collection(this.todosCollection).add(todo);
   };
 
   editTodo = async (todo, newTitle) => {
     const todoChange = {
       title: newTitle
     };
-    const userId = this.props.user.uid;
-    const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb
-      .collection(todosCollection)
+      .collection(this.todosCollection)
       .doc(todo.id)
       .update(todoChange);
   };
@@ -44,27 +38,21 @@ class TodosContainer extends React.Component {
     const todoChange = {
       completed: !todo.completed
     };
-    const userId = this.props.user.uid;
-    const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb
-      .collection(todosCollection)
+      .collection(this.todosCollection)
       .doc(todo.id)
       .update(todoChange);
   };
 
   deleteTodo = async todo => {
-    const userId = this.props.user.uid;
-    const todosCollection = mapUserIdToCollection(userId);
     await realtimeDb
-      .collection(todosCollection)
+      .collection(this.todosCollection)
       .doc(todo.id)
       .delete();
   };
 
   _mountStore = async () => {
-    const userId = this.props.user.uid;
-    const todosCollection = mapUserIdToCollection(userId);
-    await realtimeDb.collection(todosCollection).onSnapshot(snapshot => {
+    await realtimeDb.collection(this.todosCollection).onSnapshot(snapshot => {
       if (this.isUnmounted) {
         return;
       }
@@ -91,6 +79,9 @@ class TodosContainer extends React.Component {
   };
 
   componentDidMount() {
+    const userId = this.props.user.uid;
+    const mapUserIdToCollection = userId => `todos-${userId}`;
+    this.todosCollection = mapUserIdToCollection(userId);
     this._mountStore();
   }
 

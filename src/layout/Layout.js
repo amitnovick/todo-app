@@ -21,7 +21,7 @@ const Layout = () => (
 
 const ScreenLayout = () => (
   <TransitionGroup>
-    <CSSTransition classNames="fade" appear={true}>
+    <CSSTransition classNames="fade" appear={true} timeout={300}>
       <div>
         <Header />
         <Body />
