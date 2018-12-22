@@ -1,8 +1,8 @@
-import React from "react";
-import { Modal, Button, ModalHeader, ModalBody } from "reactstrap";
+import React from 'react';
+import { Modal, Button, ModalHeader, ModalBody } from 'reactstrap';
 
-import { linkWithPopup, signInWithPopup } from "../firebase/authInterface.js";
-import withAuthentication from "../containers/Auth/withAuthentication.js";
+import { linkWithPopup, signInWithPopup } from '../firebase/auth.js';
+import { withAuthentication } from '../containers/Auth/withAuthentication.js';
 
 class LoginModal extends React.Component {
   /**
@@ -29,9 +29,9 @@ class LoginModal extends React.Component {
             onClick={() => this.authenticate()}
             color="secondary"
             style={{
-              backgroundColor: "black",
-              color: "white",
-              margin: "8px"
+              backgroundColor: 'black',
+              color: 'white',
+              margin: '8px'
             }}
           >
             Sign in with GitHub

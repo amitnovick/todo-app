@@ -1,7 +1,7 @@
-import React from "react";
-import { Button } from "reactstrap";
+import React from 'react';
+import { Button } from 'reactstrap';
 
-import { signOut } from "../firebase/authInterface.js";
+import { signOut } from '../firebase/auth.js';
 
 class AccountScreen extends React.Component {
   handleLogOut = () => {

@@ -1,8 +1,8 @@
-import React from "react";
-import "firebase/auth"; // required for the `firebase.auth` method
+import React from 'react';
+import 'firebase/auth'; // required for the `firebase.auth` method
 
-import AuthContext from "./AuthContext.js";
-import firebaseApp from "../../firebase/initializeFirebaseApp.js";
+import { AuthContext } from './AuthContext.js';
+import { firebaseApp } from '../../firebase/firebaseApp.js';
 
 class AuthContainer extends React.Component {
   constructor(props) {
@@ -14,21 +14,24 @@ class AuthContainer extends React.Component {
     };
   }
 
-  _subscribeToAuthChanges = async () => {
+  subscribeToAuthChanges = async () => {
     this.setState({ isAwaitingAuth: true });
-    const doAfterAuth = user => {
-      if (user) {
-        this.setState({ user: user, isAuthenticated: true });
-      } else {
-        this.setState({ user: null, isAuthenticated: false });
-      }
-      this.setState({ isAwaitingAuth: false });
-    };
-    this.listener = await firebaseApp.auth().onAuthStateChanged(doAfterAuth);
+    this.listener = await firebaseApp
+      .auth()
+      .onAuthStateChanged(this.updateAuthState);
+  };
+
+  updateAuthState = user => {
+    if (user) {
+      this.setState({ user: user, isAuthenticated: true });
+    } else {
+      this.setState({ user: null, isAuthenticated: false });
+    }
+    this.setState({ isAwaitingAuth: false });
   };
 
   componentDidMount() {
-    this._subscribeToAuthChanges();
+    this.subscribeToAuthChanges();
   }
 
   componentWillUnmount() {

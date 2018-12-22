@@ -1,14 +1,14 @@
-import "firebase/auth"; // required dependency for the `.auth()` accessor
+import 'firebase/auth'; // required dependency for the `.auth()` accessor
 
-import firebaseApp from "./initializeFirebaseApp.js";
+import { firebaseApp } from './firebaseApp.js';
 
-const _authenticateWithGithub = () => {
+const authenticateWithGithub = () => {
   const provider = new firebaseApp.firebase_.auth.GithubAuthProvider();
   return provider;
 };
 
 export const linkWithPopup = () => {
-  const provider = _authenticateWithGithub();
+  const provider = authenticateWithGithub();
   firebaseApp
     .auth()
     .linkWithPopup(provider)
@@ -16,7 +16,7 @@ export const linkWithPopup = () => {
 };
 
 export const signInWithPopup = () => {
-  const provider = _authenticateWithGithub();
+  const provider = authenticateWithGithub();
   firebaseApp
     .auth()
     .signInWithPopup(provider)

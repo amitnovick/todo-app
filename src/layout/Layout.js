@@ -1,9 +1,11 @@
-import React from "react";
+import React from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import Header from "./Header.js";
-import Body from "./Body/index.js";
-import AuthContext from "../containers/Auth/AuthContext.js";
-import Delay from "../containers/Delay.js";
+import Header from './Header.js';
+import Body from './Body/index.js';
+import { AuthContext } from '../containers/Auth/AuthContext.js';
+import Delay from '../containers/Delay.js';
+import './style.css';
 
 const Layout = () => (
   <AuthContext.Consumer>
@@ -18,10 +20,14 @@ const Layout = () => (
 );
 
 const ScreenLayout = () => (
-  <div>
-    <Header />
-    <Body />
-  </div>
+  <TransitionGroup>
+    <CSSTransition classNames="fade" appear={true} timeout={300}>
+      <div>
+        <Header />
+        <Body />
+      </div>
+    </CSSTransition>
+  </TransitionGroup>
 );
 
 export default Layout;

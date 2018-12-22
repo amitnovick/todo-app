@@ -1,16 +1,16 @@
-import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
-import { CSSTransition } from "react-transition-group";
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { CSSTransition } from 'react-transition-group';
 
-import TodosScreen from "../../components/TodosScreen/index.js";
-import AboutScreen from "../../components/AboutScreen.js";
-import AccountScreen from "../../components/AccountScreen.js";
-import TodosContainerDemo from "../../containers/Todos/TodosContainerDemo.js";
-import TodosContainerCloud from "../../containers/Todos/TodosContainerCloud.js";
-import TodosContext from "../../containers/Todos/TodosContext.js";
-import AuthContext from "../../containers/Auth/AuthContext.js";
-import { StyledMain, StyledTransitionGroup, StyledSection } from "./style.js";
-import "./style.css";
+import TodosScreen from '../../components/TodosScreen/index.js';
+import AboutScreen from '../../components/AboutScreen.js';
+import AccountScreen from '../../components/AccountScreen.js';
+import TodosContainerDemo from '../../containers/Todos/TodosContainerDemo.js';
+import TodosContainerCloud from '../../containers/Todos/TodosContainerCloud.js';
+import { TodosContext } from '../../containers/Todos/TodosContext.js';
+import { AuthContext } from '../../containers/Auth/AuthContext.js';
+import { StyledMain, StyledTransitionGroup, StyledSection } from './style.js';
+import './style.css';
 
 const Body = () => (
   <StyledMain>
@@ -21,7 +21,6 @@ const Body = () => (
             key={location.key}
             timeout={{ enter: 300, exit: 300 }}
             classNames="fade"
-            appear={true}
           >
             <StyledSection>
               <Switch location={location}>

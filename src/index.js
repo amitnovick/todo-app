@@ -1,11 +1,11 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { BrowserRouter as Router } from "react-router-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-import * as serviceWorker from "./serviceWorker";
-import AuthContainer from "./containers/Auth/AuthContainer.js";
-import Layout from "./layout/Layout.js";
-import "bootstrap/dist/css/bootstrap.min.css";
+import * as serviceWorker from './serviceWorker';
+import AuthContainer from './containers/Auth/AuthContainer.js';
+import Layout from './layout/Layout.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
   <Router>
@@ -13,7 +13,7 @@ ReactDOM.render(
       <Layout />
     </AuthContainer>
   </Router>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 if (module.hot) module.hot.accept();
