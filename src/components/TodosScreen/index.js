@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import TodoList from "../TodoList";
-import CreateTodoTextbox from "../CreateTodoTextbox";
-import { StyledDiv } from "./style.js";
+import TodoList from '../TodoList/index.js';
+import CreateTodoTextbox from '../CreateTodoTextbox/index.js';
+import { StyledDiv } from './style.js';
 
 const Todos = ({
   // container state
@@ -15,7 +15,7 @@ const Todos = ({
 }) => {
   return (
     <StyledDiv className="todoapp">
-      <CreateTodoTextbox onSubmit={title => createTodo(title)} />
+      <CreateTodoTextbox createTodo={createTodo} />
       <TodoList
         todos={todos}
         onDelete={todo => deleteTodo(todo)}

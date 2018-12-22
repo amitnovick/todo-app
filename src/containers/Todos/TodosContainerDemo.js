@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { store, uuid } from "../../utils.js";
-import TodosContext from "./TodosContext.js";
+import { store, uuid } from '../../utils.js';
+import { TodosContext } from './TodosContext.js';
 
-const TODOS = "todos";
+const TODOS = 'todos';
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -13,46 +13,43 @@ class TodosContainer extends React.Component {
     };
   }
 
-  updateLocalStore = async newTodos => {
-    await store(TODOS, newTodos);
-  };
-
   createTodo = async title => {
-    const shouldCreateNewTodo = title.length > 0;
-    if (!shouldCreateNewTodo) return;
     const todo = {
       id: uuid(),
       title: title,
       completed: false,
       createdAt: new Date().toISOString()
     };
-    const newTodos = this.state.todos.concat(todo);
+    const newTodos = this.state.todos.concat([todo]);
 
     this.setState({ todos: newTodos });
     await this.updateLocalStore(newTodos);
   };
 
   editTodo = async (todo, newTitle) => {
-    const todoChangeFunction = t =>
-      t !== todo ? t : { ...t, title: newTitle };
-    const newTodos = this.state.todos.map(todoChangeFunction);
+    const newTodos = this.state.todos.map(
+      t => (t !== todo ? t : { ...t, title: newTitle })
+    );
     this.setState({ todos: newTodos });
     await this.updateLocalStore(newTodos);
   };
 
   toggleTodo = async todo => {
-    const todoChangeFunction = t =>
-      t !== todo ? t : { ...t, completed: !t.completed };
-    const newTodos = this.state.todos.map(todoChangeFunction);
+    const newTodos = this.state.todos.map(
+      t => (t !== todo ? t : { ...t, completed: !t.completed })
+    );
     this.setState({ todos: newTodos });
     await this.updateLocalStore(newTodos);
   };
 
   deleteTodo = async todo => {
-    const todoChangeFunction = t => t.id !== todo.id;
-    const newTodos = this.state.todos.filter(todoChangeFunction);
+    const newTodos = this.state.todos.filter(t => t.id !== todo.id);
     this.setState({ todos: newTodos });
     await this.updateLocalStore(newTodos);
+  };
+
+  updateLocalStore = async newTodos => {
+    await store(TODOS, newTodos);
   };
 
   mountStore = async () => {

@@ -1,0 +1,13 @@
+// {
+//     "compilerOptions": {
+//         "target": "esnext",
+//         "checkJs": true,
+//         "lib": ["esnext", "dom"],
+//         // "strictNullChecks": true,
+//         "jsx": "react"
+//     },
+//     "exclude": [
+//         "node_modules",
+//         "**/node_modules/*"
+//     ]
+// }

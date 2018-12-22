@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import TodosContext from "./TodosContext.js";
-import realtimeDb from "../../firebase/initializeRealtimeDb.js";
-import withAuthentication from "../Auth/withAuthentication.js";
+import { TodosContext } from './TodosContext.js';
+import { realtimeDb } from '../../firebase/realtimeDb.js';
+import { withAuthentication } from '../Auth/withAuthentication.js';
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -14,8 +14,6 @@ class TodosContainer extends React.Component {
   }
 
   createTodo = async title => {
-    const shouldCreateNewTodo = title.length > 0;
-    if (!shouldCreateNewTodo) return;
     const todo = {
       title: title,
       completed: false,
@@ -51,7 +49,7 @@ class TodosContainer extends React.Component {
       .delete();
   };
 
-  _mountStore = async () => {
+  mountStore = async () => {
     await realtimeDb.collection(this.todosCollection).onSnapshot(snapshot => {
       if (this.isUnmounted) {
         return;
@@ -78,11 +76,12 @@ class TodosContainer extends React.Component {
     this.setState({ isAwaitingTodos: false });
   };
 
+  mapUserIdToCollection = userId => `todos-${userId}`;
+
   componentDidMount() {
     const userId = this.props.user.uid;
-    const mapUserIdToCollection = userId => `todos-${userId}`;
-    this.todosCollection = mapUserIdToCollection(userId);
-    this._mountStore();
+    this.todosCollection = this.mapUserIdToCollection(userId);
+    this.mountStore();
   }
 
   /* 

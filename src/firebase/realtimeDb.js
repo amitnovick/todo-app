@@ -1,8 +1,8 @@
-import "firebase/firestore"; // required for the `firebase.firestore` method
+import 'firebase/firestore'; // required for the `firebase.firestore` method
 
-import firebaseApp from "./initializeFirebaseApp.js";
+import { firebaseApp } from './firebaseApp.js';
 
-const realtimeDb = firebaseApp.firestore();
+export const realtimeDb = firebaseApp.firestore();
 
 const settings = { timestampsInSnapshots: true };
 realtimeDb.settings(settings);
@@ -14,11 +14,9 @@ const ERROR_MSG_BROWSER_UNSUPPORTED = `The current browser does not support
   all of the features required to enable persistence`;
 
 realtimeDb.enablePersistence().catch(function(err) {
-  if (err.code === "failed-precondition") {
+  if (err.code === 'failed-precondition') {
     console.log(ERROR_MSG_MULTIPLE_TABS);
-  } else if (err.code === "unimplemented") {
+  } else if (err.code === 'unimplemented') {
     console.log(ERROR_MSG_BROWSER_UNSUPPORTED);
   }
 });
-
-export default realtimeDb;

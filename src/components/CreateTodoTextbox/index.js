@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { StyledInput } from "./style.js";
+import { StyledInput } from './style.js';
 
 const ENTER_KEY = 13;
 
@@ -9,7 +9,7 @@ class CreateTodoTextbox extends React.Component {
     super(props);
 
     this.state = {
-      newTitle: ""
+      newTitle: ''
     };
   }
 
@@ -22,8 +22,13 @@ class CreateTodoTextbox extends React.Component {
     if (!pressedEnter) return;
 
     const newTitleValue = this.state.newTitle.trim();
-    this.props.onSubmit(newTitleValue);
-    this.setState({ newTitle: "" });
+
+    const shouldCreateNewTodo = newTitleValue.length > 0;
+    if (!shouldCreateNewTodo) return;
+    else {
+      this.props.createTodo(newTitleValue);
+      this.setState({ newTitle: '' });
+    }
   };
 
   render() {
