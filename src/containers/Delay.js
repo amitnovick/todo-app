@@ -1,5 +1,5 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
 const Loader = styled.div`
   height: 10px;
@@ -11,7 +11,8 @@ class Delay extends React.Component {
   state = { timeoutOver: false };
 
   componentDidMount() {
-    window.setTimeout(() => {
+    this.timer = window.setTimeout(() => {
+      window.clearTimeout(this.timer);
       this.setState({ timeoutOver: true });
     }, this.props.timeout);
   }

@@ -1,6 +1,9 @@
 import 'firebase/auth'; // required dependency for the `.auth()` accessor
+// import firebase from 'firebase/app';
 
 import { firebaseApp } from './firebaseApp.js';
+
+// firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
 const authenticateWithGithub = () => {
   const provider = new firebaseApp.firebase_.auth.GithubAuthProvider();
