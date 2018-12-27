@@ -10,6 +10,7 @@ import './style.css';
 const Layout = () => (
   <AuthContext.Consumer>
     {authContext => (
+      // <ScreenLayout />
       <Delay
         component={ScreenLayout}
         shouldShow={!authContext.isAwaitingAuth}

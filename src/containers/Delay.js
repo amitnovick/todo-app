@@ -11,8 +11,7 @@ class Delay extends React.Component {
   state = { timeoutOver: false };
 
   componentDidMount() {
-    this.timer = window.setTimeout(() => {
-      window.clearTimeout(this.timer);
+    window.setTimeout(() => {
       this.setState({ timeoutOver: true });
     }, this.props.timeout);
   }
