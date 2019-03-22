@@ -1,5 +1,5 @@
-import { TransitionGroup } from "react-transition-group";
-import styled from "styled-components";
+import { TransitionGroup } from 'react-transition-group';
+import styled from 'styled-components';
 
 export const StyledMain = styled.main`
   min-width: 230px;

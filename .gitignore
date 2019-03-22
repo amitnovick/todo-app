@@ -22,3 +22,5 @@ yarn-error.log*
 
 # dev dependencies
 /.vscode
+/.idea
+.eslintrc

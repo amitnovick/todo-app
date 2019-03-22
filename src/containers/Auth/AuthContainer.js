@@ -10,7 +10,7 @@ class AuthContainer extends React.Component {
     this.state = {
       isAwaitingAuth: true,
       user: null,
-      isAuthenticated: false
+      isAuthenticated: false,
     };
   }
 
@@ -21,14 +21,10 @@ class AuthContainer extends React.Component {
       .onAuthStateChanged(this.updateAuthState);
   };
 
-  updateAuthState = user => {
-    if (user) {
-      this.setState({ user: user, isAuthenticated: true });
-    } else {
-      this.setState({ user: null, isAuthenticated: false });
-    }
-    this.setState({ isAwaitingAuth: false });
-  };
+  updateAuthState = user => (
+    (user) ? this.setState({ user, isAuthenticated: true, isAwaitingAuth: false })
+      : this.setState({ user: null, isAuthenticated: false, isAwaitingAuth: false })
+  );
 
   componentDidMount() {
     this.subscribeToAuthChanges();

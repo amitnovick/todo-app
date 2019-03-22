@@ -7,6 +7,17 @@ import { AuthContext } from '../containers/Auth/AuthContext.js';
 import Delay from '../containers/Delay.js';
 import './style.css';
 
+const ScreenLayout = () => (
+  <TransitionGroup>
+    <CSSTransition classNames="fade" appear={true} timeout={300}>
+      <div>
+        <Header />
+        <Body />
+      </div>
+    </CSSTransition>
+  </TransitionGroup>
+);
+
 const Layout = () => (
   <AuthContext.Consumer>
     {authContext => (
@@ -18,17 +29,6 @@ const Layout = () => (
       />
     )}
   </AuthContext.Consumer>
-);
-
-const ScreenLayout = () => (
-  <TransitionGroup>
-    <CSSTransition classNames="fade" appear={true} timeout={300}>
-      <div>
-        <Header />
-        <Body />
-      </div>
-    </CSSTransition>
-  </TransitionGroup>
 );
 
 export default Layout;

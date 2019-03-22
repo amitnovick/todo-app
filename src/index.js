@@ -13,7 +13,7 @@ ReactDOM.render(
       <Layout />
     </AuthContainer>
   </Router>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 if (module.hot) {
