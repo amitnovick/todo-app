@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'reactstrap';
 
 import { signOut } from '../firebase/auth.js';
-import { AuthContext } from '../containers/Auth/AuthContext.js';
+import AuthContext from '../containers/Auth/AuthContext.js';
 
 class AccountScreen extends React.Component {
   handleLogOut = () => {

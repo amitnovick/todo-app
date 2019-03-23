@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TodosContext } from './TodosContext.js';
 import { firestore } from '../../firebase/realtimeDb.js';
-import { withAuthentication } from '../Auth/withAuthentication.js';
+import withAuthentication from '../Auth/withAuthentication.js';
 
 class TodosContainer extends React.Component {
   constructor(props) {

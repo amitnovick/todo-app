@@ -8,7 +8,7 @@ import AccountScreen from '../../components/AccountScreen.js';
 import TodosContainerDemo from '../../containers/Todos/TodosContainerDemo.js';
 import TodosContainerCloud from '../../containers/Todos/TodosContainerCloud.js';
 import { TodosContext } from '../../containers/Todos/TodosContext.js';
-import { AuthContext } from '../../containers/Auth/AuthContext.js';
+import AuthContext from '../../containers/Auth/AuthContext.js';
 import { StyledMain, StyledTransitionGroup, StyledSection } from './style.js';
 import './style.css';
 

@@ -1,6 +1,6 @@
 import 'firebase/firestore'; // required for the `firebase.firestore` method
 
-import { firebaseApp } from './firebaseApp.js';
+import firebaseApp from './firebaseApp.js';
 
 export const firestore = firebaseApp.firestore();
 

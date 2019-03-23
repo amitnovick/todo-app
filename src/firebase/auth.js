@@ -1,6 +1,6 @@
 import 'firebase/auth'; // required dependency for the `.auth()` accessor
 
-import { firebaseApp } from './firebaseApp.js';
+import firebaseApp from './firebaseApp.js';
 
 const authenticateWithGithub = () => {
   const provider = new firebaseApp.firebase_.auth.GithubAuthProvider();

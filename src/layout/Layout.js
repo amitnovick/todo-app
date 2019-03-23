@@ -3,7 +3,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import Header from './Header.js';
 import Body from './Body/index.js';
-import { AuthContext } from '../containers/Auth/AuthContext.js';
+import AuthContext from '../containers/Auth/AuthContext.js';
 import Delay from '../containers/Delay.js';
 import './style.css';
 
