@@ -1,3 +1,5 @@
 import React from 'react';
 
-export const TodosContext = React.createContext(null);
+const TodosContext = React.createContext(null);
+
+export default TodosContext;

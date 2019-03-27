@@ -7,7 +7,7 @@ import AboutScreen from '../../components/AboutScreen.js';
 import AccountScreen from '../../components/AccountScreen.js';
 import TodosContainerDemo from '../../containers/Todos/TodosContainerDemo.js';
 import TodosContainerCloud from '../../containers/Todos/TodosContainerCloud.js';
-import { TodosContext } from '../../containers/Todos/TodosContext.js';
+import TodosContext from '../../containers/Todos/TodosContext.js';
 import AuthContext from '../../containers/Auth/AuthContext.js';
 import { StyledMain, StyledTransitionGroup, StyledSection } from './style.js';
 import './style.css';
@@ -40,13 +40,13 @@ const UserRoute = ({ path, component: Component }) => (
       <Route
         exact
         path={path}
-        render={() => (
+        render={() =>
           authContext.isAuthenticated ? (
             <Component />
           ) : (
             <Redirect to="/signin" />
           )
-        )}
+        }
       />
     )}
   </AuthContext.Consumer>
@@ -58,9 +58,9 @@ const GuestRoute = ({ path, component: Component }) => (
       <Route
         exact
         path={path}
-        render={() => (
+        render={() =>
           authContext.isAuthenticated ? <Redirect to="/" /> : <Component />
-        )}
+        }
       />
     )}
   </AuthContext.Consumer>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { store, uuid } from '../../utils.js';
-import { TodosContext } from './TodosContext.js';
+import TodosContext from './TodosContext.js';
 
 const TODOS = 'todos';
 
@@ -9,7 +9,7 @@ class TodosContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: []
+      todos: [],
     };
   }
 
@@ -18,7 +18,7 @@ class TodosContainer extends React.Component {
       id: uuid(),
       title: title,
       completed: false,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
     const newTodos = this.state.todos.concat([todo]);
 
@@ -28,7 +28,7 @@ class TodosContainer extends React.Component {
 
   editTodo = async (todo, newTitle) => {
     const newTodos = this.state.todos.map(
-      t => (t !== todo ? t : { ...t, title: newTitle })
+      t => (t !== todo ? t : { ...t, title: newTitle }),
     );
     this.setState({ todos: newTodos });
     await this.updateLocalStore(newTodos);
@@ -36,7 +36,7 @@ class TodosContainer extends React.Component {
 
   toggleTodo = async todo => {
     const newTodos = this.state.todos.map(
-      t => (t !== todo ? t : { ...t, completed: !t.completed })
+      t => (t !== todo ? t : { ...t, completed: !t.completed }),
     );
     this.setState({ todos: newTodos });
     await this.updateLocalStore(newTodos);
@@ -70,7 +70,7 @@ class TodosContainer extends React.Component {
           createTodo: this.createTodo,
           editTodo: this.editTodo,
           toggleTodo: this.toggleTodo,
-          deleteTodo: this.deleteTodo
+          deleteTodo: this.deleteTodo,
         }}
       >
         {this.props.children}

@@ -3,6 +3,7 @@ import 'firebase/auth'; // required dependency for the `.auth()` accessor
 import firebaseApp from './firebaseApp.js';
 
 const authenticateWithGithub = () => {
+  // eslint-disable-next-line no-underscore-dangle
   const provider = new firebaseApp.firebase_.auth.GithubAuthProvider();
   return provider;
 };
