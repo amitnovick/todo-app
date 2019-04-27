@@ -1,15 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import "./style.css";
+import styles from './style.module.css';
+
 import {
   StyledInputEdit,
   StyledInputCheckbox,
-  StyledButtonDestroy,
   StyledLabelTitle,
-  StyledListItem,
   StyledUnorderedList,
-  StyledDiv
-} from "./style.js";
+  StyledDiv,
+} from './style.js';
 
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
@@ -20,7 +19,7 @@ class TodoList extends React.Component {
 
     this.state = {
       editingTodo: null,
-      editTitle: ""
+      editTitle: '',
     };
 
     this.inputRef = React.createRef();
@@ -32,19 +31,19 @@ class TodoList extends React.Component {
     else if (editTitleValue !== todo.title) {
       this.props.onEdit(todo, editTitleValue);
       this.deactivateTitleEditMode();
-      this.setState({ editTitle: "" });
+      this.setState({ editTitle: '' });
     } else this.deactivateTitleEditMode();
   };
 
   activateTitleEditMode = todo => {
     this.setState({
-      editingTodo: todo
+      editingTodo: todo,
     });
   };
 
   deactivateTitleEditMode = () => {
     this.setState({
-      editingTodo: null
+      editingTodo: null,
     });
   };
 
@@ -82,6 +81,7 @@ class TodoList extends React.Component {
   render() {
     const { onToggle, onDelete, todos } = this.props;
     const { editTitle } = this.state;
+    console.log('styles?', styles);
     return (
       <StyledDiv>
         <StyledUnorderedList>
@@ -115,19 +115,19 @@ class TodoList extends React.Component {
                     isCompleted={todo.completed}
                     onDoubleClick={() => this.handleTitleClick(todo)}
                   >
-                    {todo.title + " "}
+                    {todo.title + ' '}
                   </StyledLabelTitle>
-                  <StyledButtonDestroy
-                    className="destroy"
+                  <button
+                    className={styles['button-1']}
                     onClick={() => onDelete(todo)}
                   />
                 </div>
               );
             }
             return (
-              <StyledListItem key={todo.id} className="todo-list-item">
+              <li key={todo.id} className={styles['li-1']}>
                 {content}
-              </StyledListItem>
+              </li>
             );
           })}
         </StyledUnorderedList>
