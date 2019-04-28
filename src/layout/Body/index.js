@@ -10,7 +10,6 @@ import TodosContainerCloud from '../../containers/Todos/TodosContainerCloud.js';
 import TodosContext from '../../containers/Todos/TodosContext.js';
 import AuthContext from '../../containers/Auth/AuthContext.js';
 
-import './style.css';
 import styles from './style.module.css';
 
 const HomeScreen = () => <h1>Welcome</h1>;
@@ -75,7 +74,12 @@ const Body = () => (
           <CSSTransition
             key={location.key}
             timeout={{ enter: 300, exit: 300 }}
-            classNames="fade"
+            classNames={{
+              enter: styles['fade-enter'],
+              enterActive: styles['fade-enter-active'],
+              exit: styles['fade-exit'],
+              exitActive: styles['fade-exit-active'],
+            }}
           >
             <section className={styles['section-1']}>
               <Switch location={location}>
