@@ -1,10 +1,10 @@
 import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import Header from './Header.js';
-import Body from './Body/index.js';
-import AuthContext from '../containers/Auth/AuthContext.js';
-import Delay from '../containers/Delay/Delay.js';
+import Header from '../Header.js';
+import Body from '../Body/index.js';
+import AuthContext from '../../containers/Auth/AuthContext.js';
+import Delay from '../../components/Delay/Delay.js';
 import styles from './style.module.css';
 
 const ScreenLayout = () => (
