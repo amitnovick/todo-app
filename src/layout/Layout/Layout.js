@@ -1,7 +1,7 @@
 import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import Header from '../Header.js';
+import Header from '../Header/Header.js';
 import Body from '../Body/index.js';
 import AuthContext from '../../containers/Auth/AuthContext.js';
 import Delay from '../../components/Delay/Delay.js';
