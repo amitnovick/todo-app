@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import { CSSTransition } from 'react-transition-group';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import TodosScreen from '../../components/TodosScreen/index.js';
 import AboutScreen from '../../components/AboutScreen.js';
@@ -9,8 +9,9 @@ import TodosContainerDemo from '../../containers/Todos/TodosContainerDemo.js';
 import TodosContainerCloud from '../../containers/Todos/TodosContainerCloud.js';
 import TodosContext from '../../containers/Todos/TodosContext.js';
 import AuthContext from '../../containers/Auth/AuthContext.js';
-import { StyledMain, StyledTransitionGroup, StyledSection } from './style.js';
+
 import './style.css';
+import styles from './style.module.css';
 
 const HomeScreen = () => <h1>Welcome</h1>;
 
@@ -67,16 +68,16 @@ const GuestRoute = ({ path, component: Component }) => (
 );
 
 const Body = () => (
-  <StyledMain>
+  <main className={styles['main-1']}>
     <Route
       render={({ location }) => (
-        <StyledTransitionGroup>
+        <TransitionGroup className={styles['transition-group-1']}>
           <CSSTransition
             key={location.key}
             timeout={{ enter: 300, exit: 300 }}
             classNames="fade"
           >
-            <StyledSection>
+            <section className={styles['section-1']}>
               <Switch location={location}>
                 <Route exact path="/" component={HomeScreen} />
                 <Route exact path="/features" component={AboutScreen} />
@@ -86,12 +87,12 @@ const Body = () => (
                 <GuestRoute path="/signin" component={SignInScreen} />
                 <Route component={NotFoundScreen} />
               </Switch>
-            </StyledSection>
+            </section>
           </CSSTransition>
-        </StyledTransitionGroup>
+        </TransitionGroup>
       )}
     />
-  </StyledMain>
+  </main>
 );
 
 export default Body;
