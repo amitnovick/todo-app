@@ -4,7 +4,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import TodosScreen from '../../components/TodosScreen/index.js';
 import AboutScreen from '../../pages/AboutScreen.js';
-import AccountScreen from '../../components/AccountScreen.js';
+import AccountScreen from '../../pages/AccountScreen.js';
 import TodosContainerDemo from '../../containers/Todos/TodosContainerDemo.js';
 import TodosContainerCloud from '../../containers/Todos/TodosContainerCloud.js';
 import TodosContext from '../../containers/Todos/TodosContext.js';
