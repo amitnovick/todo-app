@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import TodosScreen from '../../components/TodosScreen/index.js';
+import TodosScreen from '../../pages/TodosScreen/TodosScreen.js';
 import AboutScreen from '../../pages/AboutScreen.js';
 import AccountScreen from '../../pages/AccountScreen.js';
 import TodosContainerDemo from '../../containers/Todos/TodosContainerDemo.js';
