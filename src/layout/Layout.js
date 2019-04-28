@@ -5,11 +5,18 @@ import Header from './Header.js';
 import Body from './Body/index.js';
 import AuthContext from '../containers/Auth/AuthContext.js';
 import Delay from '../containers/Delay.js';
-import './style.css';
+import styles from './style.module.css';
 
 const ScreenLayout = () => (
   <TransitionGroup>
-    <CSSTransition classNames="fade" appear={true} timeout={300}>
+    <CSSTransition
+      classNames={{
+        appear: styles['fade-appear'],
+        appearActive: styles['fade-appear-active'],
+      }}
+      appear={true}
+      timeout={300}
+    >
       <div>
         <Header />
         <Body />
