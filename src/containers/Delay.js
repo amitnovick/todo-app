@@ -1,11 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Loader = styled.div`
-  height: 10px;
-  width: 100%;
-  background-color: hotpink;
-`;
+import styles from './delay.module.css';
 
 class Delay extends React.Component {
   state = { timeoutOver: false };
@@ -19,7 +13,8 @@ class Delay extends React.Component {
   render() {
     const { component: Component, shouldShow, timeout, ...rest } = this.props;
     if (shouldShow) return <Component {...rest} />;
-    else if (this.state.timeoutOver) return <Loader timeout={timeout} />;
+    else if (this.state.timeoutOver)
+      return <div className={styles['div-1']} timeout={timeout} />;
     else return null;
   }
 }
