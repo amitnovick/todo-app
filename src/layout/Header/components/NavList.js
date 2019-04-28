@@ -3,7 +3,7 @@ import { Nav, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 import withAuthentication from '../../../containers/Auth/withAuthentication.js';
-import ModalWithActivator from '../../../components/ModalWithActivator.js';
+import ModalWithActivator from './ModalWithActivator.js';
 
 const NavList = ({ isAuthenticated }) =>
   isAuthenticated ? (
