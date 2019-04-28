@@ -73,7 +73,6 @@ class TodoList extends React.Component {
   render() {
     const { onToggle, onDelete, todos } = this.props;
     const { editTitle } = this.state;
-    console.log('styles?', styles);
     return (
       <div className={styles['div-1']}>
         <ul className={styles['ul-1']}>
