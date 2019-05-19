@@ -3,7 +3,7 @@
   z-index: 1;
 }
 
-.fade-appear.fade-appear-active {
+.fade-appear-active {
   opacity: 1;
   transition: opacity 300ms ease-in;
 }
