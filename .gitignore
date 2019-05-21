@@ -23,3 +23,5 @@ yarn-error.log*
 
 # dev dependencies
 /.vscode
+jsconfig.json
+/misc
