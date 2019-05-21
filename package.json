@@ -28,11 +28,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/webpack-env": "^1.13.6",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "prettier": "1.14.3"
+    "@types/webpack-env": "^1.13.6"
   }
 }

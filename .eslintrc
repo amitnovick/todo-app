@@ -1,9 +1,3 @@
 {
-  "plugins": ["prettier"],
-  "extends": ["react-app", "airbnb-base", "plugin:prettier/recommended"],
-  "rules": {
-    "import/extensions": "off",
-    "quotes": "off",
-    "object-shorthand": "off"
-  }
+  "extends": ["react-app"]
 }
