@@ -1,5 +1,0 @@
-  223.81 KB  build/static/js/1.8d89a140.chunk.js
-  19.85 KB   build/static/css/1.f23bba43.chunk.css
-  4.12 KB    build/static/js/main.135ff070.chunk.js
-  1.1 KB     build/static/css/main.00622d65.chunk.css
-  763 B      build/static/js/runtime~main.229c360f.js
