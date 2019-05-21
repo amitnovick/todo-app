@@ -1,15 +1,15 @@
 import React from 'react';
 
-import { TodosContext } from './TodosContext.js';
-import { realtimeDb } from '../../firebase/realtimeDb.js';
-import { withAuthentication } from '../Auth/withAuthentication.js';
+import TodosContext from './TodosContext.js';
+import firestore from '../../firebase/realtimeDb.js';
+import withAuthentication from '../Auth/withAuthentication.js';
 
 class TodosContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
-      isAwaitingTodos: true
+      isAwaitingTodos: true,
     };
   }
 
@@ -17,16 +17,16 @@ class TodosContainer extends React.Component {
     const todo = {
       title: title,
       completed: false,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
-    await realtimeDb.collection(this.todosCollection).add(todo);
+    await firestore.collection(this.todosCollection).add(todo);
   };
 
   editTodo = async (todo, newTitle) => {
     const todoChange = {
-      title: newTitle
+      title: newTitle,
     };
-    await realtimeDb
+    await firestore
       .collection(this.todosCollection)
       .doc(todo.id)
       .update(todoChange);
@@ -34,23 +34,23 @@ class TodosContainer extends React.Component {
 
   toggleTodo = async todo => {
     const todoChange = {
-      completed: !todo.completed
+      completed: !todo.completed,
     };
-    await realtimeDb
+    await firestore
       .collection(this.todosCollection)
       .doc(todo.id)
       .update(todoChange);
   };
 
   deleteTodo = async todo => {
-    await realtimeDb
+    await firestore
       .collection(this.todosCollection)
       .doc(todo.id)
       .delete();
   };
 
   mountStore = async () => {
-    await realtimeDb.collection(this.todosCollection).onSnapshot(snapshot => {
+    await firestore.collection(this.todosCollection).onSnapshot(snapshot => {
       if (this.isUnmounted) {
         return;
       }
@@ -103,7 +103,7 @@ class TodosContainer extends React.Component {
           createTodo: this.createTodo,
           editTodo: this.editTodo,
           toggleTodo: this.toggleTodo,
-          deleteTodo: this.deleteTodo
+          deleteTodo: this.deleteTodo,
         }}
       >
         {this.props.children}

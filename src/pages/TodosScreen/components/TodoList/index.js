@@ -1,15 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import "./style.css";
-import {
-  StyledInputEdit,
-  StyledInputCheckbox,
-  StyledButtonDestroy,
-  StyledLabelTitle,
-  StyledListItem,
-  StyledUnorderedList,
-  StyledDiv
-} from "./style.js";
+import styles from './style.module.css';
 
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
@@ -20,7 +11,7 @@ class TodoList extends React.Component {
 
     this.state = {
       editingTodo: null,
-      editTitle: ""
+      editTitle: '',
     };
 
     this.inputRef = React.createRef();
@@ -32,19 +23,19 @@ class TodoList extends React.Component {
     else if (editTitleValue !== todo.title) {
       this.props.onEdit(todo, editTitleValue);
       this.deactivateTitleEditMode();
-      this.setState({ editTitle: "" });
+      this.setState({ editTitle: '' });
     } else this.deactivateTitleEditMode();
   };
 
   activateTitleEditMode = todo => {
     this.setState({
-      editingTodo: todo
+      editingTodo: todo,
     });
   };
 
   deactivateTitleEditMode = () => {
     this.setState({
-      editingTodo: null
+      editingTodo: null,
     });
   };
 
@@ -83,15 +74,16 @@ class TodoList extends React.Component {
     const { onToggle, onDelete, todos } = this.props;
     const { editTitle } = this.state;
     return (
-      <StyledDiv>
-        <StyledUnorderedList>
+      <div className={styles['div-1']}>
+        <ul className={styles['ul-1']}>
           {todos.map(todo => {
             const isBeingEdited = this.isTodoBeingEdited(todo);
             let content;
             if (isBeingEdited) {
               content = (
                 <div key={todo.id}>
-                  <StyledInputEdit
+                  <input
+                    className={styles['input-2']}
                     ref={this.inputRef}
                     value={editTitle}
                     onChange={event => this.handleEditTitleTextChange(event)}
@@ -106,32 +98,42 @@ class TodoList extends React.Component {
             } else {
               content = (
                 <div>
-                  <StyledInputCheckbox
+                  <input
+                    className={styles['input-1']}
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => onToggle(todo)}
                   />
-                  <StyledLabelTitle
-                    isCompleted={todo.completed}
+                  <label
+                    className={styles['label-1']}
+                    style={
+                      todo.completed
+                        ? {
+                            color: '#d9d9d9',
+                            textDecoration: 'line-through',
+                            backgroundImage: `url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E')`,
+                          }
+                        : {}
+                    }
                     onDoubleClick={() => this.handleTitleClick(todo)}
                   >
-                    {todo.title + " "}
-                  </StyledLabelTitle>
-                  <StyledButtonDestroy
-                    className="destroy"
+                    {todo.title + ' '}
+                  </label>
+                  <button
+                    className={styles['button-1']}
                     onClick={() => onDelete(todo)}
                   />
                 </div>
               );
             }
             return (
-              <StyledListItem key={todo.id} className="todo-list-item">
+              <li key={todo.id} className={styles['li-1']}>
                 {content}
-              </StyledListItem>
+              </li>
             );
           })}
-        </StyledUnorderedList>
-      </StyledDiv>
+        </ul>
+      </div>
     );
   }
 }

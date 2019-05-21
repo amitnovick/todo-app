@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal, Button, ModalHeader, ModalBody } from 'reactstrap';
 
-import { linkWithPopup, signInWithPopup } from '../firebase/auth.js';
-import { withAuthentication } from '../containers/Auth/withAuthentication.js';
+import { linkWithPopup, signInWithPopup } from '../../../firebase/auth.js';
+import withAuthentication from '../../../containers/Auth/withAuthentication.js';
 
 class LoginModal extends React.Component {
   /**

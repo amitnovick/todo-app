@@ -1,8 +1,8 @@
 import React from 'react';
 
-import TodoList from '../TodoList/index.js';
-import CreateTodoTextbox from '../CreateTodoTextbox/index.js';
-import { StyledDiv } from './style.js';
+import TodoList from './components/TodoList/index.js';
+import CreateTodoTextbox from './components/CreateTodoTextbox/index.js';
+import styles from './style.module.css';
 
 const Todos = ({
   // container state
@@ -11,10 +11,10 @@ const Todos = ({
   createTodo,
   editTodo,
   toggleTodo,
-  deleteTodo
+  deleteTodo,
 }) => {
   return (
-    <StyledDiv className="todoapp">
+    <div className={`todoapp ${styles['div-1']}`}>
       <CreateTodoTextbox createTodo={createTodo} />
       <TodoList
         todos={todos}
@@ -22,7 +22,7 @@ const Todos = ({
         onEdit={(todo, title) => editTodo(todo, title)}
         onToggle={todo => toggleTodo(todo)}
       />
-    </StyledDiv>
+    </div>
   );
 };
 

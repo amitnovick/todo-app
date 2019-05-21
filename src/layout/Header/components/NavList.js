@@ -2,7 +2,7 @@ import React from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
-import { withAuthentication } from '../containers/Auth/withAuthentication.js';
+import withAuthentication from '../../../containers/Auth/withAuthentication.js';
 import ModalWithActivator from './ModalWithActivator.js';
 
 const NavList = ({ isAuthenticated }) =>
@@ -25,22 +25,22 @@ const NavList = ({ isAuthenticated }) =>
       </NavItem>
     </Nav>
   ) : (
-    <Nav className="ml-auto" navbar>
-      <NavItem />
-      <NavItem>
-        <NavLink tag={Link} to="/demo">
-          Demo
+      <Nav className="ml-auto" navbar>
+        <NavItem />
+        <NavItem>
+          <NavLink tag={Link} to="/demo">
+            Demo
         </NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink tag={Link} to="/features">
-          Features
+        </NavItem>
+        <NavItem>
+          <NavLink tag={Link} to="/features">
+            Features
         </NavLink>
-      </NavItem>
-      <NavItem>
-        <ModalWithActivator />
-      </NavItem>
-    </Nav>
-  );
+        </NavItem>
+        <NavItem>
+          <ModalWithActivator />
+        </NavItem>
+      </Nav>
+    );
 
 export default withAuthentication(NavList);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyledInput } from './style.js';
+import styles from './style.module.css';
 
 const ENTER_KEY = 13;
 
@@ -9,7 +9,7 @@ class CreateTodoTextbox extends React.Component {
     super(props);
 
     this.state = {
-      newTitle: ''
+      newTitle: '',
     };
   }
 
@@ -34,7 +34,8 @@ class CreateTodoTextbox extends React.Component {
   render() {
     const { newTitle } = this.state;
     return (
-      <StyledInput
+      <input
+        className={styles['input-1']}
         value={newTitle}
         onChange={event => this.handleNewTitleChange(event)}
         type="text"

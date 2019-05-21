@@ -1,8 +1,8 @@
 import React from 'react';
 import 'firebase/auth'; // required for the `firebase.auth` method
 
-import { AuthContext } from './AuthContext.js';
-import { firebaseApp } from '../../firebase/firebaseApp.js';
+import firebaseApp from '../../firebase/firebaseApp.js';
+import AuthContext from "./AuthContext.js";
 
 class AuthContainer extends React.Component {
   constructor(props) {
@@ -10,7 +10,7 @@ class AuthContainer extends React.Component {
     this.state = {
       isAwaitingAuth: true,
       user: null,
-      isAuthenticated: false
+      isAuthenticated: false,
     };
   }
 
@@ -21,14 +21,10 @@ class AuthContainer extends React.Component {
       .onAuthStateChanged(this.updateAuthState);
   };
 
-  updateAuthState = user => {
-    if (user) {
-      this.setState({ user: user, isAuthenticated: true });
-    } else {
-      this.setState({ user: null, isAuthenticated: false });
-    }
-    this.setState({ isAwaitingAuth: false });
-  };
+  updateAuthState = user => (
+    (user) ? this.setState({ user, isAuthenticated: true, isAwaitingAuth: false })
+      : this.setState({ user: null, isAuthenticated: false, isAwaitingAuth: false })
+  );
 
   componentDidMount() {
     this.subscribeToAuthChanges();
