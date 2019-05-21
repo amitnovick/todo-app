@@ -4,17 +4,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import * as serviceWorker from './serviceWorker';
 import AuthContainer from './containers/Auth/AuthContainer.js';
-import Layout from './layout/Layout/Layout.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-ReactDOM.render(
+const Root = () => (
   <Router>
-    <AuthContainer>
-      <Layout />
-    </AuthContainer>
-  </Router>,
-  document.getElementById('root'),
+    <AuthContainer />
+  </Router>
 );
+
+ReactDOM.render(<Root />, document.getElementById('root'));
 
 if (module.hot) {
   module.hot.accept();

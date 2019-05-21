@@ -1,46 +1,75 @@
 import React from 'react';
 import 'firebase/auth'; // required for the `firebase.auth` method
+import { Machine, interpret } from 'xstate';
+import { useService } from '@xstate/react';
+import { Atom, useAtom, swap, deref } from '@dbeining/react-atom';
 
 import firebaseApp from '../../firebase/firebaseApp.js';
-import AuthContext from "./AuthContext.js";
+// import globalContext from "./AuthContext";
 
-class AuthContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isAwaitingAuth: true,
-      user: null,
-      isAuthenticated: false,
-    };
+const userOAuthAtom = Atom.of(null);
+
+const updateAuthState = user => {
+  if (user == null) {
+    swap(userOAuthAtom, _ => user);
+    machineService.send('AUTHENTICATED_SUCCESSFULLY');
+  } else {
+    machineService.send('AUTHENTICATION_FAILED');
   }
+};
 
-  subscribeToAuthChanges = async () => {
-    this.setState({ isAwaitingAuth: true });
-    this.listener = await firebaseApp
-      .auth()
-      .onAuthStateChanged(this.updateAuthState);
-  };
+const subscribeToAuthChanges = () =>
+  firebaseApp.auth().onAuthStateChanged(updateAuthState);
 
-  updateAuthState = user => (
-    (user) ? this.setState({ user, isAuthenticated: true, isAwaitingAuth: false })
-      : this.setState({ user: null, isAuthenticated: false, isAwaitingAuth: false })
-  );
-
-  componentDidMount() {
-    this.subscribeToAuthChanges();
+const machine = Machine({
+  id: 'main',
+  initial: 'loading',
+  states: {
+    loading: {
+      onEntry: [subscribeToAuthChanges],
+      on: {
+        AUTHENTICATED_SUCCESSFULLY: 'authenticated',
+        AUTHENTICATION_FAILED: 'unauthenticated'
+      }
+    },
+    authenticated: {},
+    unauthenticated: {}
   }
+});
 
-  componentWillUnmount() {
-    this.listener();
-  }
+const machineService = interpret(machine)
+  .onTransition(state => console.log(state.value))
+  .start();
 
-  render() {
-    return (
-      <AuthContext.Provider value={{ ...this.state }}>
-        {this.props.children}
-      </AuthContext.Provider>
-    );
+const AuthContainer = () => {
+  const [current] = useService(machineService);
+  const authenticationState = current.value;
+  switch (authenticationState) {
+    case 'loading':
+      return (
+        <div
+          style={{ height: 10, width: '100%', backgroundColor: 'hotpink' }}
+        />
+      );
+    case 'authenticated':
+      return (
+        <div>
+          <h2>authenticated</h2>
+        </div>
+      );
+    case 'unauthenticated':
+      return (
+        <div>
+          <h2>Unauthenticated</h2>
+        </div>
+      );
+    default:
+      return (
+        <div>
+          <h2>Unknown state, please contact.</h2>
+        </div>
+      );
   }
-}
+};
 
 export default AuthContainer;

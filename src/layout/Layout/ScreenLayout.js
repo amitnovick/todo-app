@@ -3,8 +3,6 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import Header from '../Header/Header.js';
 import Body from '../Body/index.js';
-import AuthContext from '../../containers/Auth/AuthContext.js';
-import Delay from './components/Delay/Delay.js';
 import styles from './style.module.css';
 
 const ScreenLayout = () => (
@@ -12,7 +10,7 @@ const ScreenLayout = () => (
     <CSSTransition
       classNames={{
         appear: styles['fade-appear'],
-        appearActive: styles['fade-appear-active'],
+        appearActive: styles['fade-appear-active']
       }}
       appear={true}
       timeout={300}
@@ -25,17 +23,4 @@ const ScreenLayout = () => (
   </TransitionGroup>
 );
 
-const Layout = () => (
-  <AuthContext.Consumer>
-    {authContext => (
-      // <ScreenLayout />
-      <Delay
-        component={ScreenLayout}
-        shouldShow={!authContext.isAwaitingAuth}
-        timeout={500}
-      />
-    )}
-  </AuthContext.Consumer>
-);
-
-export default Layout;
+export default ScreenLayout;
