@@ -1,11 +1,14 @@
 import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import Header from '../Header/Header.js';
-import Body from '../Body/index.js';
 import styles from './style.module.css';
 
-const ScreenLayout = () => (
+const centerContentStyle = {
+  width: '50%',
+  margin: '0 auto'
+};
+
+const ScreenLayout = ({ HeaderComponent, BodyComponent }) => (
   <TransitionGroup>
     <CSSTransition
       classNames={{
@@ -16,8 +19,10 @@ const ScreenLayout = () => (
       timeout={300}
     >
       <div>
-        <Header />
-        <Body />
+        <HeaderComponent />
+        <div style={centerContentStyle}>
+          <BodyComponent />
+        </div>
       </div>
     </CSSTransition>
   </TransitionGroup>
