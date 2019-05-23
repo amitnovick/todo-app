@@ -88,22 +88,6 @@ const changePath = newPath => {
   window.history.pushState(null, null, newPath);
 };
 
-const iconRadius = 34;
-
-const navBarRadius = iconRadius + 4;
-
-/* <input
-type="image"
-src={logo}
-alt="edit_logo"
-style={{
-  width: iconRadius,
-  height: iconRadius,
-  margin: 2
-}}
-onClick={() => changePath('/')}
-/> */
-
 const anchorStyle = {
   backgroundColor: 'transparent',
   border: 'none',
