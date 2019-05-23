@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 import 'firebase/auth'; // required for the `firebase.auth` method
 import { Machine, interpret } from 'xstate';
@@ -90,8 +92,6 @@ const iconRadius = 34;
 
 const navBarRadius = iconRadius + 4;
 
-const centeredDivStyle = {};
-
 /* <input
 type="image"
 src={logo}
@@ -109,89 +109,295 @@ const anchorStyle = {
   border: 'none',
   cursor: 'pointer',
   display: 'inline',
-  margin: 0,
+  margin: 2,
   padding: 0
 };
 
-const UnauthenticatedNavBar = () => (
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      height: navBarRadius,
-      backgroundColor: darken(0.1, 'cyan'),
-      paddingLeft: 4,
-      paddingRight: 4,
-      borderBottom: '1px solid'
-    }}
-  >
-    <button
-      style={{
-        color: 'white',
-        lineHeight: '34px',
-        verticalAlign: 'middle',
-        fontSize: 26,
-        fontWeight: 700,
-        backgroundColor: 'transparent',
-        ...anchorStyle
+const navItemStyle = {
+  textDdecoration: 'none',
+  color: 'rgba(255, 255, 255, 0.7)'
+};
+
+const MEDIA_QUERY_VIEWPORT_400 = '@media screen and (min-width: 400px)';
+
+const isCollapsibleOpenStateAtom = Atom.of(false);
+
+const UnauthenticatedNavBar = () => {
+  const isCollapsibleOpen = useAtom(isCollapsibleOpenStateAtom);
+
+  return (
+    <nav
+      css={{
+        fontSize: 18,
+        backgroundImage: 'linear-gradient(260deg, #2376ae 0%, #c16ecf 100%)',
+        border: '1px solid rgba(0, 0, 0, 0.2)',
+        paddingBottom: 10,
+        [MEDIA_QUERY_VIEWPORT_400]: {
+          display: 'flex',
+          justifyContent: 'space-between',
+          paddingBottom: '0',
+          height: '70px',
+          alignItems: 'center'
+        }
       }}
-      onClick={() => changePath('/')}
     >
-      Notes
-    </button>
-    <ul>
-      <li key="demo" style={{ display: 'inline-block' }}>
-        <button
-          style={{
-            ...anchorStyle,
-            color: 'white',
-            fontSize: 22,
-            fontWeight: 500,
-            margin: 2,
-            lineHeight: '34px',
-            verticalAlign: 'middle'
+      <span
+        css={{
+          position: 'absolute',
+          top: '10px',
+          right: '20px',
+          cursor: 'pointer',
+          color: 'rgba(255, 255, 255, 0.8)',
+          fontSize: '24px',
+          [MEDIA_QUERY_VIEWPORT_400]: {
+            display: 'none'
+          }
+        }}
+        onClick={() => swap(isCollapsibleOpenStateAtom, state => !state)}
+        id="js-navbar-toggle"
+      >
+        HAM
+      </span>
+      <button
+        onClick={() => {}}
+        css={{
+          ...navItemStyle,
+          ...anchorStyle,
+          display: 'inline-block',
+          fontSize: 22,
+          marginTop: 10,
+          marginLeft: 20,
+          [MEDIA_QUERY_VIEWPORT_400]: {
+            marginTop: '0'
+          },
+          ':hover': {
+            color: 'rgba(255, 255, 255, 1)'
+          }
+        }}
+      >
+        logo
+      </button>
+      <ul
+        css={{
+          listStyleType: 'none',
+          display: isCollapsibleOpen === false ? 'none' : 'block',
+          [MEDIA_QUERY_VIEWPORT_400]: {
+            display: 'flex',
+            marginRight: '30px',
+            flexDirection: 'row',
+            justifyContent: 'flex-end'
+          }
+        }}
+        id="js-menu"
+      >
+        <li
+          css={{
+            textAlign: 'center',
+            margin: '15px auto',
+            [MEDIA_QUERY_VIEWPORT_400]: {
+              margin: '0'
+            }
           }}
-          onClick={() => changePath('/demo')}
         >
-          Demo
-        </button>
-      </li>
-      <li style={{ display: 'inline-block' }}>
-        <button
-          style={{
-            ...anchorStyle,
-            color: 'white',
-            fontSize: 22,
-            fontWeight: 500,
-            margin: 2,
-            lineHeight: '34px',
-            verticalAlign: 'middle'
+          <button
+            onClick={() => {}}
+            css={{
+              ...anchorStyle,
+              ...navItemStyle,
+              [MEDIA_QUERY_VIEWPORT_400]: {
+                marginLeft: '40px'
+              },
+              ':hover': {
+                color: 'rgba(255, 255, 255, 1)'
+              }
+            }}
+          >
+            Home
+          </button>
+        </li>
+        <li
+          css={{
+            textAlign: 'center',
+            margin: '15px auto',
+            [MEDIA_QUERY_VIEWPORT_400]: {
+              margin: '0'
+            }
           }}
-          onClick={() => changePath('/features')}
         >
-          Features
-        </button>
-      </li>
-      <li key="signin" style={{ display: 'inline-block' }}>
-        <button
-          style={{
-            ...anchorStyle,
-            color: 'white',
-            fontSize: 22,
-            fontWeight: 500,
-            margin: 2,
-            lineHeight: '34px',
-            verticalAlign: 'middle'
+          <button
+            onClick={() => {}}
+            css={{
+              ...anchorStyle,
+              ...navItemStyle,
+              [MEDIA_QUERY_VIEWPORT_400]: {
+                marginLeft: '40px'
+              },
+              ':hover': {
+                color: 'rgba(255, 255, 255, 1)'
+              }
+            }}
+          >
+            Products
+          </button>
+        </li>
+        <li
+          css={{
+            textAlign: 'center',
+            margin: '15px auto',
+            [MEDIA_QUERY_VIEWPORT_400]: {
+              margin: '0'
+            }
           }}
-          onClick={() => changePath('/signin')}
         >
-          SignIn
-        </button>
-      </li>
-    </ul>
-    <div />
-  </div>
-);
+          <button
+            onClick={() => {}}
+            css={{
+              ...anchorStyle,
+              ...navItemStyle,
+              [MEDIA_QUERY_VIEWPORT_400]: {
+                marginLeft: '40px'
+              },
+              ':hover': {
+                color: 'rgba(255, 255, 255, 1)'
+              }
+            }}
+          >
+            About Us
+          </button>
+        </li>
+        <li
+          css={{
+            textAlign: 'center',
+            margin: '15px auto',
+            [MEDIA_QUERY_VIEWPORT_400]: {
+              margin: '0'
+            }
+          }}
+        >
+          <button
+            onClick={() => {}}
+            css={{
+              ...navItemStyle,
+              ...anchorStyle,
+              [MEDIA_QUERY_VIEWPORT_400]: {
+                marginLeft: '40px'
+              },
+              ':hover': {
+                color: 'rgba(255, 255, 255, 1)'
+              }
+            }}
+          >
+            Contact Us
+          </button>
+        </li>
+        <li
+          css={{
+            textAlign: 'center',
+            margin: '15px auto',
+            [MEDIA_QUERY_VIEWPORT_400]: {
+              margin: '0'
+            }
+          }}
+        >
+          <button
+            onClick={() => {}}
+            css={{
+              ...anchorStyle,
+              ...navItemStyle,
+              [MEDIA_QUERY_VIEWPORT_400]: {
+                marginLeft: '40px'
+              },
+              ':hover': {
+                color: 'rgba(255, 255, 255, 1)'
+              }
+            }}
+          >
+            Blog
+          </button>
+        </li>
+      </ul>
+    </nav>
+  );
+};
+// const UnauthenticatedNavBar = () => (
+//   <div
+//     style={{
+//       display: 'flex',
+//       justifyContent: 'space-between',
+//       height: navBarRadius,
+//       backgroundColor: darken(0.1, 'cyan'),
+//       paddingLeft: 4,
+//       paddingRight: 4,
+//       borderBottom: '1px solid'
+//     }}
+//   >
+//     <button
+//       style={{
+//         color: 'white',
+//         lineHeight: '34px',
+//         verticalAlign: 'middle',
+//         fontSize: 26,
+//         fontWeight: 700,
+//         backgroundColor: 'transparent',
+//         ...anchorStyle
+//       }}
+//       onClick={() => changePath('/')}
+//     >
+//       Notes
+//     </button>
+//     <ul>
+//       <li key="demo" style={{ display: 'inline-block' }}>
+//         <button
+//           style={{
+//             ...anchorStyle,
+//             color: 'white',
+//             fontSize: 22,
+//             fontWeight: 500,
+//             margin: 2,
+//             lineHeight: '34px',
+//             verticalAlign: 'middle'
+//           }}
+//           onClick={() => changePath('/demo')}
+//         >
+//           Demo
+//         </button>
+//       </li>
+//       <li style={{ display: 'inline-block' }}>
+//         <button
+//           style={{
+//             ...anchorStyle,
+//             color: 'white',
+//             fontSize: 22,
+//             fontWeight: 500,
+//             margin: 2,
+//             lineHeight: '34px',
+//             verticalAlign: 'middle'
+//           }}
+//           onClick={() => changePath('/features')}
+//         >
+//           Features
+//         </button>
+//       </li>
+//       <li key="signin" style={{ display: 'inline-block' }}>
+//         <button
+//           style={{
+//             ...anchorStyle,
+//             color: 'white',
+//             fontSize: 22,
+//             fontWeight: 500,
+//             margin: 2,
+//             lineHeight: '34px',
+//             verticalAlign: 'middle'
+//           }}
+//           onClick={() => changePath('/signin')}
+//         >
+//           SignIn
+//         </button>
+//       </li>
+//     </ul>
+//     <div />
+//   </div>
+// );
 
 const unauthenticatedPageByPath = path => {
   switch (path) {
