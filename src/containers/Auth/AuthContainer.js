@@ -7,7 +7,7 @@ import { useService } from '@xstate/react';
 import { Atom, useAtom, swap, deref } from '@dbeining/react-atom';
 import { darken, lighten } from 'polished';
 
-import { linkWithPopup, signInWithPopup } from '../../firebase/auth';
+import { linkWithPopup, signInWithPopup, signOut } from '../../firebase/auth';
 import firebaseApp from '../../firebase/firebaseApp.js';
 // import globalContext from "./AuthContext";
 import AboutScreen from '../../pages/AboutScreen.js';
@@ -23,7 +23,7 @@ const userOAuthAtom = Atom.of(null);
 const currentPathAtom = Atom.of(window.location.pathname);
 
 function updateAuthState(user) {
-  if (user == null) {
+  if (user != null) {
     swap(userOAuthAtom, _ => user);
     machineService.send('AUTHENTICATED_SUCCESSFULLY');
   } else {
@@ -45,8 +45,16 @@ const machine = Machine({
         AUTHENTICATION_FAILED: 'unauthenticated'
       }
     },
-    authenticated: {},
-    unauthenticated: {}
+    authenticated: {
+      on: {
+        UNAUTHENTICATED_SUCCESSFULLY: 'unauthenticated'
+      }
+    },
+    unauthenticated: {
+      on: {
+        AUTHENTICATED_SUCCESSFULLY: 'authenticated'
+      }
+    }
   }
 });
 
@@ -56,12 +64,45 @@ const machineService = interpret(machine)
 
 const NotFoundScreen = () => <h1>Not found</h1>;
 
-const SignInScreen = () => (
+const signInScreenMachine = Machine({
+  id: 'sign-in-screen',
+  initial: 'idle',
+  states: {
+    idle: {
+      on: {
+        AUTHENTICATION_FAILED: 'loginFailed'
+      }
+    },
+    loginFailed: {}
+  }
+});
+
+const signInScreenMahineService = interpret(signInScreenMachine)
+  .onTransition(state => console.log(state.value))
+  .start();
+
+const SignInScreenTemplate = ({ hasFailedLogin }) => (
   <div>
     <h1>Sign-in</h1>
     <button
-      onClick={() => signInWithPopup()}
-      color="secondary"
+      onClick={async () => {
+        try {
+          const { user } = await signInWithPopup();
+          swap(userOAuthAtom, _ => user);
+          machineService.send('AUTHENTICATED_SUCCESSFULLY');
+        } catch (error) {
+          if (
+            error &&
+            [
+              'auth/popup-closed-by-user',
+              'auth/cancelled-popup-request'
+            ].includes(error.code) === false
+          ) {
+            console.log(error);
+            signInScreenMahineService.send('AUTHENTICATION_FAILED');
+          }
+        }
+      }}
       style={{
         backgroundColor: 'black',
         color: 'white',
@@ -70,8 +111,43 @@ const SignInScreen = () => (
     >
       Sign in with GitHub
     </button>
+    {hasFailedLogin ? <p style={{ color: 'red' }}>Failed to login</p> : null}
   </div>
 );
+
+const SignInScreen = () => {
+  const [current] = useService(signInScreenMahineService);
+  const uiState = current.value;
+  switch (uiState) {
+    case 'idle':
+      return <SignInScreenTemplate hasFailedLogin={false} />;
+    case 'loginFailed':
+      return <SignInScreenTemplate hasFailedLogin={true} />;
+    default:
+      return <div>Unknown state, please report.</div>;
+  }
+};
+
+const handleLogOut = async () => {
+  try {
+    await signOut();
+    machineService.send('UNAUTHENTICATED_SUCCESSFULLY');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const AccountScreen = () => {
+  const { email } = useAtom(userOAuthAtom);
+
+  return (
+    <div>
+      <h1>Account Settings</h1>
+      <button onClick={() => handleLogOut()}>Logout</button>
+      <p>Email: {email}</p>
+    </div>
+  );
+};
 
 const TodosScreenDemoAdapter = () => (
   <TodosContainerDemo>
@@ -104,9 +180,201 @@ const MEDIA_QUERY_VIEWPORT_768 = '@media screen and (min-width: 768px)';
 
 const isCollapsibleOpenStateAtom = Atom.of(false);
 
-const UnauthenticatedNavBar = () => {
+const AuthenticatedMenuList = () => {
   const isCollapsibleOpen = useAtom(isCollapsibleOpenStateAtom);
+  return (
+    <ul
+      css={{
+        listStyleType: 'none',
+        display: isCollapsibleOpen === false ? 'none' : 'block',
+        [MEDIA_QUERY_VIEWPORT_768]: {
+          display: 'flex',
+          marginRight: '30px',
+          flexDirection: 'row',
+          justifyContent: 'flex-end'
+        }
+      }}
+    >
+      <li
+        key="app"
+        css={{
+          textAlign: 'center',
+          margin: '15px auto',
+          [MEDIA_QUERY_VIEWPORT_768]: {
+            margin: '0'
+          }
+        }}
+      >
+        <button
+          onClick={() => changePath('/app')}
+          css={{
+            ...anchorStyle,
+            ...navItemStyle,
+            [MEDIA_QUERY_VIEWPORT_768]: {
+              marginLeft: '40px'
+            },
+            ':hover': {
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          App
+        </button>
+      </li>
+      <li
+        key="features"
+        css={{
+          textAlign: 'center',
+          margin: '15px auto',
+          [MEDIA_QUERY_VIEWPORT_768]: {
+            margin: '0'
+          }
+        }}
+      >
+        <button
+          onClick={() => changePath('/features')}
+          css={{
+            ...anchorStyle,
+            ...navItemStyle,
+            [MEDIA_QUERY_VIEWPORT_768]: {
+              marginLeft: '40px'
+            },
+            ':hover': {
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          Features
+        </button>
+      </li>
+      <li
+        key="account"
+        css={{
+          textAlign: 'center',
+          margin: '15px auto',
+          [MEDIA_QUERY_VIEWPORT_768]: {
+            margin: '0'
+          }
+        }}
+      >
+        <button
+          onClick={() => changePath('/account')}
+          css={{
+            ...anchorStyle,
+            ...navItemStyle,
+            [MEDIA_QUERY_VIEWPORT_768]: {
+              marginLeft: '40px'
+            },
+            ':hover': {
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          Account
+        </button>
+      </li>
+    </ul>
+  );
+};
 
+const UnauthenticatedMenuList = () => {
+  const isCollapsibleOpen = useAtom(isCollapsibleOpenStateAtom);
+  return (
+    <ul
+      css={{
+        listStyleType: 'none',
+        display: isCollapsibleOpen === false ? 'none' : 'block',
+        [MEDIA_QUERY_VIEWPORT_768]: {
+          display: 'flex',
+          marginRight: '30px',
+          flexDirection: 'row',
+          justifyContent: 'flex-end'
+        }
+      }}
+    >
+      <li
+        key="demo"
+        css={{
+          textAlign: 'center',
+          margin: '15px auto',
+          [MEDIA_QUERY_VIEWPORT_768]: {
+            margin: '0'
+          }
+        }}
+      >
+        <button
+          onClick={() => changePath('/demo')}
+          css={{
+            ...anchorStyle,
+            ...navItemStyle,
+            [MEDIA_QUERY_VIEWPORT_768]: {
+              marginLeft: '40px'
+            },
+            ':hover': {
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          Demo
+        </button>
+      </li>
+      <li
+        key="features"
+        css={{
+          textAlign: 'center',
+          margin: '15px auto',
+          [MEDIA_QUERY_VIEWPORT_768]: {
+            margin: '0'
+          }
+        }}
+      >
+        <button
+          onClick={() => changePath('/features')}
+          css={{
+            ...anchorStyle,
+            ...navItemStyle,
+            [MEDIA_QUERY_VIEWPORT_768]: {
+              marginLeft: '40px'
+            },
+            ':hover': {
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          Features
+        </button>
+      </li>
+      <li
+        key="signin"
+        css={{
+          textAlign: 'center',
+          margin: '15px auto',
+          [MEDIA_QUERY_VIEWPORT_768]: {
+            margin: '0'
+          }
+        }}
+      >
+        <button
+          onClick={() => changePath('/signin')}
+          css={{
+            ...anchorStyle,
+            ...navItemStyle,
+            [MEDIA_QUERY_VIEWPORT_768]: {
+              marginLeft: '40px'
+            },
+            ':hover': {
+              textDecoration: 'underline'
+            }
+          }}
+        >
+          SignIn
+        </button>
+      </li>
+    </ul>
+  );
+};
+
+const NavBar = ({ MenuList }) => {
   return (
     <nav
       css={{
@@ -159,136 +427,86 @@ const UnauthenticatedNavBar = () => {
       >
         Notes
       </button>
-      <ul
-        css={{
-          listStyleType: 'none',
-          display: isCollapsibleOpen === false ? 'none' : 'block',
-          [MEDIA_QUERY_VIEWPORT_768]: {
-            display: 'flex',
-            marginRight: '30px',
-            flexDirection: 'row',
-            justifyContent: 'flex-end'
-          }
-        }}
-      >
-        <li
-          key="demo"
-          css={{
-            textAlign: 'center',
-            margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_768]: {
-              margin: '0'
-            }
-          }}
-        >
-          <button
-            onClick={() => changePath('/demo')}
-            css={{
-              ...anchorStyle,
-              ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_768]: {
-                marginLeft: '40px'
-              },
-              ':hover': {
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            Demo
-          </button>
-        </li>
-        <li
-          key="features"
-          css={{
-            textAlign: 'center',
-            margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_768]: {
-              margin: '0'
-            }
-          }}
-        >
-          <button
-            onClick={() => changePath('/features')}
-            css={{
-              ...anchorStyle,
-              ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_768]: {
-                marginLeft: '40px'
-              },
-              ':hover': {
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            Features
-          </button>
-        </li>
-        <li
-          key="signin"
-          css={{
-            textAlign: 'center',
-            margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_768]: {
-              margin: '0'
-            }
-          }}
-        >
-          <button
-            onClick={() => changePath('/signin')}
-            css={{
-              ...anchorStyle,
-              ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_768]: {
-                marginLeft: '40px'
-              },
-              ':hover': {
-                textDecoration: 'underline'
-              }
-            }}
-          >
-            SignIn
-          </button>
-        </li>
-      </ul>
+      {MenuList}
     </nav>
   );
 };
 
-const unauthenticatedPageByPath = path => {
+const AuthenticatedPageByPath = ({ path }) => {
   switch (path) {
     case '/':
       return (
         <ScreenLayout
-          HeaderComponent={UnauthenticatedNavBar}
-          BodyComponent={AboutScreen}
+          HeaderComponent={<NavBar MenuList={<AuthenticatedMenuList />} />}
+          BodyComponent={<AboutScreen />}
         />
       );
     case '/features':
       return (
         <ScreenLayout
-          HeaderComponent={UnauthenticatedNavBar}
-          BodyComponent={AboutScreen}
+          HeaderComponent={<NavBar MenuList={<AuthenticatedMenuList />} />}
+          BodyComponent={<AboutScreen />}
         />
       );
-    case '/demo':
+    case '/app': // demo?
       return (
         <ScreenLayout
-          HeaderComponent={UnauthenticatedNavBar}
-          BodyComponent={TodosScreenDemoAdapter}
+          HeaderComponent={<NavBar MenuList={<AuthenticatedMenuList />} />}
+          BodyComponent={<TodosScreenDemoAdapter />} // TODO: Change to <TodosScreenCloudAdapter />
         />
       );
-    case '/signin':
+    case '/account': // signin?
       return (
         <ScreenLayout
-          HeaderComponent={UnauthenticatedNavBar}
-          BodyComponent={SignInScreen}
+          HeaderComponent={<NavBar MenuList={<AuthenticatedMenuList />} />}
+          BodyComponent={<AccountScreen />}
         />
       );
     default:
       return (
         <ScreenLayout
-          HeaderComponent={UnauthenticatedNavBar}
-          BodyComponent={NotFoundScreen}
+          HeaderComponent={<NavBar MenuList={<AuthenticatedMenuList />} />}
+          BodyComponent={<NotFoundScreen />}
+        />
+      );
+  }
+};
+
+const UnauthenticatedPageByPath = ({ path }) => {
+  switch (path) {
+    case '/':
+      return (
+        <ScreenLayout
+          HeaderComponent={<NavBar MenuList={<UnauthenticatedMenuList />} />}
+          BodyComponent={<AboutScreen />}
+        />
+      );
+    case '/features':
+      return (
+        <ScreenLayout
+          HeaderComponent={<NavBar MenuList={<UnauthenticatedMenuList />} />}
+          BodyComponent={<AboutScreen />}
+        />
+      );
+    case '/demo':
+      return (
+        <ScreenLayout
+          HeaderComponent={<NavBar MenuList={<UnauthenticatedMenuList />} />}
+          BodyComponent={<TodosScreenDemoAdapter />}
+        />
+      );
+    case '/signin':
+      return (
+        <ScreenLayout
+          HeaderComponent={<NavBar MenuList={<UnauthenticatedMenuList />} />}
+          BodyComponent={<SignInScreen />}
+        />
+      );
+    default:
+      return (
+        <ScreenLayout
+          HeaderComponent={<NavBar MenuList={<UnauthenticatedMenuList />} />}
+          BodyComponent={<NotFoundScreen />}
         />
       );
   }
@@ -306,13 +524,9 @@ const AuthContainer = () => {
         />
       );
     case 'authenticated':
-      return (
-        <div>
-          <h2>authenticated</h2>
-        </div>
-      );
+      return <AuthenticatedPageByPath path={currentPath} />;
     case 'unauthenticated':
-      return unauthenticatedPageByPath(currentPath);
+      return <UnauthenticatedPageByPath path={currentPath} />;
     default:
       return (
         <div>

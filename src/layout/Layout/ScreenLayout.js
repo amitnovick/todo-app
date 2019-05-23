@@ -19,10 +19,8 @@ const ScreenLayout = ({ HeaderComponent, BodyComponent }) => (
       timeout={300}
     >
       <div>
-        <HeaderComponent />
-        <div style={centerContentStyle}>
-          <BodyComponent />
-        </div>
+        {HeaderComponent}
+        <div style={centerContentStyle}>{BodyComponent}</div>
       </div>
     </CSSTransition>
   </TransitionGroup>
