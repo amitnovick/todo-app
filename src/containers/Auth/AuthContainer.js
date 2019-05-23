@@ -154,12 +154,11 @@ const UnauthenticatedNavBar = () => {
           }
         }}
         onClick={() => swap(isCollapsibleOpenStateAtom, state => !state)}
-        id="js-navbar-toggle"
       >
         HAM
       </span>
       <button
-        onClick={() => {}}
+        onClick={() => changePath('/')}
         css={{
           ...navItemStyle,
           ...anchorStyle,
@@ -175,7 +174,7 @@ const UnauthenticatedNavBar = () => {
           }
         }}
       >
-        logo
+        Notes
       </button>
       <ul
         css={{
@@ -188,9 +187,9 @@ const UnauthenticatedNavBar = () => {
             justifyContent: 'flex-end'
           }
         }}
-        id="js-menu"
       >
         <li
+          key="demo"
           css={{
             textAlign: 'center',
             margin: '15px auto',
@@ -200,7 +199,7 @@ const UnauthenticatedNavBar = () => {
           }}
         >
           <button
-            onClick={() => {}}
+            onClick={() => changePath('/demo')}
             css={{
               ...anchorStyle,
               ...navItemStyle,
@@ -212,10 +211,11 @@ const UnauthenticatedNavBar = () => {
               }
             }}
           >
-            Home
+            Demo
           </button>
         </li>
         <li
+          key="features"
           css={{
             textAlign: 'center',
             margin: '15px auto',
@@ -225,7 +225,7 @@ const UnauthenticatedNavBar = () => {
           }}
         >
           <button
-            onClick={() => {}}
+            onClick={() => changePath('/features')}
             css={{
               ...anchorStyle,
               ...navItemStyle,
@@ -237,10 +237,11 @@ const UnauthenticatedNavBar = () => {
               }
             }}
           >
-            Products
+            Features
           </button>
         </li>
         <li
+          key="signin"
           css={{
             textAlign: 'center',
             margin: '15px auto',
@@ -250,7 +251,7 @@ const UnauthenticatedNavBar = () => {
           }}
         >
           <button
-            onClick={() => {}}
+            onClick={() => changePath('/signin')}
             css={{
               ...anchorStyle,
               ...navItemStyle,
@@ -262,142 +263,13 @@ const UnauthenticatedNavBar = () => {
               }
             }}
           >
-            About Us
-          </button>
-        </li>
-        <li
-          css={{
-            textAlign: 'center',
-            margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_400]: {
-              margin: '0'
-            }
-          }}
-        >
-          <button
-            onClick={() => {}}
-            css={{
-              ...navItemStyle,
-              ...anchorStyle,
-              [MEDIA_QUERY_VIEWPORT_400]: {
-                marginLeft: '40px'
-              },
-              ':hover': {
-                color: 'rgba(255, 255, 255, 1)'
-              }
-            }}
-          >
-            Contact Us
-          </button>
-        </li>
-        <li
-          css={{
-            textAlign: 'center',
-            margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_400]: {
-              margin: '0'
-            }
-          }}
-        >
-          <button
-            onClick={() => {}}
-            css={{
-              ...anchorStyle,
-              ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_400]: {
-                marginLeft: '40px'
-              },
-              ':hover': {
-                color: 'rgba(255, 255, 255, 1)'
-              }
-            }}
-          >
-            Blog
+            SignIn
           </button>
         </li>
       </ul>
     </nav>
   );
 };
-// const UnauthenticatedNavBar = () => (
-//   <div
-//     style={{
-//       display: 'flex',
-//       justifyContent: 'space-between',
-//       height: navBarRadius,
-//       backgroundColor: darken(0.1, 'cyan'),
-//       paddingLeft: 4,
-//       paddingRight: 4,
-//       borderBottom: '1px solid'
-//     }}
-//   >
-//     <button
-//       style={{
-//         color: 'white',
-//         lineHeight: '34px',
-//         verticalAlign: 'middle',
-//         fontSize: 26,
-//         fontWeight: 700,
-//         backgroundColor: 'transparent',
-//         ...anchorStyle
-//       }}
-//       onClick={() => changePath('/')}
-//     >
-//       Notes
-//     </button>
-//     <ul>
-//       <li key="demo" style={{ display: 'inline-block' }}>
-//         <button
-//           style={{
-//             ...anchorStyle,
-//             color: 'white',
-//             fontSize: 22,
-//             fontWeight: 500,
-//             margin: 2,
-//             lineHeight: '34px',
-//             verticalAlign: 'middle'
-//           }}
-//           onClick={() => changePath('/demo')}
-//         >
-//           Demo
-//         </button>
-//       </li>
-//       <li style={{ display: 'inline-block' }}>
-//         <button
-//           style={{
-//             ...anchorStyle,
-//             color: 'white',
-//             fontSize: 22,
-//             fontWeight: 500,
-//             margin: 2,
-//             lineHeight: '34px',
-//             verticalAlign: 'middle'
-//           }}
-//           onClick={() => changePath('/features')}
-//         >
-//           Features
-//         </button>
-//       </li>
-//       <li key="signin" style={{ display: 'inline-block' }}>
-//         <button
-//           style={{
-//             ...anchorStyle,
-//             color: 'white',
-//             fontSize: 22,
-//             fontWeight: 500,
-//             margin: 2,
-//             lineHeight: '34px',
-//             verticalAlign: 'middle'
-//           }}
-//           onClick={() => changePath('/signin')}
-//         >
-//           SignIn
-//         </button>
-//       </li>
-//     </ul>
-//     <div />
-//   </div>
-// );
 
 const unauthenticatedPageByPath = path => {
   switch (path) {
