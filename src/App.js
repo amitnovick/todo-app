@@ -2,152 +2,22 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import 'firebase/auth'; // required for the `firebase.auth` method
-import { Machine, interpret } from 'xstate';
 import { useService } from '@xstate/react';
 import { Atom, useAtom, swap, deref } from '@dbeining/react-atom';
 import { darken, lighten } from 'polished';
-
-import { linkWithPopup, signInWithPopup, signOut } from '../../firebase/auth';
-import firebaseApp from '../../firebase/firebaseApp.js';
-// import globalContext from "./AuthContext";
-import AboutScreen from '../../pages/AboutScreen.js';
-// import AccountScreen from '../../pages/AccountScreen.js';
-import ScreenLayout from '../../layout/Layout/ScreenLayout';
-import TodosContainerDemo from '../Todos/TodosContainerDemo.js';
-import TodosContext from '../../containers/Todos/TodosContext.js';
-import TodosScreen from '../../pages/TodosScreen/TodosScreen.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-const userOAuthAtom = Atom.of(null);
+import AboutScreen from './pages/AboutScreen.js';
+import ScreenLayout from './layout/Layout/ScreenLayout';
+import TodosContainerDemo from './containers/Todos/TodosContainerDemo.js';
+import TodosContext from './containers/Todos/TodosContext.js';
+import TodosScreen from './pages/TodosScreen/TodosScreen.js';
+import NotFoundScreen from './pages/NotFoundScreen';
+import SignInScreen from './pages/SignInScreen';
+import authenticationService from './state/authenticationService';
+import AccountScreen from './pages/AccountScreen';
 
 const currentPathAtom = Atom.of(window.location.pathname);
-
-function updateAuthState(user) {
-  if (user != null) {
-    swap(userOAuthAtom, _ => user);
-    machineService.send('AUTHENTICATED_SUCCESSFULLY');
-  } else {
-    machineService.send('AUTHENTICATION_FAILED');
-  }
-}
-
-const subscribeToAuthChanges = () =>
-  firebaseApp.auth().onAuthStateChanged(updateAuthState);
-
-const machine = Machine({
-  id: 'main',
-  initial: 'loading',
-  states: {
-    loading: {
-      onEntry: [subscribeToAuthChanges],
-      on: {
-        AUTHENTICATED_SUCCESSFULLY: 'authenticated',
-        AUTHENTICATION_FAILED: 'unauthenticated'
-      }
-    },
-    authenticated: {
-      on: {
-        UNAUTHENTICATED_SUCCESSFULLY: 'unauthenticated'
-      }
-    },
-    unauthenticated: {
-      on: {
-        AUTHENTICATED_SUCCESSFULLY: 'authenticated'
-      }
-    }
-  }
-});
-
-const machineService = interpret(machine)
-  .onTransition(state => console.log(state.value))
-  .start();
-
-const NotFoundScreen = () => <h1>Not found</h1>;
-
-const signInScreenMachine = Machine({
-  id: 'sign-in-screen',
-  initial: 'idle',
-  states: {
-    idle: {
-      on: {
-        AUTHENTICATION_FAILED: 'loginFailed'
-      }
-    },
-    loginFailed: {}
-  }
-});
-
-const signInScreenMahineService = interpret(signInScreenMachine)
-  .onTransition(state => console.log(state.value))
-  .start();
-
-const SignInScreenTemplate = ({ hasFailedLogin }) => (
-  <div>
-    <h1>Sign-in</h1>
-    <button
-      onClick={async () => {
-        try {
-          const { user } = await signInWithPopup();
-          swap(userOAuthAtom, _ => user);
-          machineService.send('AUTHENTICATED_SUCCESSFULLY');
-        } catch (error) {
-          if (
-            error &&
-            [
-              'auth/popup-closed-by-user',
-              'auth/cancelled-popup-request'
-            ].includes(error.code) === false
-          ) {
-            console.log(error);
-            signInScreenMahineService.send('AUTHENTICATION_FAILED');
-          }
-        }
-      }}
-      style={{
-        backgroundColor: 'black',
-        color: 'white',
-        margin: '8px'
-      }}
-    >
-      Sign in with GitHub
-    </button>
-    {hasFailedLogin ? <p style={{ color: 'red' }}>Failed to login</p> : null}
-  </div>
-);
-
-const SignInScreen = () => {
-  const [current] = useService(signInScreenMahineService);
-  const uiState = current.value;
-  switch (uiState) {
-    case 'idle':
-      return <SignInScreenTemplate hasFailedLogin={false} />;
-    case 'loginFailed':
-      return <SignInScreenTemplate hasFailedLogin={true} />;
-    default:
-      return <div>Unknown state, please report.</div>;
-  }
-};
-
-const handleLogOut = async () => {
-  try {
-    await signOut();
-    machineService.send('UNAUTHENTICATED_SUCCESSFULLY');
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const AccountScreen = () => {
-  const { email } = useAtom(userOAuthAtom);
-
-  return (
-    <div>
-      <h1>Account Settings</h1>
-      <button onClick={() => handleLogOut()}>Logout</button>
-      <p>Email: {email}</p>
-    </div>
-  );
-};
 
 const TodosScreenDemoAdapter = () => (
   <TodosContainerDemo>
@@ -512,8 +382,8 @@ const UnauthenticatedPageByPath = ({ path }) => {
   }
 };
 
-const AuthContainer = () => {
-  const [current] = useService(machineService);
+const App = () => {
+  const [current] = useService(authenticationService);
   const currentPath = useAtom(currentPathAtom);
   const authenticationState = current.value;
   switch (authenticationState) {
@@ -536,4 +406,4 @@ const AuthContainer = () => {
   }
 };
 
-export default AuthContainer;
+export default App;

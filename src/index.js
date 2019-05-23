@@ -1,19 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 import * as serviceWorker from './serviceWorker';
-import AuthContainer from './containers/Auth/AuthContainer.js';
+import App from './App';
 import 'normalize.css';
 import './global.css';
 
-const Root = () => (
-  <Router>
-    <AuthContainer />
-  </Router>
-);
-
-ReactDOM.render(<Root />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
 if (module.hot) {
   module.hot.accept();

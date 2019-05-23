@@ -1,25 +1,29 @@
 import React from 'react';
-import { Button } from 'reactstrap';
+import { useAtom } from '@dbeining/react-atom';
 
 import { signOut } from '../firebase/auth.js';
-import AuthContext from '../containers/Auth/AuthContext.js';
+import userOAuthAtom from '../state/userOAuthAtom';
+import authenticationService from '../state/authenticationService';
 
-class AccountScreen extends React.Component {
-  handleLogOut = () => {
-    signOut();
-  };
-
-  render() {
-    return (
-      <div>
-        <h1>Account Settings</h1>
-        <Button onClick={() => this.handleLogOut()}>Logout</Button>
-        <AuthContext.Consumer>
-          {authContext => <p>{authContext.user.email}</p>}
-        </AuthContext.Consumer>
-      </div>
-    );
+const handleLogOut = async () => {
+  try {
+    await signOut();
+    authenticationService.send('UNAUTHENTICATED_SUCCESSFULLY');
+  } catch (error) {
+    console.log(error);
   }
-}
+};
+
+const AccountScreen = () => {
+  const { email } = useAtom(userOAuthAtom);
+
+  return (
+    <div>
+      <h1>Account Settings</h1>
+      <button onClick={() => handleLogOut()}>Logout</button>
+      <p>Email: {email}</p>
+    </div>
+  );
+};
 
 export default AccountScreen;
