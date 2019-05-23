@@ -16,8 +16,8 @@ import ScreenLayout from '../../layout/Layout/ScreenLayout';
 import TodosContainerDemo from '../Todos/TodosContainerDemo.js';
 import TodosContext from '../../containers/Todos/TodosContext.js';
 import TodosScreen from '../../pages/TodosScreen/TodosScreen.js';
-import logo from '../../assets/edit.png'; // https://www.flaticon.com/free-icon/edit_263062#term=edit&page=1&position=20
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 const userOAuthAtom = Atom.of(null);
 
 const currentPathAtom = Atom.of(window.location.pathname);
@@ -53,8 +53,6 @@ const machine = Machine({
 const machineService = interpret(machine)
   .onTransition(state => console.log(state.value))
   .start();
-
-const HomeScreen = () => <q style={{ fontSize: 16 }}>We do what we must</q>;
 
 const NotFoundScreen = () => <h1>Not found</h1>;
 
@@ -99,10 +97,10 @@ const anchorStyle = {
 
 const navItemStyle = {
   textDdecoration: 'none',
-  color: 'rgba(255, 255, 255, 0.7)'
+  color: 'white'
 };
 
-const MEDIA_QUERY_VIEWPORT_400 = '@media screen and (min-width: 400px)';
+const MEDIA_QUERY_VIEWPORT_768 = '@media screen and (min-width: 768px)';
 
 const isCollapsibleOpenStateAtom = Atom.of(false);
 
@@ -113,10 +111,10 @@ const UnauthenticatedNavBar = () => {
     <nav
       css={{
         fontSize: 18,
-        backgroundImage: 'linear-gradient(260deg, #2376ae 0%, #c16ecf 100%)',
+        backgroundColor: darken(0.15, 'cyan'),
         border: '1px solid rgba(0, 0, 0, 0.2)',
         paddingBottom: 10,
-        [MEDIA_QUERY_VIEWPORT_400]: {
+        [MEDIA_QUERY_VIEWPORT_768]: {
           display: 'flex',
           justifyContent: 'space-between',
           paddingBottom: '0',
@@ -133,13 +131,13 @@ const UnauthenticatedNavBar = () => {
           cursor: 'pointer',
           color: 'rgba(255, 255, 255, 0.8)',
           fontSize: '24px',
-          [MEDIA_QUERY_VIEWPORT_400]: {
+          [MEDIA_QUERY_VIEWPORT_768]: {
             display: 'none'
           }
         }}
         onClick={() => swap(isCollapsibleOpenStateAtom, state => !state)}
       >
-        HAM
+        <FontAwesomeIcon icon={faBars} />
       </span>
       <button
         onClick={() => changePath('/')}
@@ -148,13 +146,14 @@ const UnauthenticatedNavBar = () => {
           ...anchorStyle,
           display: 'inline-block',
           fontSize: 22,
+          fontWeight: 500,
           marginTop: 10,
           marginLeft: 20,
-          [MEDIA_QUERY_VIEWPORT_400]: {
+          [MEDIA_QUERY_VIEWPORT_768]: {
             marginTop: '0'
           },
           ':hover': {
-            color: 'rgba(255, 255, 255, 1)'
+            textDecoration: 'underline'
           }
         }}
       >
@@ -164,7 +163,7 @@ const UnauthenticatedNavBar = () => {
         css={{
           listStyleType: 'none',
           display: isCollapsibleOpen === false ? 'none' : 'block',
-          [MEDIA_QUERY_VIEWPORT_400]: {
+          [MEDIA_QUERY_VIEWPORT_768]: {
             display: 'flex',
             marginRight: '30px',
             flexDirection: 'row',
@@ -177,7 +176,7 @@ const UnauthenticatedNavBar = () => {
           css={{
             textAlign: 'center',
             margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_400]: {
+            [MEDIA_QUERY_VIEWPORT_768]: {
               margin: '0'
             }
           }}
@@ -187,11 +186,11 @@ const UnauthenticatedNavBar = () => {
             css={{
               ...anchorStyle,
               ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_400]: {
+              [MEDIA_QUERY_VIEWPORT_768]: {
                 marginLeft: '40px'
               },
               ':hover': {
-                color: 'rgba(255, 255, 255, 1)'
+                textDecoration: 'underline'
               }
             }}
           >
@@ -203,7 +202,7 @@ const UnauthenticatedNavBar = () => {
           css={{
             textAlign: 'center',
             margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_400]: {
+            [MEDIA_QUERY_VIEWPORT_768]: {
               margin: '0'
             }
           }}
@@ -213,11 +212,11 @@ const UnauthenticatedNavBar = () => {
             css={{
               ...anchorStyle,
               ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_400]: {
+              [MEDIA_QUERY_VIEWPORT_768]: {
                 marginLeft: '40px'
               },
               ':hover': {
-                color: 'rgba(255, 255, 255, 1)'
+                textDecoration: 'underline'
               }
             }}
           >
@@ -229,7 +228,7 @@ const UnauthenticatedNavBar = () => {
           css={{
             textAlign: 'center',
             margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_400]: {
+            [MEDIA_QUERY_VIEWPORT_768]: {
               margin: '0'
             }
           }}
@@ -239,11 +238,11 @@ const UnauthenticatedNavBar = () => {
             css={{
               ...anchorStyle,
               ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_400]: {
+              [MEDIA_QUERY_VIEWPORT_768]: {
                 marginLeft: '40px'
               },
               ':hover': {
-                color: 'rgba(255, 255, 255, 1)'
+                textDecoration: 'underline'
               }
             }}
           >
@@ -261,7 +260,7 @@ const unauthenticatedPageByPath = path => {
       return (
         <ScreenLayout
           HeaderComponent={UnauthenticatedNavBar}
-          BodyComponent={HomeScreen}
+          BodyComponent={AboutScreen}
         />
       );
     case '/features':
