@@ -11,10 +11,10 @@ const Todos = ({
   createTodo,
   editTodo,
   toggleTodo,
-  deleteTodo,
+  deleteTodo
 }) => {
   return (
-    <div className={`todoapp ${styles['div-1']}`}>
+    <div className={styles['div-1']}>
       <CreateTodoTextbox createTodo={createTodo} />
       <TodoList
         todos={todos}

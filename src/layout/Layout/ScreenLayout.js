@@ -5,8 +5,9 @@ import styles from './style.module.css';
 import NavBar from '../../NavBar';
 
 const centerContentStyle = {
-  width: '50%',
-  margin: '0 auto'
+  margin: '0 auto',
+  minWidth: 230,
+  maxWidth: 550
 };
 
 const ScreenLayout = ({ BodyComponent }) => (
