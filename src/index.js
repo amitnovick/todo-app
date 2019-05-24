@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as serviceWorker from './serviceWorker';
-import App from './App';
+import ScreenRouter from './ScreenRouter';
 import 'normalize.css';
 import './global.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<ScreenRouter />, document.getElementById('root'));
 
 if (module.hot) {
   module.hot.accept();
