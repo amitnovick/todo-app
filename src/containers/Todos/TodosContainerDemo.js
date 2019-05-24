@@ -1,64 +1,80 @@
 import React from 'react';
 
-import { store, uuid } from '../../utils.js';
 import TodosContext from './TodosContext.js';
 
-const TODOS = 'todos';
+const NAMESPACE = 'todos';
+
+const uuid = () => {
+  /*jshint bitwise:false */
+  let i, random;
+  let uuid = '';
+
+  for (i = 0; i < 32; i++) {
+    random = (Math.random() * 16) | 0;
+    if (i === 8 || i === 12 || i === 16 || i === 20) {
+      uuid += '-';
+    }
+    // eslint-disable-next-line
+    uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(16);
+  }
+
+  return uuid;
+};
+
+const loadFromLocalStorage = () => {
+  const localStorageData = localStorage.getItem(NAMESPACE);
+  return localStorageData == null ? [] : JSON.parse(localStorageData);
+};
+
+const saveToLocalStorage = data =>
+  localStorage.setItem(NAMESPACE, JSON.stringify(data));
 
 class TodosContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      todos: [],
+      todos: []
     };
   }
 
-  createTodo = async title => {
+  createTodo = title => {
     const todo = {
       id: uuid(),
       title: title,
       completed: false,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
     };
     const newTodos = this.state.todos.concat([todo]);
 
     this.setState({ todos: newTodos });
-    await this.updateLocalStore(newTodos);
+    saveToLocalStorage(newTodos);
   };
 
-  editTodo = async (todo, newTitle) => {
-    const newTodos = this.state.todos.map(
-      t => (t !== todo ? t : { ...t, title: newTitle }),
+  editTodo = (todo, newTitle) => {
+    const newTodos = this.state.todos.map(t =>
+      t !== todo ? t : { ...t, title: newTitle }
     );
     this.setState({ todos: newTodos });
-    await this.updateLocalStore(newTodos);
+    saveToLocalStorage(newTodos);
   };
 
-  toggleTodo = async todo => {
-    const newTodos = this.state.todos.map(
-      t => (t !== todo ? t : { ...t, completed: !t.completed }),
+  toggleTodo = todo => {
+    const newTodos = this.state.todos.map(t =>
+      t !== todo ? t : { ...t, completed: !t.completed }
     );
     this.setState({ todos: newTodos });
-    await this.updateLocalStore(newTodos);
+    saveToLocalStorage(newTodos);
   };
 
-  deleteTodo = async todo => {
+  deleteTodo = todo => {
     const newTodos = this.state.todos.filter(t => t.id !== todo.id);
     this.setState({ todos: newTodos });
-    await this.updateLocalStore(newTodos);
+    saveToLocalStorage(newTodos);
   };
 
-  updateLocalStore = async newTodos => {
-    await store(TODOS, newTodos);
-  };
-
-  mountStore = async () => {
-    const todos = await store(TODOS);
+  async componentDidMount() {
+    const todos = await loadFromLocalStorage();
     this.setState({ todos });
-  };
-
-  componentDidMount() {
-    this.mountStore();
   }
 
   render() {
@@ -70,7 +86,7 @@ class TodosContainer extends React.Component {
           createTodo: this.createTodo,
           editTodo: this.editTodo,
           toggleTodo: this.toggleTodo,
-          deleteTodo: this.deleteTodo,
+          deleteTodo: this.deleteTodo
         }}
       >
         {this.props.children}
