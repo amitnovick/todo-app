@@ -1,7 +1,7 @@
 import React from 'react';
 import 'firebase/auth'; // required for the `firebase.auth` method
 import { useService } from '@xstate/react';
-import { Atom, useAtom, swap, deref } from '@dbeining/react-atom';
+import { useAtom } from '@dbeining/react-atom';
 import AboutScreen from './screens/AboutScreen.js';
 import ScreenLayout from './layout/Layout/ScreenLayout';
 import TodosContainerDemo from './containers/Todos/TodosContainerDemo.js';
@@ -97,35 +97,35 @@ const AuthenticatedPageByPath = ({ path }) => {
     case authenticatedRoutes.HOME:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={authenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={authenticatedMenuItems} />}
           BodyComponent={<AboutScreen />}
         />
       );
     case authenticatedRoutes.FEATURES:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={authenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={authenticatedMenuItems} />}
           BodyComponent={<AboutScreen />}
         />
       );
     case authenticatedRoutes.APP:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={authenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={authenticatedMenuItems} />}
           BodyComponent={<TodosScreenDemoAdapter />} // TODO: Change to <TodosScreenCloudAdapter />
         />
       );
     case authenticatedRoutes.ACCOUNT:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={authenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={authenticatedMenuItems} />}
           BodyComponent={<AccountScreen />}
         />
       );
     default:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={authenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={authenticatedMenuItems} />}
           BodyComponent={<NotFoundScreen />}
         />
       );
@@ -137,35 +137,35 @@ const UnauthenticatedPageByPath = ({ path }) => {
     case unauthenticatedRoutes.HOME:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={unauthenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={unauthenticatedMenuItems} />}
           BodyComponent={<AboutScreen />}
         />
       );
     case unauthenticatedRoutes.FEATURES:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={unauthenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={unauthenticatedMenuItems} />}
           BodyComponent={<AboutScreen />}
         />
       );
     case unauthenticatedRoutes.DEMO:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={unauthenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={unauthenticatedMenuItems} />}
           BodyComponent={<TodosScreenDemoAdapter />}
         />
       );
     case unauthenticatedRoutes.SIGNIN:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={unauthenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={unauthenticatedMenuItems} />}
           BodyComponent={<SignInScreen />}
         />
       );
     default:
       return (
         <ScreenLayout
-          HeaderComponent={<NavBar routes={unauthenticatedMenuItems} />}
+          HeaderComponent={<NavBar menuItems={unauthenticatedMenuItems} />}
           BodyComponent={<NotFoundScreen />}
         />
       );

@@ -31,7 +31,7 @@ const MEDIA_QUERY_VIEWPORT_768 = '@media screen and (min-width: 768px)';
 
 const isCollapsibleOpenStateAtom = Atom.of(false);
 
-const NavBar = ({ routes }) => {
+const NavBar = ({ menuItems }) => {
   const isCollapsibleOpen = useAtom(isCollapsibleOpenStateAtom);
 
   return (
@@ -98,7 +98,7 @@ const NavBar = ({ routes }) => {
           }
         }}
       >
-        {routes.map(({ path, menuTitle }) => (
+        {menuItems.map(({ path, menuTitle }) => (
           <li
             key={path}
             css={{
