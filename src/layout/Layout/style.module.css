@@ -7,3 +7,46 @@
   opacity: 1;
   transition: opacity 300ms ease-in;
 }
+
+/* Below styles are used for the body fade animation */
+
+.main-1 {
+  min-width: 230px;
+  max-width: 550px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.section-1 {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.transition-group-1 {
+  position: relative;
+}
+
+/* CSS Transition - start */
+
+.fade-enter {
+  opacity: 0.01;
+  z-index: 1;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 300ms ease-in;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+/* CSS Transition - end */
