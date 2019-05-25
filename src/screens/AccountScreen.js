@@ -1,29 +1,30 @@
 import React from 'react';
-import { useAtom } from '@dbeining/react-atom';
-
 import { signOut } from '../firebase/auth.js';
-import userOAuthAtom from '../state/userOAuthAtom';
-import authenticationService from '../state/authenticationService';
 
-const handleLogOut = async () => {
-  try {
-    await signOut();
-    authenticationService.send('UNAUTHENTICATED_SUCCESSFULLY');
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const AccountScreen = () => {
-  const { email } = useAtom(userOAuthAtom);
-
+const AccountScreen = ({ email, handleLogout }) => {
   return (
     <div>
       <h1>Account Settings</h1>
-      <button onClick={() => handleLogOut()}>Logout</button>
+      <button onClick={() => handleLogout()}>Logout</button>
       <p>Email: {email}</p>
     </div>
   );
 };
 
-export default AccountScreen;
+const handleLogout = async send => {
+  try {
+    await signOut();
+    send('UNAUTHENTICATED_SUCCESSFULLY');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const AccountScreenContainer = ({ userOAuth, send }) => {
+  const { email } = userOAuth;
+  return (
+    <AccountScreen email={email} handleLogout={() => handleLogout(send)} />
+  );
+};
+
+export default AccountScreenContainer;

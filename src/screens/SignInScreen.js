@@ -3,29 +3,15 @@ import { Machine } from 'xstate';
 import { useMachine } from '@xstate/react';
 
 import { signInWithPopup } from '../firebase/auth';
-import authenticationService from '../state/authenticationService';
 
-const signInScreenMachine = Machine({
-  id: 'sign-in-screen',
-  initial: 'idle',
-  states: {
-    idle: {
-      on: {
-        AUTHENTICATION_FAILED: 'loginFailed'
-      }
-    },
-    loginFailed: {}
-  }
-});
-
-const SignInScreenTemplate = ({ hasFailedLogin, onFailLogin }) => (
+const SignInScreen = ({ hasFailedLogin, onFailLogin, onSuccessfulLogin }) => (
   <div>
     <h1>Sign-in</h1>
     <button
       onClick={async () => {
         try {
           const { user } = await signInWithPopup();
-          authenticationService.send('AUTHENTICATED_SUCCESSFULLY', { user });
+          onSuccessfulLogin(user);
         } catch (error) {
           if (
             error &&
@@ -51,22 +37,41 @@ const SignInScreenTemplate = ({ hasFailedLogin, onFailLogin }) => (
   </div>
 );
 
-const SignInScreen = () => {
+const signInScreenMachine = Machine({
+  id: 'sign-in-screen',
+  initial: 'idle',
+  states: {
+    idle: {
+      on: {
+        AUTHENTICATION_FAILED: 'loginFailed'
+      }
+    },
+    loginFailed: {}
+  }
+});
+
+const SignInScreenContainer = ({ send: sendToAuthenticationService }) => {
   const [current, send] = useMachine(signInScreenMachine);
   const uiState = current.value;
   switch (uiState) {
     case 'idle':
       return (
-        <SignInScreenTemplate
+        <SignInScreen
           hasFailedLogin={false}
           onFailLogin={() => send('AUTHENTICATION_FAILED')}
+          onSuccessfulLogin={user =>
+            sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', { user })
+          }
         />
       );
     case 'loginFailed':
       return (
-        <SignInScreenTemplate
+        <SignInScreen
           hasFailedLogin={true}
           onFailLogin={() => send('AUTHENTICATION_FAILED')}
+          onSuccessfulLogin={user =>
+            sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', { user })
+          }
         />
       );
     default:
@@ -74,4 +79,4 @@ const SignInScreen = () => {
   }
 };
 
-export default SignInScreen;
+export default SignInScreenContainer;

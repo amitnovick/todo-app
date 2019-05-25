@@ -33,8 +33,6 @@ const saveToLocalStorage = data =>
 
 class TodosContainer extends React.Component {
   constructor(props) {
-    console.log('constructing...');
-
     super(props);
     this.state = {
       todos: []

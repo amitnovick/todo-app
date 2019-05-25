@@ -2,71 +2,10 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import { Atom, useAtom, swap } from '@dbeining/react-atom';
-import { useService } from '@xstate/react';
 import { darken } from 'polished';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-
-import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
-import authenticatedRoutes from './routes/authenticatedRoutes';
-import authenticationService from './state/authenticationService';
-
-const authenticatedMenuTitleByPath = path => {
-  switch (path) {
-    case authenticatedRoutes.APP:
-      return 'App';
-    case authenticatedRoutes.FEATURES:
-      return 'Features';
-    case authenticatedRoutes.ACCOUNT:
-      return 'Account';
-    default:
-      return 'Unknown';
-  }
-};
-
-const authenticatedMenuItems = [
-  {
-    path: authenticatedRoutes.APP,
-    menuTitle: authenticatedMenuTitleByPath(authenticatedRoutes.APP)
-  },
-  {
-    path: authenticatedRoutes.FEATURES,
-    menuTitle: authenticatedMenuTitleByPath(authenticatedRoutes.FEATURES)
-  },
-  {
-    path: authenticatedRoutes.ACCOUNT,
-    menuTitle: authenticatedMenuTitleByPath(authenticatedRoutes.ACCOUNT)
-  }
-];
-
-const unauthenticatedMenuTitleByPath = path => {
-  switch (path) {
-    case unauthenticatedRoutes.DEMO:
-      return 'Demo';
-    case unauthenticatedRoutes.FEATURES:
-      return 'Features';
-    case unauthenticatedRoutes.SIGNIN:
-      return 'SignIn';
-    default:
-      return 'Unknown';
-  }
-};
-
-const unauthenticatedMenuItems = [
-  {
-    path: unauthenticatedRoutes.DEMO,
-    menuTitle: unauthenticatedMenuTitleByPath(unauthenticatedRoutes.DEMO)
-  },
-  {
-    path: unauthenticatedRoutes.FEATURES,
-    menuTitle: unauthenticatedMenuTitleByPath(unauthenticatedRoutes.FEATURES)
-  },
-  {
-    path: unauthenticatedRoutes.SIGNIN,
-    menuTitle: unauthenticatedMenuTitleByPath(unauthenticatedRoutes.SIGNIN)
-  }
-];
 
 const anchorStyle = {
   backgroundColor: 'transparent',
@@ -133,7 +72,7 @@ const MenuItems = ({ items }) => {
   );
 };
 
-const NavBarTemplate = ({ items }) => (
+const NavBar = ({ items }) => (
   <nav
     css={{
       fontSize: 18,
@@ -185,17 +124,5 @@ const NavBarTemplate = ({ items }) => (
     <MenuItems items={items} />
   </nav>
 );
-
-const NavBar = () => {
-  const [{ value: authenticationState }] = useService(authenticationService);
-  switch (authenticationState) {
-    case 'authenticated':
-      return <NavBarTemplate items={authenticatedMenuItems} />;
-    case 'unauthenticated':
-      return <NavBarTemplate items={unauthenticatedMenuItems} />;
-    default:
-      return null;
-  }
-};
 
 export default NavBar;

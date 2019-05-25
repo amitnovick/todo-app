@@ -1,9 +1,7 @@
 import React from 'react';
-import { deref } from '@dbeining/react-atom';
 
 import TodosContext from './TodosContext.js';
 import firestore from '../../firebase/realtimeDb.js';
-import userOAuthAtom from '../../state/userOAuthAtom';
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -80,7 +78,7 @@ class TodosContainer extends React.Component {
   mapUserIdToCollection = userId => `todos-${userId}`;
 
   componentDidMount() {
-    const userOAuth = deref(userOAuthAtom);
+    const { userOAuth } = this.props;
     const { uid: userId } = userOAuth;
     this.todosCollection = this.mapUserIdToCollection(userId);
     this.mountStore();

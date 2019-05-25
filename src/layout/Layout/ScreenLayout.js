@@ -2,7 +2,6 @@ import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import styles from './style.module.css';
-import NavBar from '../../NavBar';
 
 const centerContentStyle = {
   margin: '0 auto',
@@ -10,7 +9,7 @@ const centerContentStyle = {
   maxWidth: 550
 };
 
-const ScreenLayout = ({ BodyComponent }) => (
+const ScreenLayout = ({ BodyComponent, HeaderComponent }) => (
   <TransitionGroup>
     <CSSTransition
       classNames={{
@@ -21,7 +20,7 @@ const ScreenLayout = ({ BodyComponent }) => (
       timeout={300}
     >
       <div>
-        <NavBar />
+        {HeaderComponent}
         <div style={centerContentStyle}>{BodyComponent}</div>
       </div>
     </CSSTransition>
