@@ -47,6 +47,4 @@ const ScreenLayout = ({ BodyComponent, HeaderComponent, location }) => (
   </TransitionGroup>
 );
 
-const ScreenLayoutContainer = withRouter(ScreenLayout);
-
-export default ScreenLayoutContainer;
+export default withRouter(ScreenLayout);

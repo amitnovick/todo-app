@@ -1,18 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 
-import { signOut } from '../firebase/auth.js';
-import unauthenticatedRoutes from '../routes/unauthenticatedRoutes';
-
-const AccountScreen = ({ email, handleLogout }) => {
-  return (
-    <div>
-      <h1>Account Settings</h1>
-      <button onClick={() => handleLogout()}>Logout</button>
-      <p>Email: {email}</p>
-    </div>
-  );
-};
+import { signOut } from '../../firebase/auth';
+import unauthenticatedRoutes from '../../routes/unauthenticatedRoutes';
+import AccountScreen from './Presntational';
 
 const handleLogout = async (send, history) => {
   try {

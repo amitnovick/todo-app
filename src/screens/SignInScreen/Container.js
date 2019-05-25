@@ -3,25 +3,9 @@ import { Machine } from 'xstate';
 import { useMachine } from '@xstate/react';
 import { withRouter } from 'react-router-dom';
 
-import { signInWithPopup } from '../firebase/auth';
-import authenticatedRoutes from '../routes/authenticatedRoutes';
-
-const SignInScreen = ({ hasFailedLogin, attemptToLogin }) => (
-  <div>
-    <h1>Sign-in</h1>
-    <button
-      onClick={attemptToLogin}
-      style={{
-        backgroundColor: 'black',
-        color: 'white',
-        margin: '8px'
-      }}
-    >
-      Sign in with GitHub
-    </button>
-    {hasFailedLogin ? <p style={{ color: 'red' }}>Failed to login</p> : null}
-  </div>
-);
+import { signInWithPopup } from '../../firebase/auth';
+import authenticatedRoutes from '../../routes/authenticatedRoutes';
+import SignInScreen from './Presentational';
 
 const signInScreenMachine = Machine({
   id: 'sign-in-screen',

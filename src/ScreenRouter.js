@@ -5,24 +5,24 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Atom, useAtom, swap } from '@dbeining/react-atom';
 import { Machine, interpret } from 'xstate';
 
-import AboutScreen from './screens/AboutScreen.js';
-import ScreenLayout from './layout/Layout/ScreenLayout';
-import TodosContainerDemo from './containers/Todos/TodosContainerDemo.js';
+import AboutScreen from './screens/AboutScreen';
+import ScreenLayout from './components/Layout/ScreenLayout';
+import TodosContainerDemo from './containers/Todos/TodosContainerDemo';
 import TodosContainerCloud from './containers/Todos/TodosContainerCloud';
-import TodosContext from './containers/Todos/TodosContext.js';
-import TodosScreen from './screens/TodosScreen/TodosScreen.js';
+import TodosContext from './containers/Todos/TodosContext';
+import TodosScreen from './screens/TodosScreen/TodosScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
-import SignInScreenContainer from './screens/SignInScreen';
-import AccountScreen from './screens/AccountScreen';
+import SignInScreenContainer from './screens/SignInScreen/Presentational';
+import AccountScreen from './screens/AccountScreen/Container';
 import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
-import UserOAuthContext from './containers/Auth/AuthContext.js';
+import AuthContext from './containers/Auth/AuthContext';
 import firebaseApp from './firebase/firebaseApp';
 import AuthenticatedNavBar from './containers/AuthenticatedNavBar';
 import UnauthenticatedNavBar from './containers/UnauthenticatedNavBar';
 
 const TodosScreenCloudAdapter = () => (
-  <UserOAuthContext.Consumer>
+  <AuthContext.Consumer>
     {(userOAuthContext /* TODO: Check that this is working! */) => (
       <TodosContainerCloud {...userOAuthContext}>
         <TodosContext.Consumer>
@@ -30,7 +30,7 @@ const TodosScreenCloudAdapter = () => (
         </TodosContext.Consumer>
       </TodosContainerCloud>
     )}
-  </UserOAuthContext.Consumer>
+  </AuthContext.Consumer>
 );
 
 const TodosScreenDemoAdapter = () => (
@@ -42,17 +42,17 @@ const TodosScreenDemoAdapter = () => (
 );
 
 const AccountScreenAdapter = () => (
-  <UserOAuthContext.Consumer>
+  <AuthContext.Consumer>
     {userOAuthContext => <AccountScreen {...userOAuthContext} />}
-  </UserOAuthContext.Consumer>
+  </AuthContext.Consumer>
 );
 
 const SignInScrenAdapter = () => (
-  <UserOAuthContext.Consumer>
+  <AuthContext.Consumer>
     {userOAuthContext => {
       return <SignInScreenContainer {...userOAuthContext} />;
     }}
-  </UserOAuthContext.Consumer>
+  </AuthContext.Consumer>
 );
 
 const AuthenticatedPage = () => {
@@ -215,14 +215,14 @@ const userOAuthAtom = Atom.of(null);
 const AuthenticationContainer = ({ send, children }) => {
   const userOAuth = useAtom(userOAuthAtom);
   return (
-    <UserOAuthContext.Provider
+    <AuthContext.Provider
       value={{
         userOAuth,
         send
       }}
     >
       {children}
-    </UserOAuthContext.Provider>
+    </AuthContext.Provider>
   );
 };
 

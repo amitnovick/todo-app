@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TodoList from './components/TodoList/index.js';
-import CreateTodoTextbox from './components/CreateTodoTextbox/index.js';
+import TodoList from './components/TodoList/index';
+import CreateTodoTextbox from './components/CreateTodoTextbox/index';
 import styles from './style.module.css';
 
 const Todos = ({
