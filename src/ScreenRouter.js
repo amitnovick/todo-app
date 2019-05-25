@@ -57,115 +57,111 @@ const SignInScrenAdapter = () => (
 
 const AuthenticatedPage = () => {
   return (
-    <Router>
-      <Switch>
-        <Route
-          exact
-          path={authenticatedRoutes.HOME}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<AboutScreen />}
-              HeaderComponent={<AuthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={authenticatedRoutes.FEATURES}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<AboutScreen />}
-              HeaderComponent={<AuthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={authenticatedRoutes.APP}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<TodosScreenCloudAdapter />}
-              HeaderComponent={<AuthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={authenticatedRoutes.ACCOUNT}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<AccountScreenAdapter />}
-              HeaderComponent={<AuthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<NotFoundScreen />}
-              HeaderComponent={<AuthenticatedNavBar />}
-            />
-          )}
-        />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route
+        exact
+        path={authenticatedRoutes.HOME}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<AboutScreen />}
+            HeaderComponent={<AuthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={authenticatedRoutes.FEATURES}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<AboutScreen />}
+            HeaderComponent={<AuthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={authenticatedRoutes.APP}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<TodosScreenCloudAdapter />}
+            HeaderComponent={<AuthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={authenticatedRoutes.ACCOUNT}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<AccountScreenAdapter />}
+            HeaderComponent={<AuthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<NotFoundScreen />}
+            HeaderComponent={<AuthenticatedNavBar />}
+          />
+        )}
+      />
+    </Switch>
   );
 };
 
 const UnauthenticatedPage = () => {
   return (
-    <Router>
-      <Switch>
-        <Route
-          exact
-          path={unauthenticatedRoutes.HOME}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<AboutScreen />}
-              HeaderComponent={<UnauthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={unauthenticatedRoutes.FEATURES}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<AboutScreen />}
-              HeaderComponent={<UnauthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={unauthenticatedRoutes.DEMO}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<TodosScreenDemoAdapter />}
-              HeaderComponent={<UnauthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          exact
-          path={unauthenticatedRoutes.SIGNIN}
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<SignInScrenAdapter />}
-              HeaderComponent={<UnauthenticatedNavBar />}
-            />
-          )}
-        />
-        <Route
-          render={() => (
-            <ScreenLayout
-              BodyComponent={<NotFoundScreen />}
-              HeaderComponent={<UnauthenticatedNavBar />}
-            />
-          )}
-        />
-      </Switch>
-    </Router>
+    <Switch>
+      <Route
+        exact
+        path={unauthenticatedRoutes.HOME}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<AboutScreen />}
+            HeaderComponent={<UnauthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={unauthenticatedRoutes.FEATURES}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<AboutScreen />}
+            HeaderComponent={<UnauthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={unauthenticatedRoutes.DEMO}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<TodosScreenDemoAdapter />}
+            HeaderComponent={<UnauthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={unauthenticatedRoutes.SIGNIN}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<SignInScrenAdapter />}
+            HeaderComponent={<UnauthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<NotFoundScreen />}
+            HeaderComponent={<UnauthenticatedNavBar />}
+          />
+        )}
+      />
+    </Switch>
   );
 };
 
@@ -258,4 +254,10 @@ const ScreenRouter = () => {
   }
 };
 
-export default ScreenRouter;
+const ScreenRouterContainer = () => (
+  <Router>
+    <ScreenRouter />
+  </Router>
+);
+
+export default ScreenRouterContainer;

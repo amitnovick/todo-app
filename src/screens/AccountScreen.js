@@ -1,5 +1,8 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
+
 import { signOut } from '../firebase/auth.js';
+import unauthenticatedRoutes from '../routes/unauthenticatedRoutes';
 
 const AccountScreen = ({ email, handleLogout }) => {
   return (
@@ -11,20 +14,24 @@ const AccountScreen = ({ email, handleLogout }) => {
   );
 };
 
-const handleLogout = async send => {
+const handleLogout = async (send, history) => {
   try {
     await signOut();
     send('UNAUTHENTICATED_SUCCESSFULLY');
+    history.push(unauthenticatedRoutes.HOME);
   } catch (error) {
     console.log(error);
   }
 };
 
-const AccountScreenContainer = ({ userOAuth, send }) => {
+const AccountScreenContainer = ({ userOAuth, send, history }) => {
   const { email } = userOAuth;
   return (
-    <AccountScreen email={email} handleLogout={() => handleLogout(send)} />
+    <AccountScreen
+      email={email}
+      handleLogout={() => handleLogout(send, history)}
+    />
   );
 };
 
-export default AccountScreenContainer;
+export default withRouter(AccountScreenContainer);

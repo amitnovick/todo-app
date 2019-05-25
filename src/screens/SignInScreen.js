@@ -1,8 +1,10 @@
 import React from 'react';
 import { Machine } from 'xstate';
 import { useMachine } from '@xstate/react';
+import { withRouter } from 'react-router-dom';
 
 import { signInWithPopup } from '../firebase/auth';
+import authenticatedRoutes from '../routes/authenticatedRoutes';
 
 const SignInScreen = ({ hasFailedLogin, onFailLogin, onSuccessfulLogin }) => (
   <div>
@@ -50,7 +52,10 @@ const signInScreenMachine = Machine({
   }
 });
 
-const SignInScreenContainer = ({ send: sendToAuthenticationService }) => {
+const SignInScreenContainer = ({
+  send: sendToAuthenticationService,
+  history
+}) => {
   const [current, send] = useMachine(signInScreenMachine);
   const uiState = current.value;
   switch (uiState) {
@@ -59,9 +64,10 @@ const SignInScreenContainer = ({ send: sendToAuthenticationService }) => {
         <SignInScreen
           hasFailedLogin={false}
           onFailLogin={() => send('AUTHENTICATION_FAILED')}
-          onSuccessfulLogin={user =>
-            sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', { user })
-          }
+          onSuccessfulLogin={user => {
+            sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', { user });
+            history.push(authenticatedRoutes.APP);
+          }}
         />
       );
     case 'loginFailed':
@@ -79,4 +85,4 @@ const SignInScreenContainer = ({ send: sendToAuthenticationService }) => {
   }
 };
 
-export default SignInScreenContainer;
+export default withRouter(SignInScreenContainer);
