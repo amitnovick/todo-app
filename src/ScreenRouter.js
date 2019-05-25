@@ -1,7 +1,7 @@
 import React from 'react';
 import 'firebase/auth'; // required for the `firebase.auth` method
 import { useService } from '@xstate/react';
-import { useAtom } from '@dbeining/react-atom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import AboutScreen from './screens/AboutScreen.js';
 import ScreenLayout from './layout/Layout/ScreenLayout';
@@ -12,7 +12,6 @@ import TodosScreen from './screens/TodosScreen/TodosScreen.js';
 import NotFoundScreen from './screens/NotFoundScreen';
 import SignInScreen from './screens/SignInScreen';
 import AccountScreen from './screens/AccountScreen';
-import currentPathAtom from './state/currentPathAtom';
 import authenticationService from './state/authenticationService';
 import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
@@ -33,39 +32,76 @@ const TodosScreenDemoAdapter = () => (
   </TodosContainerDemo>
 );
 
-const AuthenticatedPageByPath = ({ path }) => {
-  switch (path) {
-    case authenticatedRoutes.HOME:
-      return <ScreenLayout BodyComponent={<AboutScreen />} />;
-    case authenticatedRoutes.FEATURES:
-      return <ScreenLayout BodyComponent={<AboutScreen />} />;
-    case authenticatedRoutes.APP:
-      return <ScreenLayout BodyComponent={<TodosScreenCloudAdapter />} />;
-    case authenticatedRoutes.ACCOUNT:
-      return <ScreenLayout BodyComponent={<AccountScreen />} />;
-    default:
-      return <ScreenLayout BodyComponent={<NotFoundScreen />} />;
-  }
+const AuthenticatedPage = () => {
+  return (
+    <Router>
+      <Switch>
+        <Route
+          exact
+          path={authenticatedRoutes.HOME}
+          render={() => <ScreenLayout BodyComponent={<AboutScreen />} />}
+        />
+        <Route
+          exact
+          path={authenticatedRoutes.FEATURES}
+          render={() => <ScreenLayout BodyComponent={<AboutScreen />} />}
+        />
+        <Route
+          exact
+          path={authenticatedRoutes.APP}
+          render={() => (
+            <ScreenLayout BodyComponent={<TodosScreenCloudAdapter />} />
+          )}
+        />
+        <Route
+          exact
+          path={authenticatedRoutes.ACCOUNT}
+          render={() => <ScreenLayout BodyComponent={<AccountScreen />} />}
+        />
+        <Route
+          render={() => <ScreenLayout BodyComponent={<NotFoundScreen />} />}
+        />
+      </Switch>
+    </Router>
+  );
 };
 
-const UnauthenticatedPageByPath = ({ path }) => {
-  switch (path) {
-    case unauthenticatedRoutes.HOME:
-      return <ScreenLayout BodyComponent={<AboutScreen />} />;
-    case unauthenticatedRoutes.FEATURES:
-      return <ScreenLayout BodyComponent={<AboutScreen />} />;
-    case unauthenticatedRoutes.DEMO:
-      return <ScreenLayout BodyComponent={<TodosScreenDemoAdapter />} />;
-    case unauthenticatedRoutes.SIGNIN:
-      return <ScreenLayout BodyComponent={<SignInScreen />} />;
-    default:
-      return <ScreenLayout BodyComponent={<NotFoundScreen />} />;
-  }
+const UnauthenticatedPage = () => {
+  return (
+    <Router>
+      <Switch>
+        <Route
+          exact
+          path={unauthenticatedRoutes.HOME}
+          render={() => <ScreenLayout BodyComponent={<AboutScreen />} />}
+        />
+        <Route
+          exact
+          path={unauthenticatedRoutes.FEATURES}
+          render={() => <ScreenLayout BodyComponent={<AboutScreen />} />}
+        />
+        <Route
+          exact
+          path={unauthenticatedRoutes.DEMO}
+          render={() => (
+            <ScreenLayout BodyComponent={<TodosScreenDemoAdapter />} />
+          )}
+        />
+        <Route
+          exact
+          path={unauthenticatedRoutes.SIGNIN}
+          render={() => <ScreenLayout BodyComponent={<SignInScreen />} />}
+        />
+        <Route
+          render={() => <ScreenLayout BodyComponent={<NotFoundScreen />} />}
+        />
+      </Switch>
+    </Router>
+  );
 };
 
 const ScreenRouter = () => {
   const [current] = useService(authenticationService);
-  const currentPath = useAtom(currentPathAtom);
   const authenticationState = current.value;
   switch (authenticationState) {
     case 'loading':
@@ -75,9 +111,9 @@ const ScreenRouter = () => {
         />
       );
     case 'authenticated':
-      return <AuthenticatedPageByPath path={currentPath} />;
+      return <AuthenticatedPage />;
     case 'unauthenticated':
-      return <UnauthenticatedPageByPath path={currentPath} />;
+      return <UnauthenticatedPage />;
     default:
       return (
         <div>

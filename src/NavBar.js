@@ -6,11 +6,11 @@ import { useService } from '@xstate/react';
 import { darken } from 'polished';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
 import authenticationService from './state/authenticationService';
-import currentPathAtom from './state/currentPathAtom';
 
 const authenticatedMenuTitleByPath = path => {
   switch (path) {
@@ -68,23 +68,21 @@ const unauthenticatedMenuItems = [
   }
 ];
 
-const changePath = newPath => {
-  swap(currentPathAtom, _ => newPath);
-  window.history.pushState(null, null, newPath);
-};
-
 const anchorStyle = {
   backgroundColor: 'transparent',
   border: 'none',
   cursor: 'pointer',
   display: 'inline',
   margin: 2,
-  padding: 0
+  padding: 0,
+  textDecoration: 'none'
 };
 
 const navItemStyle = {
-  textDdecoration: 'none',
-  color: 'white'
+  color: 'white',
+  ':hover': {
+    textDecoration: 'underline'
+  }
 };
 
 const MEDIA_QUERY_VIEWPORT_768 = '@media screen and (min-width: 768px)';
@@ -117,21 +115,18 @@ const MenuItems = ({ items }) => {
             }
           }}
         >
-          <button
-            onClick={() => changePath(path)}
+          <Link
+            to={path}
             css={{
               ...anchorStyle,
               ...navItemStyle,
               [MEDIA_QUERY_VIEWPORT_768]: {
                 marginLeft: '40px'
-              },
-              ':hover': {
-                textDecoration: 'underline'
               }
             }}
           >
             {menuTitle}
-          </button>
+          </Link>
         </li>
       ))}
     </ul>
@@ -170,8 +165,8 @@ const NavBarTemplate = ({ items }) => (
     >
       <FontAwesomeIcon icon={faBars} />
     </span>
-    <button
-      onClick={() => changePath('/')}
+    <Link
+      to="/"
       css={{
         ...navItemStyle,
         ...anchorStyle,
@@ -182,14 +177,11 @@ const NavBarTemplate = ({ items }) => (
         marginLeft: 20,
         [MEDIA_QUERY_VIEWPORT_768]: {
           marginTop: '0'
-        },
-        ':hover': {
-          textDecoration: 'underline'
         }
       }}
     >
       Notes
-    </button>
+    </Link>
     <MenuItems items={items} />
   </nav>
 );

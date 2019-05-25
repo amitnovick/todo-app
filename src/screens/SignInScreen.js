@@ -1,6 +1,6 @@
 import React from 'react';
-import { Machine, interpret } from 'xstate';
-import { useService } from '@xstate/react';
+import { Machine } from 'xstate';
+import { useMachine } from '@xstate/react';
 
 import { signInWithPopup } from '../firebase/auth';
 import authenticationService from '../state/authenticationService';
@@ -18,11 +18,7 @@ const signInScreenMachine = Machine({
   }
 });
 
-const signInScreenMahineService = interpret(signInScreenMachine)
-  .onTransition(state => console.log(state.value))
-  .start();
-
-const SignInScreenTemplate = ({ hasFailedLogin }) => (
+const SignInScreenTemplate = ({ hasFailedLogin, onFailLogin }) => (
   <div>
     <h1>Sign-in</h1>
     <button
@@ -39,7 +35,7 @@ const SignInScreenTemplate = ({ hasFailedLogin }) => (
             ].includes(error.code) === false
           ) {
             console.log(error);
-            signInScreenMahineService.send('AUTHENTICATION_FAILED');
+            onFailLogin();
           }
         }
       }}
@@ -56,13 +52,23 @@ const SignInScreenTemplate = ({ hasFailedLogin }) => (
 );
 
 const SignInScreen = () => {
-  const [current] = useService(signInScreenMahineService);
+  const [current, send] = useMachine(signInScreenMachine);
   const uiState = current.value;
   switch (uiState) {
     case 'idle':
-      return <SignInScreenTemplate hasFailedLogin={false} />;
+      return (
+        <SignInScreenTemplate
+          hasFailedLogin={false}
+          onFailLogin={() => send('AUTHENTICATION_FAILED')}
+        />
+      );
     case 'loginFailed':
-      return <SignInScreenTemplate hasFailedLogin={true} />;
+      return (
+        <SignInScreenTemplate
+          hasFailedLogin={true}
+          onFailLogin={() => send('AUTHENTICATION_FAILED')}
+        />
+      );
     default:
       return <div>Unknown state, please report.</div>;
   }
