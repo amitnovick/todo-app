@@ -39,10 +39,16 @@ const signInScreenMachine = Machine({
 async function attemptToLogin(history, sendToAuthenticationService, send) {
   try {
     const { user } = await signInWithPopup();
-    history.push(authenticatedRoutes.HOME);
-    sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', {
-      user
-    });
+    history.push(
+      authenticatedRoutes.HOME
+    ); /* Race condition with `send`, must be fired first */
+    sendToAuthenticationService(
+      /* Race condition with `history.push`, must be fired second */
+      'AUTHENTICATED_SUCCESSFULLY_FROM_SIGNIN_SCREEN',
+      {
+        user
+      }
+    );
   } catch (error) {
     if (
       error &&

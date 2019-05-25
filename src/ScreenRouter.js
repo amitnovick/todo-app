@@ -168,9 +168,13 @@ const UnauthenticatedPage = () => {
 function updateAuthState(user) {
   if (user != null) {
     swap(userOAuthAtom, _ => user);
-    authenticationService.send('AUTHENTICATED_SUCCESSFULLY');
+    authenticationService.send(
+      'AUTHENTICATED_SUCCESSFULLY_DURING_INITIAL_PAGE_LOAD'
+    );
   } else {
-    authenticationService.send('AUTHENTICATION_FAILED');
+    authenticationService.send(
+      'AUTHENTICATION_FAILED_DURING_INITIAL_PAGE_LOAD'
+    );
   }
 }
 
@@ -184,18 +188,18 @@ const machine = Machine({
     loading: {
       onEntry: [subscribeToAuthChanges],
       on: {
-        AUTHENTICATED_SUCCESSFULLY: 'authenticated',
-        AUTHENTICATION_FAILED: 'unauthenticated'
+        AUTHENTICATED_SUCCESSFULLY_DURING_INITIAL_PAGE_LOAD: 'authenticated',
+        AUTHENTICATION_FAILED_DURING_INITIAL_PAGE_LOAD: 'unauthenticated'
       }
     },
     authenticated: {
       on: {
-        UNAUTHENTICATED_SUCCESSFULLY: 'unauthenticated'
+        UNAUTHENTICATED_SUCCESSFULLY_FROM_ACCOUNT_SCREEN: 'unauthenticated'
       }
     },
     unauthenticated: {
       on: {
-        AUTHENTICATED_SUCCESSFULLY: 'authenticated',
+        AUTHENTICATED_SUCCESSFULLY_FROM_SIGNIN_SCREEN: 'authenticated',
         actions: [(_, event) => swap(userOAuthAtom, _ => event.user)]
       }
     }
