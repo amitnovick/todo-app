@@ -6,6 +6,7 @@ import { useAtom } from '@dbeining/react-atom';
 import AboutScreen from './screens/AboutScreen.js';
 import ScreenLayout from './layout/Layout/ScreenLayout';
 import TodosContainerDemo from './containers/Todos/TodosContainerDemo.js';
+import TodosContainerCloud from './containers/Todos/TodosContainerCloud';
 import TodosContext from './containers/Todos/TodosContext.js';
 import TodosScreen from './screens/TodosScreen/TodosScreen.js';
 import NotFoundScreen from './screens/NotFoundScreen';
@@ -15,6 +16,14 @@ import currentPathAtom from './state/currentPathAtom';
 import authenticationService from './state/authenticationService';
 import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
+
+const TodosScreenCloudAdapter = () => (
+  <TodosContainerCloud>
+    <TodosContext.Consumer>
+      {todosContext => <TodosScreen {...todosContext} />}
+    </TodosContext.Consumer>
+  </TodosContainerCloud>
+);
 
 const TodosScreenDemoAdapter = () => (
   <TodosContainerDemo>
@@ -31,11 +40,7 @@ const AuthenticatedPageByPath = ({ path }) => {
     case authenticatedRoutes.FEATURES:
       return <ScreenLayout BodyComponent={<AboutScreen />} />;
     case authenticatedRoutes.APP:
-      return (
-        <ScreenLayout
-          BodyComponent={<TodosScreenDemoAdapter />} // TODO: Change to <TodosScreenCloudAdapter />
-        />
-      );
+      return <ScreenLayout BodyComponent={<TodosScreenCloudAdapter />} />;
     case authenticatedRoutes.ACCOUNT:
       return <ScreenLayout BodyComponent={<AccountScreen />} />;
     default:

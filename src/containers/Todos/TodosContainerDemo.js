@@ -2,6 +2,7 @@ import React from 'react';
 
 import TodosContext from './TodosContext.js';
 
+/////////////////// UTILS ////////////
 const NAMESPACE = 'todos';
 
 const uuid = () => {
@@ -28,9 +29,12 @@ const loadFromLocalStorage = () => {
 
 const saveToLocalStorage = data =>
   localStorage.setItem(NAMESPACE, JSON.stringify(data));
+/////////////////// UTILS ////////////
 
 class TodosContainer extends React.Component {
   constructor(props) {
+    console.log('constructing...');
+
     super(props);
     this.state = {
       todos: []
