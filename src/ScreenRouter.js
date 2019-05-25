@@ -12,7 +12,7 @@ import TodosContainerCloud from './containers/Todos/TodosContainerCloud';
 import TodosContext from './containers/Todos/TodosContext';
 import TodosScreen from './screens/TodosScreen/TodosScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
-import SignInScreenContainer from './screens/SignInScreen/Presentational';
+import SignInScreenContainer from './screens/SignInScreen/Container';
 import AccountScreen from './screens/AccountScreen/Container';
 import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';

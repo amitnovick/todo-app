@@ -2,10 +2,11 @@
 import { jsx } from '@emotion/core';
 import React from 'react';
 import { Atom, useAtom, swap } from '@dbeining/react-atom';
-import { darken } from 'polished';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+
+import colors from '../colors';
 
 const anchorStyle = {
   backgroundColor: 'transparent',
@@ -76,7 +77,7 @@ const NavBar = ({ items }) => (
   <nav
     css={{
       fontSize: 18,
-      backgroundColor: darken(0.15, 'cyan'),
+      backgroundColor: colors.CYAN,
       border: '1px solid rgba(0, 0, 0, 0.2)',
       paddingBottom: 10,
       [MEDIA_QUERY_VIEWPORT_768]: {

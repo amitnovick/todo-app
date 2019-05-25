@@ -1,7 +1,7 @@
 import React from 'react';
 
 import authenticatedRoutes from '../routes/authenticatedRoutes';
-import NavBar from '../components/NavBar';
+import NavBar from '../layout/NavBar';
 
 const authenticatedMenuTitleByPath = path => {
   switch (path) {
