@@ -18,8 +18,8 @@ import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
 import UserOAuthContext from './containers/Auth/AuthContext.js';
 import firebaseApp from './firebase/firebaseApp';
-import AuthenticatedNavBar from './AuthenticatedNavBar';
-import UnauthenticatedNavBar from './UnauthenticatedNavBar';
+import AuthenticatedNavBar from './containers/AuthenticatedNavBar';
+import UnauthenticatedNavBar from './containers/UnauthenticatedNavBar';
 
 const TodosScreenCloudAdapter = () => (
   <UserOAuthContext.Consumer>
