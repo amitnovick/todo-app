@@ -17,8 +17,8 @@ const AccountScreen = ({ email, handleLogout }) => {
 const handleLogout = async (send, history) => {
   try {
     await signOut();
-    send('UNAUTHENTICATED_SUCCESSFULLY');
     history.push(unauthenticatedRoutes.HOME);
+    send('UNAUTHENTICATED_SUCCESSFULLY');
   } catch (error) {
     console.log(error);
   }

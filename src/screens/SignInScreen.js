@@ -6,27 +6,11 @@ import { withRouter } from 'react-router-dom';
 import { signInWithPopup } from '../firebase/auth';
 import authenticatedRoutes from '../routes/authenticatedRoutes';
 
-const SignInScreen = ({ hasFailedLogin, onFailLogin, onSuccessfulLogin }) => (
+const SignInScreen = ({ hasFailedLogin, attemptToLogin }) => (
   <div>
     <h1>Sign-in</h1>
     <button
-      onClick={async () => {
-        try {
-          const { user } = await signInWithPopup();
-          onSuccessfulLogin(user);
-        } catch (error) {
-          if (
-            error &&
-            [
-              'auth/popup-closed-by-user',
-              'auth/cancelled-popup-request'
-            ].includes(error.code) === false
-          ) {
-            console.log(error);
-            onFailLogin();
-          }
-        }
-      }}
+      onClick={attemptToLogin}
       style={{
         backgroundColor: 'black',
         color: 'white',
@@ -52,6 +36,26 @@ const signInScreenMachine = Machine({
   }
 });
 
+async function attemptToLogin(history, sendToAuthenticationService, send) {
+  try {
+    const { user } = await signInWithPopup();
+    history.push(authenticatedRoutes.HOME);
+    sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', {
+      user
+    });
+  } catch (error) {
+    if (
+      error &&
+      ['auth/popup-closed-by-user', 'auth/cancelled-popup-request'].includes(
+        error.code
+      ) === false
+    ) {
+      console.log(error);
+      send('AUTHENTICATION_FAILED');
+    }
+  }
+}
+
 const SignInScreenContainer = ({
   send: sendToAuthenticationService,
   history
@@ -63,20 +67,17 @@ const SignInScreenContainer = ({
       return (
         <SignInScreen
           hasFailedLogin={false}
-          onFailLogin={() => send('AUTHENTICATION_FAILED')}
-          onSuccessfulLogin={user => {
-            sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', { user });
-            history.push(authenticatedRoutes.APP);
-          }}
+          attemptToLogin={() =>
+            attemptToLogin(history, sendToAuthenticationService, send)
+          }
         />
       );
     case 'loginFailed':
       return (
         <SignInScreen
           hasFailedLogin={true}
-          onFailLogin={() => send('AUTHENTICATION_FAILED')}
-          onSuccessfulLogin={user =>
-            sendToAuthenticationService('AUTHENTICATED_SUCCESSFULLY', { user })
+          attemptToLogin={() =>
+            attemptToLogin(history, sendToAuthenticationService, send)
           }
         />
       );
