@@ -3,7 +3,6 @@ import { jsx } from '@emotion/core';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
-import { Link } from 'react-router-dom';
 
 import colors from '../colors';
 
