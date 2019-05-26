@@ -4,9 +4,6 @@ import firebaseApp from './firebaseApp.js';
 
 const firestore = firebaseApp.firestore();
 
-const settings = { timestampsInSnapshots: true };
-firestore.settings(settings);
-
 const ERROR_MSG_MULTIPLE_TABS = `Multiple tab open, persistence can only
   be enabled in one tab at a time.`;
 
