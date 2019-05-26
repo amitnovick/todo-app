@@ -22,9 +22,32 @@ const uuid = () => {
   return uuid;
 };
 
+const defaultInitialData = [
+  {
+    id: uuid(),
+    title: 'Run house chores',
+    completed: true,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: uuid(),
+    title: 'Cook dinner',
+    completed: true,
+    createdAt: new Date().toISOString()
+  },
+  {
+    id: uuid(),
+    title: 'Do what you really want!',
+    completed: false,
+    createdAt: new Date().toISOString()
+  }
+];
+
 const loadFromLocalStorage = () => {
   const localStorageData = localStorage.getItem(NAMESPACE);
-  return localStorageData == null ? [] : JSON.parse(localStorageData);
+  return localStorageData == null
+    ? defaultInitialData
+    : JSON.parse(localStorageData);
 };
 
 const saveToLocalStorage = data =>
