@@ -1,10 +1,14 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
+import { Link } from 'react-router-dom';
 
 import colors from '../colors';
 
 const listStyle = {
+  listStyle: 'none',
   padding: 0
 };
 
@@ -27,34 +31,61 @@ const anchorStyle = {
   }
 };
 
+const anchorOpenLinkInNewTab = {
+  target: '_blank',
+  rel: 'noopener noreferrer'
+};
+
 const AboutScreen = () => {
   return (
     <div>
-      <h2> Features:</h2>
+      <h2> Hi there! </h2>
+      <p style={{ fontSize: 24 }}>
+        {`This is a notes app that allows users to write notes describing tasks. `}
+        <span role="img" aria-label="flex-biceps">
+          💪
+        </span>
+      </p>
+      <p style={{ fontSize: 24 }}>
+        You're welcome to use the Demo version of the app, wherein your changes
+        are saved locally.
+      </p>
+      <p style={{ fontSize: 24 }}>
+        {`Logging-in will enable you to use the Cloud version, with the benefit of
+        having all your notes backed up and synchronized automatically for you
+        across devices. `}
+        <span role="img" aria-label="flex-biceps">
+          🔄
+        </span>
+      </p>
+      <p style={{ fontSize: 24 }}>
+        The Cloud version lets you use multiple devices simultaneously (e.g.
+        phone and laptop), with changes arriving at real-time as soon as they
+        are performed.
+      </p>
+      <p style={{ fontSize: 24 }}>
+        Both versions work fully offline! the Cloud version will also
+        synchronize with other devices as soon as you reconnect to the network.
+      </p>
       <ul style={listStyle}>
         <li style={listItemStyle}>
-          Try out the Demo app to see if you like it, no login required!
-        </li>
-        <li style={listItemStyle}>
-          Logging-in will enable your data to be automatically saved for you.
-        </li>
-        <li style={listItemStyle}>
-          Can be used in two or more devices simultaneously, using real-time
-          synchronization! Try opening it in a new tab or on your phone and see
-          updates arriving as soon as they are sent.
-        </li>
-        <li style={listItemStyle}>
-          This app can be used while offline! your changes will be saved as
-          usual, and synchronized back once you reconnect to the network.
-        </li>
-        <li style={listItemStyle}>
-          <a css={anchorStyle} href="https://github.com/amitnovick/todo-app">
+          <FontAwesomeIcon icon={faGithub} style={{ marginRight: 4 }} />
+          <a
+            css={anchorStyle}
+            {...anchorOpenLinkInNewTab}
+            href="https://github.com/amitnovick/todo-app"
+          >
             Source code available on GitHub
           </a>
         </li>
         <li style={listItemStyle}>
-          <a css={anchorStyle} href="https://twitter.com/amitnovick">
-            Chat me up on Twitter
+          <FontAwesomeIcon icon={faTwitter} style={{ marginRight: 4 }} />
+          <a
+            css={anchorStyle}
+            {...anchorOpenLinkInNewTab}
+            href="https://twitter.com/amitnovick"
+          >
+            Come and say hi on Twitter @amitnovick
           </a>
         </li>
       </ul>
