@@ -2,48 +2,47 @@ import React from 'react';
 
 import TodosContext from './TodosContext.js';
 import firestore from '../../firebase/realtimeDb.js';
-import withAuthentication from '../Auth/withAuthentication.js';
 
 class TodosContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       todos: [],
-      isAwaitingTodos: true,
+      isAwaitingTodos: true
     };
   }
 
-  createTodo = async title => {
+  createTodo = title => {
     const todo = {
       title: title,
       completed: false,
-      createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString()
     };
-    await firestore.collection(this.todosCollection).add(todo);
+    firestore.collection(this.todosCollection).add(todo);
   };
 
-  editTodo = async (todo, newTitle) => {
+  editTodo = (todo, newTitle) => {
     const todoChange = {
-      title: newTitle,
+      title: newTitle
     };
-    await firestore
+    firestore
       .collection(this.todosCollection)
       .doc(todo.id)
       .update(todoChange);
   };
 
-  toggleTodo = async todo => {
+  toggleTodo = todo => {
     const todoChange = {
-      completed: !todo.completed,
+      completed: !todo.completed
     };
-    await firestore
+    firestore
       .collection(this.todosCollection)
       .doc(todo.id)
       .update(todoChange);
   };
 
-  deleteTodo = async todo => {
-    await firestore
+  deleteTodo = todo => {
+    firestore
       .collection(this.todosCollection)
       .doc(todo.id)
       .delete();
@@ -79,7 +78,8 @@ class TodosContainer extends React.Component {
   mapUserIdToCollection = userId => `todos-${userId}`;
 
   componentDidMount() {
-    const userId = this.props.user.uid;
+    const { userOAuth } = this.props;
+    const { uid: userId } = userOAuth;
     this.todosCollection = this.mapUserIdToCollection(userId);
     this.mountStore();
   }
@@ -103,7 +103,7 @@ class TodosContainer extends React.Component {
           createTodo: this.createTodo,
           editTodo: this.editTodo,
           toggleTodo: this.toggleTodo,
-          deleteTodo: this.deleteTodo,
+          deleteTodo: this.deleteTodo
         }}
       >
         {this.props.children}
@@ -112,4 +112,4 @@ class TodosContainer extends React.Component {
   }
 }
 
-export default withAuthentication(TodosContainer);
+export default TodosContainer;

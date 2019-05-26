@@ -1,30 +1,17 @@
-import "firebase/auth"; // required dependency for the `.auth()` accessor
-import firebaseApp from "./firebaseApp.js";
+import 'firebase/auth'; // required dependency for the `.auth()` accessor
+import firebaseApp from './firebaseApp.js';
 
-const authenticateWithGithub = () => {
-  // eslint-disable-next-line no-underscore-dangle
-  return new firebaseApp.firebase_.auth.GithubAuthProvider();
-};
+const authenticateWithGithub = () =>
+  new firebaseApp.firebase_.auth.GithubAuthProvider();
 
 export const linkWithPopup = () => {
   const provider = authenticateWithGithub();
-  firebaseApp
-    .auth()
-    .linkWithPopup(provider)
-    .catch(err => console.log(err));
+  return firebaseApp.auth().currentUser.linkWithPopup(provider);
 };
 
 export const signInWithPopup = () => {
   const provider = authenticateWithGithub();
-  firebaseApp
-    .auth()
-    .signInWithPopup(provider)
-    .catch(err => console.log(err));
+  return firebaseApp.auth().signInWithPopup(provider);
 };
 
-export const signOut = () => {
-  firebaseApp
-    .auth()
-    .signOut()
-    .catch(err => console.log(err));
-};
+export const signOut = () => firebaseApp.auth().signOut();

@@ -1,20 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from 'react-router-dom';
 
 import * as serviceWorker from './serviceWorker';
-import AuthContainer from './containers/Auth/AuthContainer.js';
-import Layout from './layout/Layout/Layout.js';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import ScreenRouter from './ScreenRouter';
+import 'normalize.css';
+import './global.css';
 
-ReactDOM.render(
-  <Router>
-    <AuthContainer>
-      <Layout />
-    </AuthContainer>
-  </Router>,
-  document.getElementById('root'),
-);
+ReactDOM.render(<ScreenRouter />, document.getElementById('root'));
 
 if (module.hot) {
   module.hot.accept();
