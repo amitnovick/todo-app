@@ -206,9 +206,7 @@ const machine = Machine({
   }
 });
 
-const authenticationService = interpret(machine)
-  .onTransition(state => console.log(state.value))
-  .start();
+const authenticationService = interpret(machine).start();
 
 const userOAuthAtom = Atom.of(null);
 

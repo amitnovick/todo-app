@@ -14,9 +14,7 @@ const handleLogout = async (send, history) => {
     send(
       'UNAUTHENTICATED_SUCCESSFULLY_FROM_ACCOUNT_SCREEN'
     ); /* Race condition with `history.push`, must be fired second */
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 const AccountScreenContainer = ({ userOAuth, send, history }) => {

@@ -40,7 +40,6 @@ async function attemptToLogin(history, sendToAuthenticationService, send) {
         error.code
       ) === false
     ) {
-      console.log(error);
       send('AUTHENTICATION_FAILED');
     }
   }
