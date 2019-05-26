@@ -6,7 +6,7 @@ import { Atom, useAtom, swap } from '@dbeining/react-atom';
 import { Machine, interpret } from 'xstate';
 
 import AboutScreen from './screens/AboutScreen';
-import ScreenLayout from './components/Layout/ScreenLayout';
+import ScreenLayout from './layout/Layout/ScreenLayout';
 import TodosContainerDemo from './containers/Todos/TodosContainerDemo';
 import TodosContainerCloud from './containers/Todos/TodosContainerCloud';
 import TodosContext from './containers/Todos/TodosContext';
