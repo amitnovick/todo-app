@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { withRouter } from 'react-router-dom';
@@ -5,9 +7,14 @@ import { withRouter } from 'react-router-dom';
 import styles from './style.module.css';
 
 const centerContentStyle = {
-  margin: '0 auto',
   minWidth: 230,
-  maxWidth: 550
+  maxWidth: 550,
+  '@media screen and (max-device-width: 768px)': {
+    margin: '0 32px'
+  },
+  '@media screen and (min-device-width: 768px)': {
+    margin: '0 auto'
+  }
 };
 
 const ScreenLayout = ({ BodyComponent, HeaderComponent, location }) => (
@@ -22,7 +29,7 @@ const ScreenLayout = ({ BodyComponent, HeaderComponent, location }) => (
     >
       <div>
         {HeaderComponent}
-        <div style={centerContentStyle}>
+        <div css={centerContentStyle}>
           <main className={styles['main-1']}>
             <TransitionGroup className={styles['transition-group-1']}>
               <CSSTransition
