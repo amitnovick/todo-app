@@ -7,6 +7,7 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 
 import colors from '../colors';
+import cloudLogo from '../assets/cloud.png';
 
 const anchorStyle = {
   backgroundColor: 'transparent',
@@ -73,56 +74,109 @@ const MenuItems = ({ items }) => {
   );
 };
 
+const BrandMenuItems = () => {
+  return (
+    <ul
+      css={{
+        listStyleType: 'none',
+        marginLeft: 20,
+        display: 'flex',
+        marginRight: '30px',
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+      }}
+    >
+      <li
+        css={{
+          textAlign: 'center',
+          margin: 'auto 0px'
+        }}
+      >
+        <Link
+          to={'/'}
+          css={{
+            ...anchorStyle,
+            ...navItemStyle,
+            marginLeft: '10px'
+          }}
+        >
+          <img
+            src={cloudLogo}
+            alt="cloud_logo"
+            width="48"
+            height="48"
+            style={{ margin: '2px', padding: '0px' }}
+          />
+        </Link>
+      </li>
+      <li
+        css={{
+          textAlign: 'center',
+          margin: 'auto 0px'
+        }}
+      >
+        <Link
+          to={'/'}
+          css={{
+            textDecoration: 'none',
+            color: 'white',
+            fontSize: 24,
+            fontWeight: 900,
+            marginLeft: '10px'
+          }}
+        >
+          {'CloudNotes'}
+        </Link>
+      </li>
+    </ul>
+  );
+};
+
 const NavBar = ({ items }) => (
   <nav
     css={{
-      fontSize: 18,
       backgroundColor: colors.CYAN,
-      border: '1px solid rgba(0, 0, 0, 0.2)',
+      display: 'flex',
+      justifyContent: 'space-between',
       paddingBottom: 10,
-      [MEDIA_QUERY_VIEWPORT_768]: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingBottom: '0',
-        height: '70px',
-        alignItems: 'center'
-      }
+      height: '70px',
+      alignItems: 'center',
+      border: '1px solid rgba(0, 0, 0, 0.2)'
     }}
   >
-    <span
+    <BrandMenuItems />
+    <nav
       css={{
-        position: 'absolute',
-        top: '10px',
-        right: '20px',
-        cursor: 'pointer',
-        color: 'rgba(255, 255, 255, 0.8)',
-        fontSize: '24px',
+        fontSize: 18,
+        backgroundColor: colors.CYAN,
+        paddingBottom: 10,
         [MEDIA_QUERY_VIEWPORT_768]: {
-          display: 'none'
-        }
-      }}
-      onClick={() => swap(isCollapsibleOpenStateAtom, state => !state)}
-    >
-      <FontAwesomeIcon icon={faBars} />
-    </span>
-    <Link
-      to="/"
-      css={{
-        ...navItemStyle,
-        ...anchorStyle,
-        display: 'inline-block',
-        fontSize: 22,
-        fontWeight: 500,
-        marginTop: 10,
-        marginLeft: 20,
-        [MEDIA_QUERY_VIEWPORT_768]: {
-          marginTop: '0'
+          display: 'flex',
+          justifyContent: 'space-between',
+          paddingBottom: '0',
+          height: '70px',
+          alignItems: 'center'
         }
       }}
     >
-      Notes
-    </Link>
-    <MenuItems items={items} />
+      <span
+        css={{
+          position: 'absolute',
+          top: '10px',
+          right: '20px',
+          cursor: 'pointer',
+          color: 'rgba(255, 255, 255, 0.8)',
+          fontSize: '24px',
+          [MEDIA_QUERY_VIEWPORT_768]: {
+            display: 'none'
+          }
+        }}
+        onClick={() => swap(isCollapsibleOpenStateAtom, state => !state)}
+      >
+        <FontAwesomeIcon icon={faBars} />
+      </span>
+      <MenuItems items={items} />
+    </nav>
   </nav>
 );
 
