@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import ScreenRouter from './ScreenRouter';
 import 'normalize.css';
 import './global.css';
+import 'semantic-ui-css/semantic.min.css';
 
 ReactDOM.render(<ScreenRouter />, document.getElementById('root'));
 
