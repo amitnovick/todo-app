@@ -7,8 +7,6 @@ import { withRouter } from 'react-router-dom';
 import styles from './style.module.css';
 
 const centerContentStyle = {
-  minWidth: 230,
-  maxWidth: 550,
   '@media screen and (max-device-width: 768px)': {
     margin: '0 32px'
   },
