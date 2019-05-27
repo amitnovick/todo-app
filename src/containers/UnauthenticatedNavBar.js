@@ -1,5 +1,5 @@
 import React from 'react';
-import NavBar from '../layout/NavBar2';
+import NavBar from '../layout/NavBar';
 import unauthenticatedRoutes from '../routes/unauthenticatedRoutes';
 
 const unauthenticatedMenuTitleByPath = path => {
