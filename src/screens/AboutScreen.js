@@ -40,18 +40,18 @@ const AboutScreen = () => {
     <div>
       <h2> Hi there! </h2>
       <p style={{ fontSize: 24 }}>
-        {`This is a notes app that allows users to write notes describing tasks. `}
+        {`This is an app that that lets you write notes describing your tasks. `}
         <span role="img" aria-label="flex-biceps">
           💪
         </span>
       </p>
       <p style={{ fontSize: 24 }}>
-        You're welcome to use the Demo version of the app, wherein your changes
-        are saved locally.
+        The Demo version will let you get a quick feel of the note taking
+        experience without having to register.
       </p>
       <p style={{ fontSize: 24 }}>
-        {`Logging-in will enable you to use the Cloud version, with the benefit of
-        having all your notes backed up and synchronized automatically for you
+        {`However, logging-in is recommended in order to have acecss to the Cloud version, with the benefit of
+        having all your notes backed up remotely, and synchronized automatically for you
         across devices. `}
         <span role="img" aria-label="flex-biceps">
           🔄

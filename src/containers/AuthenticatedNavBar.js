@@ -1,13 +1,14 @@
 import React from 'react';
 
 import authenticatedRoutes from '../routes/authenticatedRoutes';
+import sharedRoutes from '../routes/sharedRoutes';
 import NavBar from '../layout/NavBar';
 
 const authenticatedMenuTitleByPath = path => {
   switch (path) {
-    case authenticatedRoutes.APP:
+    case sharedRoutes.APP:
       return 'App';
-    case authenticatedRoutes.FEATURES:
+    case sharedRoutes.FEATURES:
       return 'Features';
     case authenticatedRoutes.ACCOUNT:
       return 'Account';
@@ -18,12 +19,12 @@ const authenticatedMenuTitleByPath = path => {
 
 const authenticatedMenuItems = [
   {
-    path: authenticatedRoutes.APP,
-    menuTitle: authenticatedMenuTitleByPath(authenticatedRoutes.APP)
+    path: sharedRoutes.APP,
+    menuTitle: authenticatedMenuTitleByPath(sharedRoutes.APP)
   },
   {
-    path: authenticatedRoutes.FEATURES,
-    menuTitle: authenticatedMenuTitleByPath(authenticatedRoutes.FEATURES)
+    path: sharedRoutes.FEATURES,
+    menuTitle: authenticatedMenuTitleByPath(sharedRoutes.FEATURES)
   },
   {
     path: authenticatedRoutes.ACCOUNT,

@@ -4,7 +4,12 @@ import { useService } from '@xstate/react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Atom, useAtom, swap } from '@dbeining/react-atom';
 import { Machine, interpret } from 'xstate';
+import { Message, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCloud } from '@fortawesome/free-solid-svg-icons';
 
+import HomeScreen from './screens/HomeScreen';
 import AboutScreen from './screens/AboutScreen';
 import ScreenLayout from './layout/Layout/ScreenLayout';
 import TodosContainerDemo from './containers/Todos/TodosContainerDemo';
@@ -16,6 +21,7 @@ import SignInScreenContainer from './screens/SignInScreen/Container';
 import AccountScreen from './screens/AccountScreen/Container';
 import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
+import sharedRoutes from './routes/sharedRoutes';
 import AuthContext from './containers/Auth/AuthContext';
 import firebaseApp from './firebase/firebaseApp';
 import AuthenticatedNavBar from './containers/AuthenticatedNavBar';
@@ -23,7 +29,7 @@ import UnauthenticatedNavBar from './containers/UnauthenticatedNavBar';
 
 const TodosScreenCloudAdapter = () => (
   <AuthContext.Consumer>
-    {(userOAuthContext /* TODO: Check that this is working! */) => (
+    {userOAuthContext => (
       <TodosContainerCloud {...userOAuthContext}>
         <TodosContext.Consumer>
           {todosContext => <TodosScreen {...todosContext} />}
@@ -35,6 +41,17 @@ const TodosScreenCloudAdapter = () => (
 
 const TodosScreenDemoAdapter = () => (
   <TodosContainerDemo>
+    <Message info style={{ textAlign: 'center' }}>
+      <span style={{ lineHeight: 1.75 }}>
+        You are currently viewing the <b>demo</b> version. <br />
+      </span>
+      <Link to={unauthenticatedRoutes.SIGNIN}>
+        <Button basic color="blue">
+          <FontAwesomeIcon icon={faCloud} style={{ marginRight: 10 }} />
+          {`Access the Cloud version`}
+        </Button>
+      </Link>
+    </Message>
     <TodosContext.Consumer>
       {todosContext => <TodosScreen {...todosContext} />}
     </TodosContext.Consumer>
@@ -60,7 +77,17 @@ const AuthenticatedPage = () => {
     <Switch>
       <Route
         exact
-        path={authenticatedRoutes.HOME}
+        path={sharedRoutes.HOME}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<HomeScreen />}
+            HeaderComponent={<AuthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={sharedRoutes.FEATURES}
         render={() => (
           <ScreenLayout
             BodyComponent={<AboutScreen />}
@@ -70,17 +97,7 @@ const AuthenticatedPage = () => {
       />
       <Route
         exact
-        path={authenticatedRoutes.FEATURES}
-        render={() => (
-          <ScreenLayout
-            BodyComponent={<AboutScreen />}
-            HeaderComponent={<AuthenticatedNavBar />}
-          />
-        )}
-      />
-      <Route
-        exact
-        path={authenticatedRoutes.APP}
+        path={sharedRoutes.APP}
         render={() => (
           <ScreenLayout
             BodyComponent={<TodosScreenCloudAdapter />}
@@ -115,7 +132,17 @@ const UnauthenticatedPage = () => {
     <Switch>
       <Route
         exact
-        path={unauthenticatedRoutes.HOME}
+        path={sharedRoutes.HOME}
+        render={() => (
+          <ScreenLayout
+            BodyComponent={<HomeScreen />}
+            HeaderComponent={<UnauthenticatedNavBar />}
+          />
+        )}
+      />
+      <Route
+        exact
+        path={sharedRoutes.FEATURES}
         render={() => (
           <ScreenLayout
             BodyComponent={<AboutScreen />}
@@ -125,17 +152,7 @@ const UnauthenticatedPage = () => {
       />
       <Route
         exact
-        path={unauthenticatedRoutes.FEATURES}
-        render={() => (
-          <ScreenLayout
-            BodyComponent={<AboutScreen />}
-            HeaderComponent={<UnauthenticatedNavBar />}
-          />
-        )}
-      />
-      <Route
-        exact
-        path={unauthenticatedRoutes.DEMO}
+        path={sharedRoutes.APP}
         render={() => (
           <ScreenLayout
             BodyComponent={<TodosScreenDemoAdapter />}

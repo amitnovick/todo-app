@@ -1,129 +1,83 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
 import React from 'react';
-import { Atom, useAtom, swap } from '@dbeining/react-atom';
+import { Menu, Grid } from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 
-import colors from '../colors';
+import notesLogo from '../assets/notes_logo.svg';
+import sharedRoutes from '../routes/sharedRoutes';
 
-const anchorStyle = {
-  backgroundColor: 'transparent',
-  border: 'none',
-  cursor: 'pointer',
-  display: 'inline',
-  margin: 2,
-  padding: 0,
-  textDecoration: 'none'
-};
+const BrandMenuItem = () => (
+  <Menu.Item as={Link} to={sharedRoutes.HOME} active={false}>
+    <img src={notesLogo} alt="notes_logo" style={{ width: '5.75em' }} />
+  </Menu.Item>
+);
 
-const navItemStyle = {
-  color: 'white',
-  ':hover': {
-    textDecoration: 'underline'
-  }
-};
+const NavigationMenuItems = ({ items, activeItem }) =>
+  items.map(({ path, menuTitle }) => (
+    <Menu.Item as={Link} to={path} key={path} active={activeItem === path}>
+      {menuTitle}
+    </Menu.Item>
+  ));
 
-const MEDIA_QUERY_VIEWPORT_768 = '@media screen and (min-width: 768px)';
+const BiggerScreens = ({ items, activeItem }) => (
+  <Grid.Row columns={1} only="tablet computer">
+    <Grid.Column>
+      <Menu color="teal" inverted size="huge">
+        <BrandMenuItem />
+        <Menu.Menu position="right">
+          <NavigationMenuItems items={items} activeItem={activeItem} />
+        </Menu.Menu>
+      </Menu>
+    </Grid.Column>
+  </Grid.Row>
+);
 
-const isCollapsibleOpenStateAtom = Atom.of(false);
+const SmallerScreens = ({ items, activeItem, isCollapsed, setIsCollapsed }) => (
+  <React.Fragment>
+    <Grid.Row columns={1} only="mobile" style={{ paddingBottom: 0 }}>
+      <Grid.Column>
+        <Menu color="teal" inverted size="huge">
+          <BrandMenuItem />
+          <Menu.Menu position="right">
+            <Menu.Item>
+              <FontAwesomeIcon
+                icon={faBars}
+                style={{ cursor: 'pointer' }}
+                onClick={() => setIsCollapsed(!isCollapsed)}
+              />
+            </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+      </Grid.Column>
+    </Grid.Row>
+    <Grid.Row columns={1} only="mobile" style={{ paddingTop: 0 }}>
+      <Grid.Column>
+        {isCollapsed ? null : (
+          <Menu color="teal" inverted size="huge" stackable>
+            <NavigationMenuItems items={items} activeItem={activeItem} />
+          </Menu>
+        )}
+      </Grid.Column>
+    </Grid.Row>
+  </React.Fragment>
+);
 
-const MenuItems = ({ items }) => {
-  const isCollapsibleOpen = useAtom(isCollapsibleOpenStateAtom);
+const NavBar = ({ items, location }) => {
+  const activeItem = location.pathname;
+  const [isCollapsed, setIsCollapsed] = React.useState(true);
+
   return (
-    <ul
-      css={{
-        listStyleType: 'none',
-        display: isCollapsibleOpen === false ? 'none' : 'block',
-        [MEDIA_QUERY_VIEWPORT_768]: {
-          display: 'flex',
-          marginRight: '30px',
-          flexDirection: 'row',
-          justifyContent: 'flex-end'
-        }
-      }}
-    >
-      {items.map(({ path, menuTitle }) => (
-        <li
-          key={path}
-          css={{
-            textAlign: 'center',
-            margin: '15px auto',
-            [MEDIA_QUERY_VIEWPORT_768]: {
-              margin: '0'
-            }
-          }}
-        >
-          <Link
-            to={path}
-            css={{
-              ...anchorStyle,
-              ...navItemStyle,
-              [MEDIA_QUERY_VIEWPORT_768]: {
-                marginLeft: '40px'
-              }
-            }}
-          >
-            {menuTitle}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <Grid style={{ marginBottom: 10 }}>
+      <BiggerScreens items={items} activeItem={activeItem} />
+      <SmallerScreens
+        items={items}
+        activeItem={activeItem}
+        isCollapsed={isCollapsed}
+        setIsCollapsed={setIsCollapsed}
+      />
+    </Grid>
   );
 };
 
-const NavBar = ({ items }) => (
-  <nav
-    css={{
-      fontSize: 18,
-      backgroundColor: colors.CYAN,
-      border: '1px solid rgba(0, 0, 0, 0.2)',
-      paddingBottom: 10,
-      [MEDIA_QUERY_VIEWPORT_768]: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingBottom: '0',
-        height: '70px',
-        alignItems: 'center'
-      }
-    }}
-  >
-    <span
-      css={{
-        position: 'absolute',
-        top: '10px',
-        right: '20px',
-        cursor: 'pointer',
-        color: 'rgba(255, 255, 255, 0.8)',
-        fontSize: '24px',
-        [MEDIA_QUERY_VIEWPORT_768]: {
-          display: 'none'
-        }
-      }}
-      onClick={() => swap(isCollapsibleOpenStateAtom, state => !state)}
-    >
-      <FontAwesomeIcon icon={faBars} />
-    </span>
-    <Link
-      to="/"
-      css={{
-        ...navItemStyle,
-        ...anchorStyle,
-        display: 'inline-block',
-        fontSize: 22,
-        fontWeight: 500,
-        marginTop: 10,
-        marginLeft: 20,
-        [MEDIA_QUERY_VIEWPORT_768]: {
-          marginTop: '0'
-        }
-      }}
-    >
-      Notes
-    </Link>
-    <MenuItems items={items} />
-  </nav>
-);
-
-export default NavBar;
+export default withRouter(NavBar);

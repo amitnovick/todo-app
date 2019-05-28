@@ -1,12 +1,13 @@
 import React from 'react';
 import NavBar from '../layout/NavBar';
 import unauthenticatedRoutes from '../routes/unauthenticatedRoutes';
+import sharedRoutes from '../routes/sharedRoutes';
 
 const unauthenticatedMenuTitleByPath = path => {
   switch (path) {
-    case unauthenticatedRoutes.DEMO:
-      return 'Demo';
-    case unauthenticatedRoutes.FEATURES:
+    case sharedRoutes.APP:
+      return 'App';
+    case sharedRoutes.FEATURES:
       return 'Features';
     case unauthenticatedRoutes.SIGNIN:
       return 'SignIn';
@@ -17,12 +18,12 @@ const unauthenticatedMenuTitleByPath = path => {
 
 const unauthenticatedMenuItems = [
   {
-    path: unauthenticatedRoutes.DEMO,
-    menuTitle: unauthenticatedMenuTitleByPath(unauthenticatedRoutes.DEMO)
+    path: sharedRoutes.APP,
+    menuTitle: unauthenticatedMenuTitleByPath(sharedRoutes.APP)
   },
   {
-    path: unauthenticatedRoutes.FEATURES,
-    menuTitle: unauthenticatedMenuTitleByPath(unauthenticatedRoutes.FEATURES)
+    path: sharedRoutes.FEATURES,
+    menuTitle: unauthenticatedMenuTitleByPath(sharedRoutes.FEATURES)
   },
   {
     path: unauthenticatedRoutes.SIGNIN,
