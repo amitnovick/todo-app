@@ -7,11 +7,13 @@ import { withRouter } from 'react-router-dom';
 import styles from './style.module.css';
 
 const centerContentStyle = {
-  '@media screen and (max-device-width: 768px)': {
-    margin: '0 32px'
+  '@media screen and (max-device-width: 700px)': {
+    paddingLeft: '13.5%',
+    paddingRight: '13.5%'
   },
-  '@media screen and (min-device-width: 768px)': {
-    margin: '0 auto'
+  '@media screen and (min-device-width: 700px)': {
+    paddingLeft: '1.5em',
+    paddingRight: '1.5em'
   }
 };
 
