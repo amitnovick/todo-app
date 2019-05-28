@@ -4,6 +4,10 @@ import { useService } from '@xstate/react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Atom, useAtom, swap } from '@dbeining/react-atom';
 import { Machine, interpret } from 'xstate';
+import { Message, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCloud } from '@fortawesome/free-solid-svg-icons';
 
 import AboutScreen from './screens/AboutScreen';
 import ScreenLayout from './layout/Layout/ScreenLayout';
@@ -23,7 +27,7 @@ import UnauthenticatedNavBar from './containers/UnauthenticatedNavBar';
 
 const TodosScreenCloudAdapter = () => (
   <AuthContext.Consumer>
-    {(userOAuthContext /* TODO: Check that this is working! */) => (
+    {userOAuthContext => (
       <TodosContainerCloud {...userOAuthContext}>
         <TodosContext.Consumer>
           {todosContext => <TodosScreen {...todosContext} />}
@@ -35,6 +39,17 @@ const TodosScreenCloudAdapter = () => (
 
 const TodosScreenDemoAdapter = () => (
   <TodosContainerDemo>
+    <Message info style={{ textAlign: 'center' }}>
+      <span style={{ lineHeight: 1.75 }}>
+        You are currently viewing the <b>demo</b> version. <br />
+      </span>
+      <Link to={unauthenticatedRoutes.SIGNIN}>
+        <Button basic color="blue">
+          <FontAwesomeIcon icon={faCloud} style={{ marginRight: 10 }} />
+          {`Access the Cloud version`}
+        </Button>
+      </Link>
+    </Message>
     <TodosContext.Consumer>
       {todosContext => <TodosScreen {...todosContext} />}
     </TodosContext.Consumer>
@@ -135,7 +150,7 @@ const UnauthenticatedPage = () => {
       />
       <Route
         exact
-        path={unauthenticatedRoutes.DEMO}
+        path={unauthenticatedRoutes.APP}
         render={() => (
           <ScreenLayout
             BodyComponent={<TodosScreenDemoAdapter />}

@@ -1,6 +1,6 @@
 const unauthenticatedRoutes = {
   HOME: '/',
-  DEMO: '/demo',
+  APP: '/app',
   FEATURES: '/features',
   SIGNIN: '/signin'
 };

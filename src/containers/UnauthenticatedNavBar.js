@@ -4,8 +4,8 @@ import unauthenticatedRoutes from '../routes/unauthenticatedRoutes';
 
 const unauthenticatedMenuTitleByPath = path => {
   switch (path) {
-    case unauthenticatedRoutes.DEMO:
-      return 'Demo';
+    case unauthenticatedRoutes.APP:
+      return 'App';
     case unauthenticatedRoutes.FEATURES:
       return 'Features';
     case unauthenticatedRoutes.SIGNIN:
@@ -17,8 +17,8 @@ const unauthenticatedMenuTitleByPath = path => {
 
 const unauthenticatedMenuItems = [
   {
-    path: unauthenticatedRoutes.DEMO,
-    menuTitle: unauthenticatedMenuTitleByPath(unauthenticatedRoutes.DEMO)
+    path: unauthenticatedRoutes.APP,
+    menuTitle: unauthenticatedMenuTitleByPath(unauthenticatedRoutes.APP)
   },
   {
     path: unauthenticatedRoutes.FEATURES,

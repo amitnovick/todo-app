@@ -24,7 +24,7 @@ async function attemptToLogin(history, sendToAuthenticationService, send) {
   try {
     const { user } = await signInWithPopup();
     history.push(
-      authenticatedRoutes.HOME
+      authenticatedRoutes.APP
     ); /* Race condition with `send`, must be fired first */
     sendToAuthenticationService(
       /* Race condition with `history.push`, must be fired second */
