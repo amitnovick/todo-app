@@ -4,12 +4,12 @@ import { Link, withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-import cloudLogo from '../assets/cloud.png';
+import notesLogo from '../assets/notes_logo.svg';
 import sharedRoutes from '../routes/sharedRoutes';
 
 const BrandMenuItem = () => (
   <Menu.Item as={Link} to={sharedRoutes.HOME} active={false}>
-    <img src={cloudLogo} alt="cloud_logo" />
+    <img src={notesLogo} alt="notes_logo" style={{ width: '5.75em' }} />
   </Menu.Item>
 );
 

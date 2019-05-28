@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloud } from '@fortawesome/free-solid-svg-icons';
 
+import HomeScreen from './screens/HomeScreen';
 import AboutScreen from './screens/AboutScreen';
 import ScreenLayout from './layout/Layout/ScreenLayout';
 import TodosContainerDemo from './containers/Todos/TodosContainerDemo';
@@ -134,7 +135,7 @@ const UnauthenticatedPage = () => {
         path={sharedRoutes.HOME}
         render={() => (
           <ScreenLayout
-            BodyComponent={<AboutScreen />}
+            BodyComponent={<HomeScreen />}
             HeaderComponent={<UnauthenticatedNavBar />}
           />
         )}
