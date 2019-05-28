@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 import cloudLogo from '../assets/cloud.png';
+import sharedRoutes from '../routes/sharedRoutes';
 
 const BrandMenuItem = () => (
-  <Menu.Item as={Link} to={'/'} active={false}>
+  <Menu.Item as={Link} to={sharedRoutes.HOME} active={false}>
     <img src={cloudLogo} alt="cloud_logo" />
   </Menu.Item>
 );

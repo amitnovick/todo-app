@@ -20,6 +20,7 @@ import SignInScreenContainer from './screens/SignInScreen/Container';
 import AccountScreen from './screens/AccountScreen/Container';
 import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
+import sharedRoutes from './routes/sharedRoutes';
 import AuthContext from './containers/Auth/AuthContext';
 import firebaseApp from './firebase/firebaseApp';
 import AuthenticatedNavBar from './containers/AuthenticatedNavBar';
@@ -75,7 +76,7 @@ const AuthenticatedPage = () => {
     <Switch>
       <Route
         exact
-        path={authenticatedRoutes.HOME}
+        path={sharedRoutes.HOME}
         render={() => (
           <ScreenLayout
             BodyComponent={<AboutScreen />}
@@ -85,7 +86,7 @@ const AuthenticatedPage = () => {
       />
       <Route
         exact
-        path={authenticatedRoutes.FEATURES}
+        path={sharedRoutes.FEATURES}
         render={() => (
           <ScreenLayout
             BodyComponent={<AboutScreen />}
@@ -95,7 +96,7 @@ const AuthenticatedPage = () => {
       />
       <Route
         exact
-        path={authenticatedRoutes.APP}
+        path={sharedRoutes.APP}
         render={() => (
           <ScreenLayout
             BodyComponent={<TodosScreenCloudAdapter />}
@@ -130,7 +131,7 @@ const UnauthenticatedPage = () => {
     <Switch>
       <Route
         exact
-        path={unauthenticatedRoutes.HOME}
+        path={sharedRoutes.HOME}
         render={() => (
           <ScreenLayout
             BodyComponent={<AboutScreen />}
@@ -140,7 +141,7 @@ const UnauthenticatedPage = () => {
       />
       <Route
         exact
-        path={unauthenticatedRoutes.FEATURES}
+        path={sharedRoutes.FEATURES}
         render={() => (
           <ScreenLayout
             BodyComponent={<AboutScreen />}
@@ -150,7 +151,7 @@ const UnauthenticatedPage = () => {
       />
       <Route
         exact
-        path={unauthenticatedRoutes.APP}
+        path={sharedRoutes.APP}
         render={() => (
           <ScreenLayout
             BodyComponent={<TodosScreenDemoAdapter />}

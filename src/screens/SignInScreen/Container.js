@@ -4,7 +4,7 @@ import { useMachine } from '@xstate/react';
 import { withRouter } from 'react-router-dom';
 
 import { signInWithPopup } from '../../firebase/auth';
-import authenticatedRoutes from '../../routes/authenticatedRoutes';
+import sharedRoutes from '../../routes/sharedRoutes';
 import SignInScreen from './Presentational';
 
 const signInScreenMachine = Machine({
@@ -24,7 +24,7 @@ async function attemptToLogin(history, sendToAuthenticationService, send) {
   try {
     const { user } = await signInWithPopup();
     history.push(
-      authenticatedRoutes.APP
+      sharedRoutes.APP
     ); /* Race condition with `send`, must be fired first */
     sendToAuthenticationService(
       /* Race condition with `history.push`, must be fired second */
