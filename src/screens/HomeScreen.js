@@ -43,7 +43,10 @@ const HomeScreen = () => (
       color="teal"
       css={{
         backgroundColor: semanticUiTeal,
+        fontFamily: "'Roboto', sans-serif",
         fontSize: '1em',
+        fontWeight: 'bold',
+        letterSpacing: '0.1em',
         borderRadius: '0.5em',
         border: '1px solid',
         padding: '16px 24px',
@@ -65,7 +68,10 @@ const HomeScreen = () => (
       css={{
         backgroundColor: 'white',
         color: semanticUiTeal,
+        fontFamily: "'Roboto', sans-serif",
         fontSize: '1em',
+        fontWeight: 'bold',
+        letterSpacing: '0.1em',
         borderRadius: '0.5em',
         border: '1px solid',
         padding: '16px 24px',
