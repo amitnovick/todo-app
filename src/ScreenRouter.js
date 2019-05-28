@@ -80,7 +80,7 @@ const AuthenticatedPage = () => {
         path={sharedRoutes.HOME}
         render={() => (
           <ScreenLayout
-            BodyComponent={<AboutScreen />}
+            BodyComponent={<HomeScreen />}
             HeaderComponent={<AuthenticatedNavBar />}
           />
         )}

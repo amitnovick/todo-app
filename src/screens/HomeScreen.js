@@ -15,7 +15,7 @@ const buttonHoverPopAnimation = {
 
 const HomeScreen = () => (
   <div style={{ textAlign: 'center' }}>
-    <img src={clipboardLogo} alt="clipboard_logo" />
+    <img src={clipboardLogo} alt="clipboard_logo" style={{ width: '100%' }} />
     <h2
       style={{
         fontFamily: "'Roboto', sans-serif",
