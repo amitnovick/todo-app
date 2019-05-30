@@ -1,7 +1,7 @@
 import React from 'react';
 
-import TodoList from './components/TodoList/index';
-import CreateTodoTextbox from './components/CreateTodoTextbox/index';
+import TodoList from './components/TodoList/TodoList';
+import CreateTodoTextbox from './components/CreateTodoTextbox';
 
 const todoMvcStyle = {
   background: '#fff',
