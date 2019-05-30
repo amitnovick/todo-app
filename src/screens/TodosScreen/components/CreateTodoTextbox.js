@@ -1,6 +1,25 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/core';
 import React from 'react';
 
-import styles from './style.module.css';
+const inputStyle = {
+  position: 'relative',
+  margin: '0',
+  width: '100%',
+  fontSize: '24px',
+  fontFamily: 'inherit',
+  fontWeight: 'inherit',
+  lineHeight: '1.4em',
+  color: 'inherit',
+  boxSizing: 'border-box',
+  WebkitFontSmoothing: 'antialiased',
+  MozOsxFontSmoothing: 'grayscale',
+  padding: '16px 16px 16px 60px',
+  border: 'none',
+  background: 'rgba(0, 0, 0, 0.003)',
+  boxShadow: 'inset 0 -2px 1px rgba(0, 0, 0, 0.03)',
+  '::placeholder': { fontStyle: 'italic', fontWeight: '300', color: '#e6e6e6' }
+};
 
 const ENTER_KEY = 13;
 
@@ -9,7 +28,7 @@ class CreateTodoTextbox extends React.Component {
     super(props);
 
     this.state = {
-      newTitle: '',
+      newTitle: ''
     };
   }
 
@@ -35,7 +54,7 @@ class CreateTodoTextbox extends React.Component {
     const { newTitle } = this.state;
     return (
       <input
-        className={styles['input-1']}
+        css={inputStyle}
         value={newTitle}
         onChange={event => this.handleNewTitleChange(event)}
         type="text"
