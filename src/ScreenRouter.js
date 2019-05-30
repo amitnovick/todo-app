@@ -11,7 +11,7 @@ import { faCloud } from '@fortawesome/free-solid-svg-icons';
 
 import HomeScreen from './screens/HomeScreen';
 import AboutScreen from './screens/AboutScreen';
-import ScreenLayout from './layout/Layout/ScreenLayout';
+import ScreenLayout from './layout/ScreenLayout/ScreenLayout';
 import TodosContainerDemo from './containers/Todos/TodosContainerDemo';
 import TodosContainerCloud from './containers/Todos/TodosContainerCloud';
 import TodosContext from './containers/Todos/TodosContext';
@@ -26,6 +26,7 @@ import AuthContext from './containers/Auth/AuthContext';
 import firebaseApp from './firebase/firebaseApp';
 import AuthenticatedNavBar from './containers/AuthenticatedNavBar';
 import UnauthenticatedNavBar from './containers/UnauthenticatedNavBar';
+import CommonBodyLayout from './layout/CommonBodyLayout/CommonBodyLayout';
 
 const TodosScreenCloudAdapter = () => (
   <AuthContext.Consumer>
@@ -90,7 +91,7 @@ const AuthenticatedPage = () => {
         path={sharedRoutes.FEATURES}
         render={() => (
           <ScreenLayout
-            BodyComponent={<AboutScreen />}
+            BodyComponent={<CommonBodyLayout BodyComponent={<AboutScreen />} />}
             HeaderComponent={<AuthenticatedNavBar />}
           />
         )}
@@ -100,7 +101,9 @@ const AuthenticatedPage = () => {
         path={sharedRoutes.APP}
         render={() => (
           <ScreenLayout
-            BodyComponent={<TodosScreenCloudAdapter />}
+            BodyComponent={
+              <CommonBodyLayout BodyComponent={<TodosScreenCloudAdapter />} />
+            }
             HeaderComponent={<AuthenticatedNavBar />}
           />
         )}
@@ -110,7 +113,9 @@ const AuthenticatedPage = () => {
         path={authenticatedRoutes.ACCOUNT}
         render={() => (
           <ScreenLayout
-            BodyComponent={<AccountScreenAdapter />}
+            BodyComponent={
+              <CommonBodyLayout BodyComponent={<AccountScreenAdapter />} />
+            }
             HeaderComponent={<AuthenticatedNavBar />}
           />
         )}
@@ -118,7 +123,9 @@ const AuthenticatedPage = () => {
       <Route
         render={() => (
           <ScreenLayout
-            BodyComponent={<NotFoundScreen />}
+            BodyComponent={
+              <CommonBodyLayout BodyComponent={<NotFoundScreen />} />
+            }
             HeaderComponent={<AuthenticatedNavBar />}
           />
         )}
@@ -145,7 +152,7 @@ const UnauthenticatedPage = () => {
         path={sharedRoutes.FEATURES}
         render={() => (
           <ScreenLayout
-            BodyComponent={<AboutScreen />}
+            BodyComponent={<CommonBodyLayout BodyComponent={<AboutScreen />} />}
             HeaderComponent={<UnauthenticatedNavBar />}
           />
         )}
@@ -155,7 +162,9 @@ const UnauthenticatedPage = () => {
         path={sharedRoutes.APP}
         render={() => (
           <ScreenLayout
-            BodyComponent={<TodosScreenDemoAdapter />}
+            BodyComponent={
+              <CommonBodyLayout BodyComponent={<TodosScreenDemoAdapter />} />
+            }
             HeaderComponent={<UnauthenticatedNavBar />}
           />
         )}
@@ -165,7 +174,9 @@ const UnauthenticatedPage = () => {
         path={unauthenticatedRoutes.SIGNIN}
         render={() => (
           <ScreenLayout
-            BodyComponent={<SignInScrenAdapter />}
+            BodyComponent={
+              <CommonBodyLayout BodyComponent={<SignInScrenAdapter />} />
+            }
             HeaderComponent={<UnauthenticatedNavBar />}
           />
         )}
@@ -173,7 +184,9 @@ const UnauthenticatedPage = () => {
       <Route
         render={() => (
           <ScreenLayout
-            BodyComponent={<NotFoundScreen />}
+            BodyComponent={
+              <CommonBodyLayout BodyComponent={<NotFoundScreen />} />
+            }
             HeaderComponent={<UnauthenticatedNavBar />}
           />
         )}
