@@ -24,8 +24,8 @@ const centerContentStyle = {
 };
 
 const mainStyle = {
-  minWidth: '230px',
-  maxWidth: '550px',
+  // minWidth: '230px',
+  // maxWidth: '550px',
   margin: '0 auto',
   padding: '0'
 };
@@ -39,7 +39,7 @@ const sectionStyle = {
 
 const transitionGroupStyle = { position: 'relative' };
 
-const CommonBodyLayout = ({ BodyComponent, location }) => (
+const BodyLayout = ({ BodyComponent, location }) => (
   <div css={centerContentStyle}>
     <main css={mainStyle}>
       <TransitionGroup css={transitionGroupStyle}>
@@ -60,4 +60,4 @@ const CommonBodyLayout = ({ BodyComponent, location }) => (
   </div>
 );
 
-export default withRouter(CommonBodyLayout);
+export default withRouter(BodyLayout);

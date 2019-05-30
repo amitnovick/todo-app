@@ -2,7 +2,13 @@ import React from 'react';
 
 import TodoList from './components/TodoList/index';
 import CreateTodoTextbox from './components/CreateTodoTextbox/index';
-import styles from './style.module.css';
+
+const todoMvcStyle = {
+  background: '#fff',
+  position: 'relative',
+  margin: '40px 0 40px 0',
+  boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1)'
+};
 
 const Todos = ({
   // container state
@@ -14,7 +20,7 @@ const Todos = ({
   deleteTodo
 }) => {
   return (
-    <div className={styles['div-1']}>
+    <div style={todoMvcStyle}>
       <CreateTodoTextbox createTodo={createTodo} />
       <TodoList
         todos={todos}
