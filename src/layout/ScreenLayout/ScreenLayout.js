@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/core';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
+import BodyLayout from '../BodyLayout/BodyLayout';
 import styles from './style.module.css';
 
 const ScreenLayout = ({ BodyComponent, HeaderComponent }) => (
@@ -16,7 +17,7 @@ const ScreenLayout = ({ BodyComponent, HeaderComponent }) => (
     >
       <div>
         {HeaderComponent}
-        {BodyComponent}
+        <BodyLayout BodyComponent={BodyComponent} />
       </div>
     </CSSTransition>
   </TransitionGroup>

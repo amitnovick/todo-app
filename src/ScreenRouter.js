@@ -26,7 +26,7 @@ import AuthContext from './containers/Auth/AuthContext';
 import firebaseApp from './firebase/firebaseApp';
 import AuthenticatedNavBar from './containers/AuthenticatedNavBar';
 import UnauthenticatedNavBar from './containers/UnauthenticatedNavBar';
-import CommonBodyLayout from './layout/CommonBodyLayout/CommonBodyLayout';
+import CommonBodyLayout from './layout/CommonBodyLayout';
 
 const TodosScreenCloudAdapter = () => (
   <AuthContext.Consumer>
