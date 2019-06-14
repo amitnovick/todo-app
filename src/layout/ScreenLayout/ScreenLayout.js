@@ -1,5 +1,4 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/core';
+import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import BodyLayout from '../BodyLayout/BodyLayout';
