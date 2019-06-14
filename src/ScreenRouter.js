@@ -4,22 +4,14 @@ import { useService } from '@xstate/react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Atom, useAtom, swap } from '@dbeining/react-atom';
 import { Machine, interpret } from 'xstate';
-import { Message, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCloud } from '@fortawesome/free-solid-svg-icons';
 
 import HomeScreen from './screens/HomeScreen';
 import AboutScreen from './screens/AboutScreen';
 import ScreenLayout from './layout/ScreenLayout/ScreenLayout';
-import TodosContainerDemo from './containers/Todos/TodosContainerDemo';
 import TodosContainerCloud from './containers/Todos/TodosContainerCloud';
-import TodosContext from './containers/Todos/TodosContext';
-import TodosScreen from './screens/TodosScreen/TodosScreen';
 import NotFoundScreen from './screens/NotFoundScreen';
 import SignInScreenContainer from './screens/SignInScreen/Container';
 import AccountScreen from './screens/AccountScreen/Container';
-import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 import authenticatedRoutes from './routes/authenticatedRoutes';
 import sharedRoutes from './routes/sharedRoutes';
 import AuthContext from './containers/Auth/AuthContext';
@@ -27,51 +19,8 @@ import firebaseApp from './firebase/firebaseApp';
 import AuthenticatedNavBar from './containers/AuthenticatedNavBar';
 import UnauthenticatedNavBar from './containers/UnauthenticatedNavBar';
 import CommonBodyLayout from './layout/CommonBodyLayout';
-
-const TodosScreenCloudAdapter = () => (
-  <AuthContext.Consumer>
-    {userOAuthContext => (
-      <TodosContainerCloud {...userOAuthContext}>
-        <TodosContext.Consumer>
-          {todosContext => <TodosScreen {...todosContext} />}
-        </TodosContext.Consumer>
-      </TodosContainerCloud>
-    )}
-  </AuthContext.Consumer>
-);
-
-const TodosScreenDemoAdapter = () => (
-  <TodosContainerDemo>
-    <Message info style={{ textAlign: 'center' }}>
-      <span style={{ lineHeight: 1.75 }}>
-        You are currently viewing the <b>demo</b> version. <br />
-      </span>
-      <Link to={unauthenticatedRoutes.SIGNIN}>
-        <Button basic color="blue">
-          <FontAwesomeIcon icon={faCloud} style={{ marginRight: 10 }} />
-          {`Access the Cloud version`}
-        </Button>
-      </Link>
-    </Message>
-    <TodosContext.Consumer>
-      {todosContext => <TodosScreen {...todosContext} />}
-    </TodosContext.Consumer>
-  </TodosContainerDemo>
-);
-
-const AccountScreenAdapter = () => (
-  <AuthContext.Consumer>
-    {userOAuthContext => <AccountScreen {...userOAuthContext} />}
-  </AuthContext.Consumer>
-);
-
-const SignInScrenAdapter = () => (
-  <AuthContext.Consumer>
-    {userOAuthContext => {
-      return <SignInScreenContainer {...userOAuthContext} />;
-    }}
-  </AuthContext.Consumer>
-);
+import TodosScreenDemoAdapter from './screens/TodosScreenDemo';
+import unauthenticatedRoutes from './routes/unauthenticatedRoutes';
 
 const AuthenticatedPage = () => {
   return (
@@ -102,7 +51,7 @@ const AuthenticatedPage = () => {
         render={() => (
           <ScreenLayout
             BodyComponent={
-              <CommonBodyLayout BodyComponent={<TodosScreenCloudAdapter />} />
+              <CommonBodyLayout BodyComponent={<TodosContainerCloud />} />
             }
             HeaderComponent={<AuthenticatedNavBar />}
           />
@@ -114,7 +63,7 @@ const AuthenticatedPage = () => {
         render={() => (
           <ScreenLayout
             BodyComponent={
-              <CommonBodyLayout BodyComponent={<AccountScreenAdapter />} />
+              <CommonBodyLayout BodyComponent={<AccountScreen />} />
             }
             HeaderComponent={<AuthenticatedNavBar />}
           />
@@ -175,7 +124,7 @@ const UnauthenticatedPage = () => {
         render={() => (
           <ScreenLayout
             BodyComponent={
-              <CommonBodyLayout BodyComponent={<SignInScrenAdapter />} />
+              <CommonBodyLayout BodyComponent={<SignInScreenContainer />} />
             }
             HeaderComponent={<UnauthenticatedNavBar />}
           />

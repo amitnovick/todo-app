@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Machine } from 'xstate';
 import { useMachine } from '@xstate/react';
 import { withRouter } from 'react-router-dom';
@@ -73,6 +74,11 @@ const SignInScreenContainer = ({
     default:
       return <div>Unknown state, please report.</div>;
   }
+};
+
+SignInScreenContainer.propTypes = {
+  send: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 };
 
 export default withRouter(SignInScreenContainer);
