@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { css } from 'emotion';
 
 export const liStyle = css`
@@ -7,13 +6,7 @@ export const liStyle = css`
   border-bottom: 1px solid #ededed;
 `;
 
-export const StyledLi = styled.li`
-  position: relative;
-  font-size: 24px;
-  border-bottom: 1px solid #ededed;
-`;
-
-export const StyledButton = styled.button`
+export const buttonStyle = css`
   padding: 0;
   border: 0;
   background: none;
@@ -45,7 +38,7 @@ export const StyledButton = styled.button`
     content: '×';
   }
 
-  ${StyledLi}:hover & {
+  .${liStyle}:hover & {
     display: block;
   }
 `;
