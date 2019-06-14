@@ -1,26 +1,10 @@
 import React from 'react';
+import uuid from 'uuid/v4';
 
-import TodosContext from './TodosContext.js';
+import TodoScreen from '../../screens/TodosScreen/TodosScreen';
 
 /////////////////// UTILS ////////////
 const NAMESPACE = 'todos';
-
-const uuid = () => {
-  /*jshint bitwise:false */
-  let i, random;
-  let uuid = '';
-
-  for (i = 0; i < 32; i++) {
-    random = (Math.random() * 16) | 0;
-    if (i === 8 || i === 12 || i === 16 || i === 20) {
-      uuid += '-';
-    }
-    // eslint-disable-next-line
-    uuid += (i === 12 ? 4 : i === 16 ? (random & 3) | 8 : random).toString(16);
-  }
-
-  return uuid;
-};
 
 const defaultInitialData = [
   {
@@ -98,24 +82,28 @@ class TodosContainer extends React.Component {
   };
 
   async componentDidMount() {
+    this.mounted = true; // Hack, see: https://stackoverflow.com/questions/49906437/how-to-cancel-a-fetch-on-componentwillunmount
+    // Also, don't rename to `isMounted` since it's a preserved React keyword, see: https://github.com/azmenak/react-stripe-checkout/issues/83
     const todos = await loadFromLocalStorage();
-    this.setState({ todos });
+    if (this.mounted === true) {
+      this.setState({ todos });
+    }
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   render() {
     const { todos } = this.state;
     return (
-      <TodosContext.Provider
-        value={{
-          todos,
-          createTodo: this.createTodo,
-          editTodo: this.editTodo,
-          toggleTodo: this.toggleTodo,
-          deleteTodo: this.deleteTodo
-        }}
-      >
-        {this.props.children}
-      </TodosContext.Provider>
+      <TodoScreen
+        todos={todos}
+        createTodo={this.createTodo}
+        editTodo={this.editTodo}
+        toggleTodo={this.toggleTodo}
+        deleteTodo={this.deleteTodo}
+      />
     );
   }
 }

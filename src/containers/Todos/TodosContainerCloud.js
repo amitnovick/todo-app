@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import TodosContext from './TodosContext.js';
+import TodoScreen from '../../screens/TodosScreen/TodosScreen';
 import firestore from '../../firebase/realtimeDb.js';
+import withAuth from '../../containers/Auth/withAuth';
 
 class TodosContainer extends React.Component {
   constructor(props) {
@@ -96,20 +98,20 @@ class TodosContainer extends React.Component {
   render() {
     const { todos, isAwaitingTodos } = this.state;
     return (
-      <TodosContext.Provider
-        value={{
-          todos,
-          isAwaitingTodos,
-          createTodo: this.createTodo,
-          editTodo: this.editTodo,
-          toggleTodo: this.toggleTodo,
-          deleteTodo: this.deleteTodo
-        }}
-      >
-        {this.props.children}
-      </TodosContext.Provider>
+      <TodoScreen
+        todos={todos}
+        isAwaitingTodos={isAwaitingTodos}
+        createTodo={this.createTodo}
+        editTodo={this.editTodo}
+        toggleTodo={this.toggleTodo}
+        deleteTodo={this.deleteTodo}
+      />
     );
   }
 }
 
-export default TodosContainer;
+TodosContainer.propTypes = {
+  userOAuth: PropTypes.object.isRequired
+};
+
+export default withAuth(TodosContainer);

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Machine } from 'xstate';
 import { useMachine } from '@xstate/react';
 import { withRouter } from 'react-router-dom';
@@ -6,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { signInWithPopup } from '../../firebase/auth';
 import sharedRoutes from '../../routes/sharedRoutes';
 import SignInScreen from './Presentational';
+import withAuth from '../../containers/Auth/withAuth';
 
 const signInScreenMachine = Machine({
   id: 'sign-in-screen',
@@ -75,4 +77,9 @@ const SignInScreenContainer = ({
   }
 };
 
-export default withRouter(SignInScreenContainer);
+SignInScreenContainer.propTypes = {
+  send: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
+};
+
+export default withAuth(withRouter(SignInScreenContainer));

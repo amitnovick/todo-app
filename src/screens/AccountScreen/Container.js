@@ -1,9 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 
 import { signOut } from '../../firebase/auth';
 import sharedRoutes from '../../routes/sharedRoutes';
 import AccountScreen from './Presntational';
+import withAuth from '../../containers/Auth/withAuth';
 
 const handleLogout = async (send, history) => {
   try {
@@ -27,4 +29,10 @@ const AccountScreenContainer = ({ userOAuth, send, history }) => {
   );
 };
 
-export default withRouter(AccountScreenContainer);
+AccountScreenContainer.propTypes = {
+  userOAuth: PropTypes.object.isRequired,
+  send: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
+};
+
+export default withAuth(withRouter(AccountScreenContainer));
