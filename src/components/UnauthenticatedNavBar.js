@@ -1,4 +1,5 @@
 import React from 'react';
+
 import NavBar from '../layout/NavBar';
 import unauthenticatedRoutes from '../routes/unauthenticatedRoutes';
 import sharedRoutes from '../routes/sharedRoutes';

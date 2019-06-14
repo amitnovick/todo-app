@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { signInWithPopup } from '../../firebase/auth';
 import sharedRoutes from '../../routes/sharedRoutes';
 import SignInScreen from './Presentational';
+import withAuth from '../../containers/Auth/withAuth';
 
 const signInScreenMachine = Machine({
   id: 'sign-in-screen',
@@ -81,4 +82,4 @@ SignInScreenContainer.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-export default withRouter(SignInScreenContainer);
+export default withAuth(withRouter(SignInScreenContainer));

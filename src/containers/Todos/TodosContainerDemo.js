@@ -82,8 +82,16 @@ class TodosContainer extends React.Component {
   };
 
   async componentDidMount() {
+    this.mounted = true; // Hack, see: https://stackoverflow.com/questions/49906437/how-to-cancel-a-fetch-on-componentwillunmount
+    // Also, don't rename to `isMounted` since it's a preserved React keyword, see: https://github.com/azmenak/react-stripe-checkout/issues/83
     const todos = await loadFromLocalStorage();
-    this.setState({ todos });
+    if (this.mounted === true) {
+      this.setState({ todos });
+    }
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   render() {
