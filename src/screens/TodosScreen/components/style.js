@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import { css } from 'emotion';
 
-export const StyledInput = styled.input`
+export const inputStyle = css`
   position: relative;
   margin: 0;
   width: 100%;

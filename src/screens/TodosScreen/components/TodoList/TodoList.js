@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-  StyledLi,
-  StyledButton,
-  StyledInput1,
-  StyledInput2,
-  StyledUl,
-  StyledDiv,
-  StyledLabel
+  liStyle,
+  liClassHash,
+  buttonStyle,
+  input1Style,
+  input2Style,
+  ulStyle,
+  divStyle,
+  labelStyle
 } from './style';
 
 const ENTER_KEY = 13;
@@ -81,15 +82,16 @@ class TodoList extends React.Component {
     const { onToggle, onDelete, todos } = this.props;
     const { editTitle } = this.state;
     return (
-      <StyledDiv>
-        <StyledUl>
+      <div className={divStyle}>
+        <ul className={ulStyle}>
           {todos.map(todo => {
             const isBeingEdited = this.isTodoBeingEdited(todo);
             let content;
             if (isBeingEdited) {
               content = (
                 <div key={todo.id}>
-                  <StyledInput2
+                  <input
+                    className={input2Style}
                     ref={this.inputRef}
                     value={editTitle}
                     onChange={event => this.handleEditTitleTextChange(event)}
@@ -104,12 +106,14 @@ class TodoList extends React.Component {
             } else {
               content = (
                 <div>
-                  <StyledInput1
+                  <input
+                    className={input1Style}
                     type="checkbox"
                     checked={todo.completed}
                     onChange={() => onToggle(todo)}
                   />
-                  <StyledLabel
+                  <label
+                    className={labelStyle}
                     style={
                       todo.completed
                         ? {
@@ -122,15 +126,22 @@ class TodoList extends React.Component {
                     onDoubleClick={() => this.handleTitleClick(todo)}
                   >
                     {todo.title + ' '}
-                  </StyledLabel>
-                  <StyledButton onClick={() => onDelete(todo)} />
+                  </label>
+                  <button
+                    className={buttonStyle}
+                    onClick={() => onDelete(todo)}
+                  />
                 </div>
               );
             }
-            return <StyledLi key={todo.id}>{content}</StyledLi>;
+            return (
+              <li className={liClassHash + ' ' + liStyle} key={todo.id}>
+                {content}
+              </li>
+            );
           })}
-        </StyledUl>
-      </StyledDiv>
+        </ul>
+      </div>
     );
   }
 }

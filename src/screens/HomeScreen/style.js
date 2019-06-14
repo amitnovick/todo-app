@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { css } from 'emotion';
 
 const buttonHoverPopAnimation = `
 transform: translateY(-0.25em);
@@ -28,7 +28,7 @@ const mobileBreakpoint = 1024;
 const mobileMediaQueryKey = `@media (max-width: ${mobileBreakpoint}px)`;
 const desktopMediaQueryKey = `@media (min-width: ${mobileBreakpoint + 1}px)`;
 
-export const StyledScreenDiv = styled.div`
+export const gridCreatorDivStyle = css`
   text-align: center;
   display: grid;
   width: 100%;
@@ -48,12 +48,12 @@ export const StyledScreenDiv = styled.div`
   }
 `;
 
-export const StyledImgGridAreaDiv = styled.div`
+export const gridAreaSplashDivStyle = css`
   grid-area: splash;
   align-self: center;
 `;
 
-export const StyledImg = styled.img`
+export const imgStyle = css`
   height: 100%;
 
   ${mobileMediaQueryKey} {
@@ -65,21 +65,27 @@ export const StyledImg = styled.img`
   }
 `;
 
-export const StyledPitchHeadersGridAreaDiv = styled.div`
+export const gridAreaCtaDivStyle = css`
   grid-area: cta;
   align-self: center;
 `;
 
-export const StyledPitchFirstHeaderH2 = styled.h2`
+export const pitchFirstHeaderH2Style = css`
   font-family: 'Roboto', sans-serif;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.2em;
 `;
 
-export const StyledPitchSecondHeaderH2 = styled.h2`
+export const pitchSecondHeaderH2Style = css`
   font-family: 'Roboto', sans-serif;
   font-weight: 600;
+`;
+
+export const pitchThirdHeaderH3Style = css`
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 1.3em;
 `;
 
 export const StyledPitchThirdHeaderH3 = styled.h3`
@@ -90,18 +96,18 @@ export const StyledPitchThirdHeaderH3 = styled.h3`
 
 const semanticUiTeal = '#008080';
 
-export const StyledPrimaryLink = styled(Link)`
-  ${linkStyle}
-  background-color: ${semanticUiTeal};
-  color: white;
+export const primaryLinkStyle = css`
+${linkStyle}
+background-color: ${semanticUiTeal};
+color: white;
 
-  :hover {
-    ${buttonHoverPopAnimation}
-    color: white;
-  }
+:hover {
+  ${buttonHoverPopAnimation}
+  color: white;
+}
 `;
 
-export const StyledSecondaryLink = styled(Link)`
+export const secondaryLinkStyle = css`
   ${linkStyle}
   background-color: white;
   color: ${semanticUiTeal};

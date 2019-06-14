@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import { css } from 'emotion';
 
-export const StyledButton = styled.button`
+export const buttonStyle = css`
   cursor: pointer;
   background-color: black;
   color: white;

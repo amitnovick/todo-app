@@ -1,12 +1,22 @@
-import styled from 'styled-components';
+// import styled from 'styled-components';
+import { css } from 'emotion';
+import hash from '@emotion/hash';
 
-export const StyledLi = styled.li`
+export const liStyle = css`
   position: relative;
   font-size: 24px;
   border-bottom: 1px solid #ededed;
 `;
 
-export const StyledButton = styled.button`
+// export const StyledLi = styled.li`
+//   position: relative;
+//   font-size: 24px;
+//   border-bottom: 1px solid #ededed;
+// `;
+
+export const liClassHash = hash('todo-list-item');
+
+export const buttonStyle = css`
   padding: 0;
   border: 0;
   background: none;
@@ -38,12 +48,49 @@ export const StyledButton = styled.button`
     content: '×';
   }
 
-  ${StyledLi}:hover & {
+  .${liClassHash}:hover & {
     display: block;
   }
 `;
 
-export const StyledInput1 = styled.input`
+// export const StyledButton = styled.button`
+//   padding: 0;
+//   border: 0;
+//   background: none;
+//   vertical-align: baseline;
+//   font-family: inherit;
+//   font-weight: inherit;
+//   font-size: 30px;
+//   -webkit-appearance: none;
+//   appearance: none;
+//   -webkit-font-smoothing: antialiased;
+//   -moz-osx-font-smoothing: grayscale;
+//   display: none;
+//   position: absolute;
+//   top: 0;
+//   right: 10px;
+//   bottom: 0;
+//   width: 40px;
+//   height: 40px;
+//   margin: auto 0;
+//   color: #cc9a9a;
+//   margin-bottom: 11px;
+//   transition: color 0.2s ease-out;
+
+//   :hover {
+//     color: #af5b5e;
+//   }
+
+//   :after {
+//     content: '×';
+//   }
+
+//   ${StyledLi}:hover & {
+//     display: block;
+//   }
+// `;
+
+export const input1Style = css`
   text-align: center;
   width: 40px;
   height: auto;
@@ -57,7 +104,7 @@ export const StyledInput1 = styled.input`
   opacity: 0;
 `;
 
-export const StyledInput2 = styled.input`
+export const input2Style = css`
   position: relative;
   font-size: 24px;
   font-family: inherit;
@@ -75,19 +122,19 @@ export const StyledInput2 = styled.input`
   margin: 0 0 0 43px;
 `;
 
-export const StyledUl = styled.ul`
+export const ulStyle = css`
   margin: 0;
   padding: 0;
   list-style: none;
 `;
 
-export const StyledDiv = styled.div`
+export const divStyle = css`
   position: relative;
   z-index: 2;
   border-top: 1px solid #e6e6e6;
 `;
 
-export const StyledLabel = styled.label`
+export const labelStyle = css`
   background-image: url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23ededed%22%20stroke-width%3D%223%22/%3E%3C/svg%3E');
   background-repeat: no-repeat;
   background-position: center left;

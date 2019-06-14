@@ -1,18 +1,18 @@
-import styled from 'styled-components';
+import { css } from 'emotion';
 
 import colors from '../../colors';
 
-export const StyledUl = styled.ul`
+export const ulStyle = css`
   list-style: none;
   padding: 0px;
 `;
 
-export const StyledLi = styled.li`
+export const liStyle = css`
   margin: 4px;
   font-size: 24px;
 `;
 
-export const StyledAnchor = styled.a`
+export const aStyle = css`
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -27,6 +27,6 @@ export const StyledAnchor = styled.a`
   }
 `;
 
-export const StyledP = styled.p`
+export const pStyle = css`
   font-size: 24px;
 `;
