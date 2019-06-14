@@ -1,8 +1,7 @@
 import React from 'react';
 import {
-  liStyle,
-  liClassHash,
-  buttonStyle,
+  StyledLi,
+  StyledButton,
   input1Style,
   input2Style,
   ulStyle,
@@ -127,18 +126,11 @@ class TodoList extends React.Component {
                   >
                     {todo.title + ' '}
                   </label>
-                  <button
-                    className={buttonStyle}
-                    onClick={() => onDelete(todo)}
-                  />
+                  <StyledButton onClick={() => onDelete(todo)} />
                 </div>
               );
             }
-            return (
-              <li className={liClassHash + ' ' + liStyle} key={todo.id}>
-                {content}
-              </li>
-            );
+            return <StyledLi key={todo.id}>{content}</StyledLi>;
           })}
         </ul>
       </div>

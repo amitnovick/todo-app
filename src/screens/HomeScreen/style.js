@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { css } from 'emotion';
 
 const buttonHoverPopAnimation = `
@@ -83,12 +82,6 @@ export const pitchSecondHeaderH2Style = css`
 `;
 
 export const pitchThirdHeaderH3Style = css`
-  font-family: 'Roboto', sans-serif;
-  font-weight: 400;
-  font-size: 1.3em;
-`;
-
-export const StyledPitchThirdHeaderH3 = styled.h3`
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 1.3em;

@@ -1,34 +1,37 @@
 import React from 'react';
-import { CSSTransition } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { withRouter } from 'react-router-dom';
 
-import styles from './style.module.css';
 import {
-  StyledCenteringDiv,
-  StyledMain,
-  StyledSection,
-  StyledTransitionGroup
+  centeredDivStyle,
+  mainStyle,
+  sectionStyle,
+  transitionGroupStyle,
+  transitionFadeEnter,
+  transitionFadeEnterActive,
+  transitionFadeExit,
+  transitionFadeExitActive
 } from './style';
 
 const BodyLayout = ({ BodyComponent, location }) => (
-  <StyledCenteringDiv>
-    <StyledMain>
-      <StyledTransitionGroup>
+  <div className={centeredDivStyle}>
+    <main className={mainStyle}>
+      <TransitionGroup className={transitionGroupStyle}>
         <CSSTransition
           key={location.key}
           timeout={{ enter: 300, exit: 300 }}
           classNames={{
-            enter: styles['fade-enter'],
-            enterActive: styles['fade-enter-active'],
-            exit: styles['fade-exit'],
-            exitActive: styles['fade-exit-active']
+            enter: transitionFadeEnter,
+            enterActive: transitionFadeEnterActive,
+            exit: transitionFadeExit,
+            exitActive: transitionFadeExitActive
           }}
         >
-          <StyledSection>{BodyComponent}</StyledSection>
+          <section className={sectionStyle}>{BodyComponent}</section>
         </CSSTransition>
-      </StyledTransitionGroup>
-    </StyledMain>
-  </StyledCenteringDiv>
+      </TransitionGroup>
+    </main>
+  </div>
 );
 
 export default withRouter(BodyLayout);

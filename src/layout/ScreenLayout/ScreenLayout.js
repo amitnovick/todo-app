@@ -2,14 +2,14 @@ import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 import BodyLayout from '../BodyLayout/BodyLayout';
-import styles from './style.module.css';
+import { transitionFadeAppear, transitionFadeAppearActive } from './style';
 
 const ScreenLayout = ({ BodyComponent, HeaderComponent }) => (
   <TransitionGroup>
     <CSSTransition
       classNames={{
-        appear: styles['fade-appear'],
-        appearActive: styles['fade-appear-active']
+        appear: transitionFadeAppear,
+        appearActive: transitionFadeAppearActive
       }}
       appear={true}
       timeout={300}

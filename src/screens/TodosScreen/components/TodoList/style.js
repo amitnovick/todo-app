@@ -1,6 +1,5 @@
-// import styled from 'styled-components';
+import styled from 'styled-components';
 import { css } from 'emotion';
-import hash from '@emotion/hash';
 
 export const liStyle = css`
   position: relative;
@@ -8,15 +7,13 @@ export const liStyle = css`
   border-bottom: 1px solid #ededed;
 `;
 
-// export const StyledLi = styled.li`
-//   position: relative;
-//   font-size: 24px;
-//   border-bottom: 1px solid #ededed;
-// `;
+export const StyledLi = styled.li`
+  position: relative;
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
+`;
 
-export const liClassHash = hash('todo-list-item');
-
-export const buttonStyle = css`
+export const StyledButton = styled.button`
   padding: 0;
   border: 0;
   background: none;
@@ -48,47 +45,10 @@ export const buttonStyle = css`
     content: '×';
   }
 
-  .${liClassHash}:hover & {
+  ${StyledLi}:hover & {
     display: block;
   }
 `;
-
-// export const StyledButton = styled.button`
-//   padding: 0;
-//   border: 0;
-//   background: none;
-//   vertical-align: baseline;
-//   font-family: inherit;
-//   font-weight: inherit;
-//   font-size: 30px;
-//   -webkit-appearance: none;
-//   appearance: none;
-//   -webkit-font-smoothing: antialiased;
-//   -moz-osx-font-smoothing: grayscale;
-//   display: none;
-//   position: absolute;
-//   top: 0;
-//   right: 10px;
-//   bottom: 0;
-//   width: 40px;
-//   height: 40px;
-//   margin: auto 0;
-//   color: #cc9a9a;
-//   margin-bottom: 11px;
-//   transition: color 0.2s ease-out;
-
-//   :hover {
-//     color: #af5b5e;
-//   }
-
-//   :after {
-//     content: '×';
-//   }
-
-//   ${StyledLi}:hover & {
-//     display: block;
-//   }
-// `;
 
 export const input1Style = css`
   text-align: center;
