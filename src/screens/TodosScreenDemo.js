@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCloud } from '@fortawesome/free-solid-svg-icons';
 import { Message, Button } from 'semantic-ui-react';
 
-import TodosContainerDemo from '..//containers/Todos/TodosContainerDemo';
+import TodosContainerDemo from '../containers/Todos/TodosContainerDemo';
 import unauthenticatedRoutes from '../routes/unauthenticatedRoutes';
 
 const TodosScreenDemoAdapter = () => (

@@ -1,7 +1,7 @@
 import React from 'react';
 import uuid from 'uuid/v4';
 
-import TodoScreen from '../../screens/TodosScreen/TodosScreen';
+import TodoScreen from '../../components/TodosScreen/TodosScreen';
 
 /////////////////// UTILS ////////////
 const NAMESPACE = 'todos';
@@ -82,16 +82,15 @@ class TodosContainer extends React.Component {
   };
 
   async componentDidMount() {
-    this.mounted = true; // Hack, see: https://stackoverflow.com/questions/49906437/how-to-cancel-a-fetch-on-componentwillunmount
-    // Also, don't rename to `isMounted` since it's a preserved React keyword, see: https://github.com/azmenak/react-stripe-checkout/issues/83
+    this.isUnmounted = false; // Hack to abort setting state after Promise has settled but the component has already unmounted, see: https://stackoverflow.com/questions/49906437/how-to-cancel-a-fetch-on-componentwillunmount
     const todos = await loadFromLocalStorage();
-    if (this.mounted === true) {
+    if (this.isUnmounted === true) {
       this.setState({ todos });
     }
   }
 
   componentWillUnmount() {
-    this.mounted = false;
+    this.isUnmounted = false;
   }
 
   render() {

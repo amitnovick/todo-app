@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 import * as serviceWorker from './serviceWorker';
 import ScreenRouter from './ScreenRouter';
-import './global.css';
+import './style/global.css';
 import 'semantic-ui-css/semantic.min.css';
 import AuthenticationContainer from './containers/Auth/AuthContainer';
 

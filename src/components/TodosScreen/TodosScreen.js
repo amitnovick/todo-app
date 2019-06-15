@@ -3,13 +3,27 @@ import PropTypes from 'prop-types';
 
 import TodoList from './components/TodoList/TodoList';
 import CreateTodoTextbox from './components/CreateTodoTextbox';
+import { css } from 'emotion';
 
-const todoMvcStyle = {
-  background: '#fff',
-  position: 'relative',
-  margin: '40px 0 40px 0',
-  boxShadow: '0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1)'
-};
+const centeredDivStyle = `
+max-width: 550px;
+min-width: 230px;
+margin-left: auto;
+margin-right: auto;
+`;
+
+const todoMvcStyle = `
+background: #fff;
+position: relative;
+margin: 40px 0 40px 0;
+box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+  0 25px 50px 0 rgba(0, 0, 0, 0.1);
+`;
+
+const todoDiv = css`
+  ${centeredDivStyle}
+  ${todoMvcStyle}
+`;
 
 const Todos = ({
   // container state
@@ -21,7 +35,7 @@ const Todos = ({
   deleteTodo
 }) => {
   return (
-    <div style={todoMvcStyle}>
+    <div className={todoDiv}>
       <CreateTodoTextbox createTodo={createTodo} />
       <TodoList
         todos={todos}

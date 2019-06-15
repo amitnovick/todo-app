@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TodoScreen from '../../screens/TodosScreen/TodosScreen';
+import TodoScreen from '../../components/TodosScreen/TodosScreen';
 import firestore from '../../firebase/realtimeDb.js';
 import withAuth from '../../containers/Auth/withAuth';
 
@@ -57,6 +57,7 @@ class TodosContainer extends React.Component {
       }
 
       let todos = [];
+
       snapshot.forEach(doc => {
         const todo = doc.data();
         todo.id = doc.id;
@@ -71,7 +72,7 @@ class TodosContainer extends React.Component {
       };
 
       todos.sort(timeCreated);
-      // Anytime the state of our database changes, we update state
+      // Anytime the state of remote database changes, we update local state
       this.setState({ todos });
     });
     this.setState({ isAwaitingTodos: false });

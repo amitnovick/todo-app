@@ -1,6 +1,6 @@
 import { css } from 'emotion';
 
-import colors from '../../colors';
+import colors from '../../style/colors';
 
 export const ulStyle = css`
   list-style: none;
