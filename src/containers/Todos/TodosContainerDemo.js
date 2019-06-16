@@ -38,73 +38,92 @@ const saveToLocalStorage = data =>
   localStorage.setItem(NAMESPACE, JSON.stringify(data));
 /////////////////// UTILS ////////////
 
-class TodosContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      todos: []
-    };
-  }
-
-  createTodo = title => {
-    const todo = {
-      id: uuid(),
-      title: title,
-      completed: false,
-      createdAt: new Date().toISOString()
-    };
-    const newTodos = this.state.todos.concat([todo]);
-
-    this.setState({ todos: newTodos });
-    saveToLocalStorage(newTodos);
-  };
-
-  editTodo = (todo, newTitle) => {
-    const newTodos = this.state.todos.map(t =>
-      t !== todo ? t : { ...t, title: newTitle }
-    );
-    this.setState({ todos: newTodos });
-    saveToLocalStorage(newTodos);
-  };
-
-  toggleTodo = todo => {
-    const newTodos = this.state.todos.map(t =>
-      t !== todo ? t : { ...t, completed: !t.completed }
-    );
-    this.setState({ todos: newTodos });
-    saveToLocalStorage(newTodos);
-  };
-
-  deleteTodo = todo => {
-    const newTodos = this.state.todos.filter(t => t.id !== todo.id);
-    this.setState({ todos: newTodos });
-    saveToLocalStorage(newTodos);
-  };
-
-  async componentDidMount() {
-    this.isUnmounted = false; // Hack to abort setting state after Promise has settled but the component has already unmounted, see: https://stackoverflow.com/questions/49906437/how-to-cancel-a-fetch-on-componentwillunmount
-    const todos = await loadFromLocalStorage();
-    if (this.isUnmounted === true) {
-      this.setState({ todos });
+const todosReducer = (todos, action) => {
+  switch (action.type) {
+    case 'CREATE_TODO': {
+      const { title } = action.payload;
+      const todo = {
+        id: uuid(),
+        title: title,
+        completed: false,
+        createdAt: new Date().toISOString()
+      };
+      return todos.concat([todo]);
     }
+    case 'EDIT_TODO': {
+      const { todo, newTitle } = action.payload;
+      return todos.map(t => (t !== todo ? t : { ...t, title: newTitle }));
+    }
+    case 'TOGGLE_TODO': {
+      const { todo } = action.payload;
+      return todos.map(t =>
+        t !== todo ? t : { ...t, completed: !t.completed }
+      );
+    }
+    case 'DELETE_TODO': {
+      const { todo } = action.payload;
+      return todos.filter(t => t.id !== todo.id);
+    }
+    default:
+      return todos;
   }
+};
 
-  componentWillUnmount() {
-    this.isUnmounted = false;
-  }
+const TodosContainer = () => {
+  const [todos, setTodos] = React.useState(loadFromLocalStorage());
 
-  render() {
-    const { todos } = this.state;
-    return (
-      <TodoScreen
-        todos={todos}
-        createTodo={this.createTodo}
-        editTodo={this.editTodo}
-        toggleTodo={this.toggleTodo}
-        deleteTodo={this.deleteTodo}
-      />
-    );
-  }
-}
+  const processAction = action => {
+    const newTodos = todosReducer(todos, action);
+    setTodos(newTodos);
+    saveToLocalStorage(newTodos);
+  };
+
+  const createTodo = title => {
+    processAction({
+      type: 'CREATE_TODO',
+      payload: {
+        title
+      }
+    });
+  };
+
+  const editTodo = (todo, newTitle) => {
+    processAction({
+      type: 'EDIT_TODO',
+      payload: {
+        todo,
+        newTitle
+      }
+    });
+  };
+
+  const toggleTodo = todo => {
+    processAction({
+      type: 'TOGGLE_TODO',
+      payload: {
+        todo
+      }
+    });
+  };
+
+  const deleteTodo = todo => {
+    processAction({
+      type: 'DELETE_TODO',
+      payload: {
+        todo
+      }
+    });
+  };
+
+  return (
+    <TodoScreen
+      todos={todos}
+      createTodo={createTodo}
+      editTodo={editTodo}
+      toggleTodo={toggleTodo}
+      deleteTodo={deleteTodo}
+    />
+  );
+};
 
 export default TodosContainer;
