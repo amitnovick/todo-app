@@ -1,7 +1,7 @@
 import React from 'react';
 import uuid from 'uuid/v4';
 
-import TodoScreen from '../../components/TodosScreen/TodosScreen';
+import TodoScreen2 from '../../components/TodosScreen2/TodosScreen';
 
 const todosReducer = (todos, action) => {
   switch (action.type) {
@@ -78,7 +78,7 @@ const TodosContainer = ({ todos, setTodos }) => {
   };
 
   return (
-    <TodoScreen
+    <TodoScreen2
       todos={todos}
       createTodo={createTodo}
       editTodo={editTodo}
