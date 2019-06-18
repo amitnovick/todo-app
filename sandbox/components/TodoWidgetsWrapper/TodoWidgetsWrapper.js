@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { css } from 'emotion';
 
 import TodoList from './components/TodoList/TodoList';
 import CreateTodoTextbox from './components/CreateTodoTextbox';
-import { css } from 'emotion';
+import wrapperRadius from './wrapperRadius';
+import colors from '../../../src/style/colors';
 
 const centeredDivStyle = `
 max-width: 550px;
@@ -20,12 +22,17 @@ box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
   0 25px 50px 0 rgba(0, 0, 0, 0.1);
 `;
 
+const myStyle = `
+outline: solid ${wrapperRadius}px ${colors.CYAN};
+`;
+
 const todoDiv = css`
   ${centeredDivStyle}
   ${todoMvcStyle}
+  ${myStyle}
 `;
 
-const Todos = ({
+const TodoWidgetsWrapper = ({
   // container state
   todos,
   // container methods
@@ -36,18 +43,18 @@ const Todos = ({
 }) => {
   return (
     <div className={todoDiv}>
-      <CreateTodoTextbox createTodo={createTodo} />
+      <CreateTodoTextbox createTodo={args => createTodo(args)} />
       <TodoList
         todos={todos}
-        onDelete={todo => deleteTodo(todo)}
-        onEdit={(todo, title) => editTodo(todo, title)}
-        onToggle={todo => toggleTodo(todo)}
+        onDelete={args => deleteTodo(args)}
+        onEdit={args => editTodo(args)}
+        onToggle={args => toggleTodo(args)}
       />
     </div>
   );
 };
 
-Todos.propTypes = {
+TodoWidgetsWrapper.propTypes = {
   todos: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.any.isRequired,
@@ -62,4 +69,4 @@ Todos.propTypes = {
   deleteTodo: PropTypes.func.isRequired
 };
 
-export default Todos;
+export default TodoWidgetsWrapper;

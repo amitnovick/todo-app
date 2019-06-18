@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import TodoScreen from '../../components/TodosScreen/TodosScreen';
+import TodoScreen from '../../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
 import firestore from '../../firebase/realtimeDb.js';
 import withAuth from '../../containers/Auth/withAuth';
 
@@ -14,7 +14,7 @@ class TodosContainer extends React.Component {
     };
   }
 
-  createTodo = title => {
+  createTodo = ({ title }) => {
     const todo = {
       title: title,
       completed: false,
@@ -23,7 +23,7 @@ class TodosContainer extends React.Component {
     firestore.collection(this.todosCollection).add(todo);
   };
 
-  editTodo = (todo, newTitle) => {
+  editTodo = ({ todo, newTitle }) => {
     const todoChange = {
       title: newTitle
     };
@@ -33,7 +33,7 @@ class TodosContainer extends React.Component {
       .update(todoChange);
   };
 
-  toggleTodo = todo => {
+  toggleTodo = ({ todo }) => {
     const todoChange = {
       completed: !todo.completed
     };
@@ -43,7 +43,7 @@ class TodosContainer extends React.Component {
       .update(todoChange);
   };
 
-  deleteTodo = todo => {
+  deleteTodo = ({ todo }) => {
     firestore
       .collection(this.todosCollection)
       .doc(todo.id)

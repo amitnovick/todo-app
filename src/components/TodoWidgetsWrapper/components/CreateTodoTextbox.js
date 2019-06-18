@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { inputStyle } from './style';
 const ENTER_KEY = 13;
 
@@ -24,7 +26,7 @@ class CreateTodoTextbox extends React.Component {
     const shouldCreateNewTodo = newTitleValue.length > 0;
     if (!shouldCreateNewTodo) return;
     else {
-      this.props.createTodo(newTitleValue);
+      this.props.createTodo({ title: newTitleValue });
       this.setState({ newTitle: '' });
     }
   };
@@ -44,5 +46,9 @@ class CreateTodoTextbox extends React.Component {
     );
   }
 }
+
+CreateTodoTextbox.propTypes = {
+  createTodo: PropTypes.func.isRequired
+};
 
 export default CreateTodoTextbox;

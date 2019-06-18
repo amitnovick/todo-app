@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import {
   liStyle,
   buttonStyle,
@@ -26,9 +28,9 @@ class TodoList extends React.Component {
 
   replaceTitle = todo => {
     const editTitleValue = this.state.editTitle.trim();
-    if (editTitleValue.length === 0) this.props.onDelete(todo);
+    if (editTitleValue.length === 0) this.props.onDelete({ todo });
     else if (editTitleValue !== todo.title) {
-      this.props.onEdit(todo, editTitleValue);
+      this.props.onEdit({ todo: todo, newTitle: editTitleValue });
       this.deactivateTitleEditMode();
       this.setState({ editTitle: '' });
     } else this.deactivateTitleEditMode();
@@ -109,7 +111,7 @@ class TodoList extends React.Component {
                     className={input1Style}
                     type="checkbox"
                     checked={todo.completed}
-                    onChange={() => onToggle(todo)}
+                    onChange={() => onToggle({ todo })}
                   />
                   <label
                     className={labelStyle}
@@ -128,7 +130,7 @@ class TodoList extends React.Component {
                   </label>
                   <button
                     className={buttonStyle}
-                    onClick={() => onDelete(todo)}
+                    onClick={() => onDelete({ todo })}
                   />
                 </div>
               );
@@ -144,5 +146,11 @@ class TodoList extends React.Component {
     );
   }
 }
+
+TodoList.propTypes = {
+  onEdit: PropTypes.func.isRequired,
+  onToggle: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
+};
 
 export default TodoList;

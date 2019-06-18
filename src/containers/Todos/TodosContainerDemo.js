@@ -1,7 +1,7 @@
 import React from 'react';
 import uuid from 'uuid/v4';
 
-import TodoScreen from '../../components/TodosScreen/TodosScreen';
+import TodoScreen from '../../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
 
 const todosReducer = (todos, action) => {
   switch (action.type) {
@@ -40,7 +40,7 @@ const TodosContainer = ({ todos, setTodos }) => {
     setTodos(newTodos);
   };
 
-  const createTodo = title => {
+  const createTodo = ({ title }) => {
     processAction({
       type: 'CREATE_TODO',
       payload: {
@@ -49,7 +49,7 @@ const TodosContainer = ({ todos, setTodos }) => {
     });
   };
 
-  const editTodo = (todo, newTitle) => {
+  const editTodo = ({ todo, newTitle }) => {
     processAction({
       type: 'EDIT_TODO',
       payload: {
@@ -59,7 +59,7 @@ const TodosContainer = ({ todos, setTodos }) => {
     });
   };
 
-  const toggleTodo = todo => {
+  const toggleTodo = ({ todo }) => {
     processAction({
       type: 'TOGGLE_TODO',
       payload: {
@@ -68,7 +68,7 @@ const TodosContainer = ({ todos, setTodos }) => {
     });
   };
 
-  const deleteTodo = todo => {
+  const deleteTodo = ({ todo }) => {
     processAction({
       type: 'DELETE_TODO',
       payload: {

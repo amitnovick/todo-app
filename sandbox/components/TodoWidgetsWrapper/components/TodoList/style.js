@@ -1,5 +1,5 @@
 import { css } from 'emotion';
-import colors from '../../../../style/colors';
+import colors from '../../../../../src/style/colors';
 import wrapperRadius from '../../wrapperRadius';
 
 const todoMvcStyle = `
