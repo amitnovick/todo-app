@@ -3,8 +3,8 @@ import uuid from 'uuid/v4';
 
 import { storiesOf } from '@storybook/react';
 
-import TodosContainerDemo from '../containers/Todos/TodosContainerDemo';
-import TodosContainerDemo2 from '../containers/Todos/TodosContainerDemo2';
+import TodosContainerDemo from '../../containers/Todos/TodosContainerDemo';
+import TodosContainerDemo2 from '../../containers/Todos/TodosContainerDemo2';
 /* 
 storiesOf('Category', module).add('Subcategory', () => <Jumbotron />)
 // */
