@@ -60,43 +60,61 @@ const initialTodos = [
 
 const URL = 'ws://localhost:3030';
 
-let ws1 = new WebSocket(URL);
+/* Work In Progress */
+const withWebSocket = Component => {
+  const WithWebSocket = props => {
+    const [todos, setTodos] = React.useState(initialTodos);
+    const [ws, setWs] = React.useState(null);
+    React.useEffect(() => {
+      const initialWs = new WebSocket(URL);
+      setWs(initialWs);
+    }, []);
 
-const StatefulTodosContainerDemo = () => {
-  const [todos, setTodos] = React.useState(initialTodos);
-  React.useEffect(() => {
-    ws1.addEventListener('open', () => {
-      // on connecting, do nothing but log it to the console
-      console.log('connected');
-    });
-    ws1.addEventListener('message', event => {
-      console.log('received message');
-      const newTodos = JSON.parse(event.data);
-      setTodos(newTodos);
-    });
-    ws1.addEventListener('close', () => {
-      console.log('disconnected');
-      // automatically try to reconnect on connection loss
-      ws1 = new WebSocket(URL);
-    });
-    ws1.addEventListener('error', () => {
-      console.log('error');
-    });
+    React.useEffect(() => {
+      if (ws !== null) {
+        ws.addEventListener('open', () => {
+          // on connecting, do nothing but log it to the console
+          console.log('connected');
+          const action = {
+            type: 'GET_STATE'
+          };
+          ws.send(JSON.stringify(action));
+        });
+        ws.addEventListener('message', event => {
+          console.log('received message');
+          const newTodos = JSON.parse(event.data);
+          setTodos(newTodos);
+        });
+        ws.addEventListener('close', () => {
+          console.log('disconnected');
+          // automatically try to reconnect on connection loss
+          const newWs = new WebSocket(URL);
+          setWs(newWs);
+        });
+        ws.addEventListener('error', () => {
+          console.log('error');
+        });
 
-    const action = {
-      type: 'GET_STATE'
+        return () => ws.close();
+      }
+    }, [ws]);
+
+    const sendAction = newTodos => {
+      if (ws !== null) {
+        const action = {
+          type: 'UPDATE_STATE',
+          payload: newTodos
+        };
+        ws.send(JSON.stringify(action));
+      }
     };
-    ws1.send(JSON.stringify(action));
-  }, []);
 
-  const sendAction = newTodos => {
-    const action = {
-      type: 'UPDATE_STATE',
-      payload: newTodos
-    };
-    ws1.send(JSON.stringify(action));
+    return <Component {...props} todos={todos} sendAction={sendAction} />;
   };
+  return WithWebSocket;
+};
 
+const TodoWidgetsWrapperContainer = ({ todos, sendAction }) => {
   return (
     <TodoWidgetsWrapper
       todos={todos}
@@ -108,43 +126,7 @@ const StatefulTodosContainerDemo = () => {
   );
 };
 
-let ws2 = new WebSocket(URL);
-
-const StatefulTodosContainerDemo2 = () => {
-  const [todos, setTodos] = React.useState(initialTodos);
-  React.useEffect(() => {
-    ws2.addEventListener('open', () => {
-      // on connecting, do nothing but log it to the console
-      console.log('connected');
-    });
-    ws2.addEventListener('message', event => {
-      console.log('received message');
-      const newTodos = JSON.parse(event.data);
-      setTodos(newTodos);
-    });
-    ws2.addEventListener('close', () => {
-      console.log('disconnected');
-      // automatically try to reconnect on connection loss
-      ws2 = new WebSocket(URL);
-    });
-    ws2.addEventListener('error', () => {
-      console.log('error');
-    });
-
-    const action = {
-      type: 'GET_STATE'
-    };
-    ws2.send(JSON.stringify(action));
-  }, []);
-
-  const sendAction = newTodos => {
-    const action = {
-      type: 'UPDATE_STATE',
-      payload: newTodos
-    };
-    ws2.send(JSON.stringify(action));
-  };
-
+const TodoWidgetsWrapperContainer2 = ({ todos, sendAction }) => {
   return (
     <TodoWidgetsWrapper2
       todos={todos}
@@ -156,13 +138,13 @@ const StatefulTodosContainerDemo2 = () => {
   );
 };
 
-storiesOf('Components', module).add('TodoScreenDemo', () => (
-  <StatefulTodosContainerDemo />
-));
+const TodoWithWebSocket = withWebSocket(TodoWidgetsWrapperContainer);
 
-storiesOf('Components', module).add('TodoScreenDemo2', () => (
-  <StatefulTodosContainerDemo2 />
-));
+const TodoWithWebSocket2 = withWebSocket(TodoWidgetsWrapperContainer2);
+
+storiesOf('Components', module).add('Todo', () => <TodoWithWebSocket />);
+
+storiesOf('Components', module).add('Todo2', () => <TodoWithWebSocket2 />);
 
 // const StatefulTodosContainerDemo = () => {
 //   const [todos, setTodos] = React.useState(loadFromLocalStorage());

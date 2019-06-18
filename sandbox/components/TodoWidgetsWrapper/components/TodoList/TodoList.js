@@ -14,12 +14,15 @@ import {
 const ENTER_KEY = 13;
 const ESCAPE_KEY = 27;
 
+const Li = ({ ...props }) => <li {...props} className={liStyle} />;
+
 class TodoList extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      editingTodo: null,
+      isInEditMode: false,
+      todoBeingEdited: null,
       editTitle: ''
     };
 
@@ -27,35 +30,54 @@ class TodoList extends React.Component {
   }
 
   replaceTitle = todo => {
-    const editTitleValue = this.state.editTitle.trim();
-    if (editTitleValue.length === 0) this.props.onDelete({ todo });
-    else if (editTitleValue !== todo.title) {
+    const { editTitle } = this.state;
+    const editTitleValue = editTitle.trim();
+    if (editTitleValue.length === 0) {
+      this.props.onDelete({ todo });
+    } else if (editTitleValue !== todo.title) {
       this.props.onEdit({ todo: todo, newTitle: editTitleValue });
       this.deactivateTitleEditMode();
       this.setState({ editTitle: '' });
-    } else this.deactivateTitleEditMode();
+    } else {
+      this.deactivateTitleEditMode();
+    }
   };
 
   activateTitleEditMode = todo => {
+    console.log(
+      'activateTitleEditMode: isInEditMode:',
+      this.state.isInEditMode
+    );
     this.setState({
-      editingTodo: todo
+      isInEditMode: true,
+      todoBeingEdited: todo
     });
   };
 
   deactivateTitleEditMode = () => {
+    console.log(
+      'deactivateTitleEditMode: isInEditMode:',
+      this.state.isInEditMode
+    );
     this.setState({
-      editingTodo: null
+      isInEditMode: false,
+      todoBeingEdited: null
     });
   };
 
   isTodoBeingEdited = todo => {
-    return this.state.editingTodo && todo.id === this.state.editingTodo.id;
+    const { isInEditMode, todoBeingEdited } = this.state;
+    return isInEditMode && todo.id === todoBeingEdited.id;
   };
 
   /* TodoListItem */
   handleTitleClick = todo => {
-    this.activateTitleEditMode(todo);
-    this.setState({ editTitle: todo.title });
+    const { isInEditMode } = this.state;
+    console.log('handleTitleClick: isInEditMode:', isInEditMode);
+    if (!isInEditMode) {
+      this.activateTitleEditMode(todo);
+      this.setState({ editTitle: todo.title });
+    }
   };
 
   handleEditTitleTextChange = event => {
@@ -72,8 +94,8 @@ class TodoList extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (
-      !(prevState.editingTodo && prevState.editingTodo.id) &&
-      (this.state.editingTodo && this.state.editingTodo.id)
+      !(prevState.todoBeingEdited && prevState.todoBeingEdited.id) &&
+      (this.state.todoBeingEdited && this.state.todoBeingEdited.id)
     ) {
       this.inputRef.current.focus();
     }
@@ -87,59 +109,57 @@ class TodoList extends React.Component {
         <ul className={ulStyle}>
           {todos.map(todo => {
             const isBeingEdited = this.isTodoBeingEdited(todo);
-            let content;
             if (isBeingEdited) {
-              content = (
-                <div key={todo.id}>
-                  <input
-                    className={input2Style}
-                    ref={this.inputRef}
-                    value={editTitle}
-                    onChange={event => this.handleEditTitleTextChange(event)}
-                    onKeyDown={event =>
-                      this.handleEditTitleKeyDown(event, todo)
-                    }
-                    onBlur={() => this.replaceTitle(todo)}
-                    type="text"
-                  />
-                </div>
+              return (
+                <Li key={todo.id}>
+                  <div key={todo.id}>
+                    <input
+                      className={input2Style}
+                      ref={this.inputRef}
+                      value={editTitle}
+                      onChange={event => this.handleEditTitleTextChange(event)}
+                      onKeyDown={event =>
+                        this.handleEditTitleKeyDown(event, todo)
+                      }
+                      onBlur={() => this.replaceTitle(todo)}
+                      type="text"
+                    />
+                  </div>
+                </Li>
               );
             } else {
-              content = (
-                <div>
-                  <input
-                    className={input1Style}
-                    type="checkbox"
-                    checked={todo.completed}
-                    onChange={() => onToggle({ todo })}
-                  />
-                  <label
-                    className={labelStyle}
-                    style={
-                      todo.completed
-                        ? {
-                            color: '#d9d9d9',
-                            textDecoration: 'line-through',
-                            backgroundImage: `url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E')`
-                          }
-                        : {}
-                    }
-                    onDoubleClick={() => this.handleTitleClick(todo)}
-                  >
-                    {todo.title + ' '}
-                  </label>
-                  <button
-                    className={buttonStyle}
-                    onClick={() => onDelete({ todo })}
-                  />
-                </div>
+              return (
+                <Li key={todo.id}>
+                  <div>
+                    <input
+                      className={input1Style}
+                      type="checkbox"
+                      checked={todo.completed}
+                      onChange={() => onToggle({ todo })}
+                    />
+                    <label
+                      className={labelStyle}
+                      style={
+                        todo.completed
+                          ? {
+                              color: '#d9d9d9',
+                              textDecoration: 'line-through',
+                              backgroundImage: `url('data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2240%22%20height%3D%2240%22%20viewBox%3D%22-10%20-18%20100%20135%22%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2250%22%20fill%3D%22none%22%20stroke%3D%22%23bddad5%22%20stroke-width%3D%223%22/%3E%3Cpath%20fill%3D%22%235dc2af%22%20d%3D%22M72%2025L42%2071%2027%2056l-4%204%2020%2020%2034-52z%22/%3E%3C/svg%3E')`
+                            }
+                          : {}
+                      }
+                      onClick={() => this.handleTitleClick(todo)}
+                    >
+                      {todo.title + ' '}
+                    </label>
+                    <button
+                      className={buttonStyle}
+                      onClick={() => onDelete({ todo })}
+                    />
+                  </div>
+                </Li>
               );
             }
-            return (
-              <li className={liStyle} key={todo.id}>
-                {content}
-              </li>
-            );
           })}
         </ul>
       </div>
