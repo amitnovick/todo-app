@@ -44,10 +44,6 @@ class TodoList extends React.Component {
   };
 
   activateTitleEditMode = todo => {
-    console.log(
-      'activateTitleEditMode: isInEditMode:',
-      this.state.isInEditMode
-    );
     this.setState({
       isInEditMode: true,
       todoBeingEdited: todo
@@ -55,10 +51,6 @@ class TodoList extends React.Component {
   };
 
   deactivateTitleEditMode = () => {
-    console.log(
-      'deactivateTitleEditMode: isInEditMode:',
-      this.state.isInEditMode
-    );
     this.setState({
       isInEditMode: false,
       todoBeingEdited: null
@@ -73,7 +65,6 @@ class TodoList extends React.Component {
   /* TodoListItem */
   handleTitleClick = todo => {
     const { isInEditMode } = this.state;
-    console.log('handleTitleClick: isInEditMode:', isInEditMode);
     if (!isInEditMode) {
       this.activateTitleEditMode(todo);
       this.setState({ editTitle: todo.title });
@@ -84,11 +75,12 @@ class TodoList extends React.Component {
     this.setState({ editTitle: event.target.value });
   };
 
-  handleEditTitleKeyDown = (event, todo) => {
+  handleEditTitleKeyDown = event => {
+    const { onHitEnterKey, onBlur } = this.props;
     if (event.which === ESCAPE_KEY) {
-      this.deactivateTitleEditMode();
+      onBlur();
     } else if (event.which === ENTER_KEY) {
-      this.replaceTitle(todo);
+      onHitEnterKey();
     }
   };
 
@@ -102,26 +94,36 @@ class TodoList extends React.Component {
   }
 
   render() {
-    const { onToggle, onDelete, todos } = this.props;
-    const { editTitle } = this.state;
+    const {
+      onToggle,
+      onDelete,
+      onBlur,
+      onClickTitle,
+      todos,
+      editedTodo,
+      editedTodoValue,
+      isBeingEdited,
+      onChangeEditedTodoValue
+    } = this.props;
     return (
       <div className={divStyle}>
         <ul className={ulStyle}>
           {todos.map(todo => {
-            const isBeingEdited = this.isTodoBeingEdited(todo);
-            if (isBeingEdited) {
+            const isThisTodoBeingEdited = isBeingEdited && todo === editedTodo;
+            if (isThisTodoBeingEdited) {
               return (
                 <Li key={todo.id}>
                   <div key={todo.id}>
                     <input
                       className={input2Style}
                       ref={this.inputRef}
-                      value={editTitle}
-                      onChange={event => this.handleEditTitleTextChange(event)}
-                      onKeyDown={event =>
-                        this.handleEditTitleKeyDown(event, todo)
+                      value={editedTodoValue}
+                      onChange={({ target }) =>
+                        onChangeEditedTodoValue({ title: target.value })
                       }
-                      onBlur={() => this.replaceTitle(todo)}
+                      onKeyDown={event => this.handleEditTitleKeyDown(event)}
+                      onBlur={onBlur}
+                      autoFocus={true} // Crucial here!
                       type="text"
                     />
                   </div>
@@ -148,7 +150,7 @@ class TodoList extends React.Component {
                             }
                           : {}
                       }
-                      onClick={() => this.handleTitleClick(todo)}
+                      onClick={() => onClickTitle({ todo })}
                     >
                       {todo.title + ' '}
                     </label>
@@ -170,7 +172,13 @@ class TodoList extends React.Component {
 TodoList.propTypes = {
   onEdit: PropTypes.func.isRequired,
   onToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired
+  onDelete: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  editedTodo: PropTypes.object.isRequired,
+  editedTodoValue: PropTypes.string.isRequired,
+  isBeingEdited: PropTypes.bool.isRequired,
+  onChangeEditedTodoValue: PropTypes.func.isRequired,
+  onHitEnterKey: PropTypes.func.isRequired
 };
 
 export default TodoList;

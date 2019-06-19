@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { inputStyle } from './style';
+import { inputStyleBeingEdited, inputStyleIdle } from './style';
+
 const ENTER_KEY = 13;
 
 class CreateTodoTextbox extends React.Component {
@@ -11,44 +12,48 @@ class CreateTodoTextbox extends React.Component {
     this.state = {
       newTitle: ''
     };
+
+    this.inputRef = React.createRef();
   }
 
   handleNewTitleChange = event => {
     this.setState({ newTitle: event.target.value });
   };
 
-  handleNewTitleKeyDown = event => {
+  handleKeyDown = event => {
+    const { newTitle } = this.state;
+    const { onHitEnterKey } = this.props;
     const pressedEnter = event.keyCode === ENTER_KEY;
-    if (!pressedEnter) return;
-
-    const newTitleValue = this.state.newTitle.trim();
-
-    const shouldCreateNewTodo = newTitleValue.length > 0;
-    if (!shouldCreateNewTodo) return;
-    else {
-      this.props.createTodo({ title: newTitleValue });
+    if (pressedEnter) {
+      onHitEnterKey({ title: newTitle });
       this.setState({ newTitle: '' });
     }
   };
 
   render() {
     const { newTitle } = this.state;
+    const { isBeingEdited, onClick, onBlur } = this.props;
     return (
       <input
-        className={inputStyle}
+        className={isBeingEdited ? inputStyleBeingEdited : inputStyleIdle}
         value={newTitle}
         onChange={event => this.handleNewTitleChange(event)}
         type="text"
         placeholder="Enter your task here..."
-        onKeyDown={event => this.handleNewTitleKeyDown(event)}
-        autoFocus={true}
+        onKeyDown={event => this.handleKeyDown(event)}
+        autoFocus={isBeingEdited}
+        onClick={() => onClick({ title: newTitle })}
+        onBlur={onBlur}
       />
     );
   }
 }
 
 CreateTodoTextbox.propTypes = {
-  createTodo: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  isBeingEdited: PropTypes.bool.isRequired,
+  onHitEnterKey: PropTypes.func.isRequired
 };
 
 export default CreateTodoTextbox;

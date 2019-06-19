@@ -16,7 +16,7 @@ outline: ${inputRadius}px solid ${
 }
 `;
 
-export const inputStyle = css`
+const inputStyle = `
   ${myStyle}
   position: relative;
   margin: 0;
@@ -30,7 +30,6 @@ export const inputStyle = css`
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 16px 16px 16px 60px;
-  background: rgba(0, 0, 0, 0.003);
   box-shadow: inset 0 -2px 1px rgba(0, 0, 0, 0.03);
 
   ::placeholder {
@@ -38,4 +37,13 @@ export const inputStyle = css`
     font-weight: 300;
     color: #e6e6e6;
   }
+`;
+
+export const inputStyleIdle = css`
+  ${inputStyle}
+  background: rgba(0, 0, 0, 0.003);
+`;
+export const inputStyleBeingEdited = css`
+  ${inputStyle}
+  background: hotpink;
 `;

@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
+import { useMachine } from '@xstate/react';
 
 import TodoList from './components/TodoList/TodoList';
 import CreateTodoTextbox from './components/CreateTodoTextbox';
 import wrapperRadius from './wrapperRadius';
 import colors from '../../../src/style/colors';
+import todosMachine from './todosMachine';
 
 const centeredDivStyle = `
 max-width: 550px;
@@ -41,14 +43,50 @@ const TodoWidgetsWrapper = ({
   toggleTodo,
   deleteTodo
 }) => {
+  const machineWithActions = todosMachine.withConfig({
+    actions: {
+      createTodoWhenTitleNotEmpty: (_, { title }) => {
+        if (title.length > 0) {
+          createTodo({ title });
+        }
+      },
+      editTodo: ({ todo, editedTodoValue }, _) =>
+        editTodo({ todo, newTitle: editedTodoValue }),
+      toggleTodo: ({ todo }, _) => toggleTodo({ todo }),
+      deleteTodo: ({ todo }, _) => deleteTodo({ todo }),
+      editTodoWhenEditValueIsDifferent: ({ todo, editedTodoValue }, _) => {
+        console.log('editTodoWhenEditValueIsDifferent');
+        if (todo.title !== editedTodoValue) {
+          editTodo({ todo, newTitle: editedTodoValue });
+        }
+      }
+    }
+  });
+  const [current, send] = useMachine(machineWithActions, { devTools: true }); // { devTools: true }
+  const uiState = current.value;
+  const { editedTodoValue, todo } = current.context;
+  const isCreateTodoTextboxBeingEdited = uiState === 'editingNew';
+  const isTodoListBeingEdited = uiState === 'editingExisting';
   return (
     <div className={todoDiv}>
-      <CreateTodoTextbox createTodo={args => createTodo(args)} />
+      <CreateTodoTextbox
+        onHitEnterKey={args => send('EDITING_NEW_HIT_ENTER_KEY', args)}
+        isBeingEdited={isCreateTodoTextboxBeingEdited}
+        onClick={args => send('CLICK_NEW_TODO_TEXTBOX', args)}
+        onBlur={() => send('EDITING_NEW_CLICK_AWAY')}
+      />
       <TodoList
         todos={todos}
         onDelete={args => deleteTodo(args)}
         onEdit={args => editTodo(args)}
         onToggle={args => toggleTodo(args)}
+        onBlur={() => send('EDITING_EXISTING_CLICK_AWAY')}
+        onClickTitle={args => send('CLICK_EXISTING_TODO_TITLE', args)}
+        editedTodo={todo}
+        editedTodoValue={editedTodoValue}
+        isBeingEdited={isTodoListBeingEdited}
+        onChangeEditedTodoValue={args => send('CHANGE_EDITED_TODO_VALUE', args)}
+        onHitEnterKey={() => send('HIT_ENTER_KEY')}
       />
     </div>
   );
