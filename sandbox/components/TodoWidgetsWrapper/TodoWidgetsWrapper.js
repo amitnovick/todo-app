@@ -64,7 +64,7 @@ const TodoWidgetsWrapper = ({
   });
   const [current, send] = useMachine(machineWithActions, { devTools: true }); // { devTools: true }
   const uiState = current.value;
-  const { editedTodoValue, todo } = current.context;
+  const { newTodoTitle, editedTodoValue, todo } = current.context;
   const isCreateTodoTextboxBeingEdited = uiState === 'editingNew';
   const isTodoListBeingEdited = uiState === 'editingExisting';
   const isInIdleState = uiState === 'idle';
@@ -75,6 +75,8 @@ const TodoWidgetsWrapper = ({
         isBeingEdited={isCreateTodoTextboxBeingEdited}
         onClick={() => send('CLICK_NEW_TODO_TEXTBOX')}
         onBlur={() => send('EDITING_NEW_CLICK_AWAY')}
+        onInputChange={args => send('EDITING_NEW_INPUT_CHANGE', args)}
+        inputValue={newTodoTitle}
       />
       <TodoList
         todos={todos}

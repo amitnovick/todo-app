@@ -5,58 +5,43 @@ import { inputStyleBeingEdited, inputStyleIdle } from './style';
 
 const ENTER_KEY = 13;
 
-class CreateTodoTextbox extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      newTitle: ''
-    };
-
-    this.inputRef = React.createRef();
-  }
-
-  handleNewTitleChange = newTitle => {
-    this.setState({ newTitle });
-  };
-
-  handleKeyDown = keyCode => {
-    const { newTitle } = this.state;
-    const { onHitEnterKey } = this.props;
+const CreateTodoTextbox = ({
+  inputValue,
+  isBeingEdited,
+  onClick,
+  onBlur,
+  onInputChange,
+  onHitEnterKey
+}) => {
+  const handleKeyDown = keyCode => {
     const didHitEnterKey = keyCode === ENTER_KEY;
     if (didHitEnterKey) {
-      onHitEnterKey({ title: newTitle });
-      this.setState({ newTitle: '' });
+      onHitEnterKey({ title: inputValue });
     }
   };
 
-  render() {
-    const { newTitle } = this.state;
-    const { isBeingEdited, onClick, onBlur } = this.props;
-    return (
-      <input
-        className={isBeingEdited ? inputStyleBeingEdited : inputStyleIdle}
-        value={newTitle}
-        onChange={({ target }) => this.handleNewTitleChange(target.value)}
-        type="text"
-        placeholder="Enter your task here..."
-        onKeyDown={({ keyCode }) => this.handleKeyDown(keyCode)}
-        autoFocus={isBeingEdited}
-        onClick={onClick}
-        onBlur={() => {
-          console.log('createTextBox onBlur');
-          onBlur();
-        }}
-      />
-    );
-  }
-}
+  return (
+    <input
+      className={isBeingEdited ? inputStyleBeingEdited : inputStyleIdle}
+      value={inputValue}
+      onChange={({ target }) => onInputChange({ title: target.value })}
+      type="text"
+      placeholder="Enter your task here..."
+      onKeyDown={({ keyCode }) => handleKeyDown(keyCode)}
+      autoFocus={isBeingEdited}
+      onClick={onClick}
+      onBlur={() => onBlur()}
+    />
+  );
+};
 
 CreateTodoTextbox.propTypes = {
   onClick: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
   isBeingEdited: PropTypes.bool.isRequired,
-  onHitEnterKey: PropTypes.func.isRequired
+  onHitEnterKey: PropTypes.func.isRequired,
+  onInputChange: PropTypes.func.isRequired,
+  inputValue: PropTypes.string.isRequired
 };
 
 export default CreateTodoTextbox;

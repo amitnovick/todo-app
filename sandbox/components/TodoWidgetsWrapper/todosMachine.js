@@ -5,6 +5,7 @@ const todosMachine = Machine({
   id: 'todo-list',
   initial: 'editingNew',
   context: {
+    newTodoTitle: '',
     editedTodoValue: '',
     todo: {}
   },
@@ -47,9 +48,19 @@ const todosMachine = Machine({
     editingNew: {
       on: {
         EDITING_NEW_HIT_ENTER_KEY: {
-          actions: 'createTodoWhenTitleNotEmpty'
+          actions: [
+            'createTodoWhenTitleNotEmpty',
+            assign({
+              newTodoTitle: (_, __) => ''
+            })
+          ]
         },
-        EDITING_NEW_CLICK_AWAY: 'idle'
+        EDITING_NEW_CLICK_AWAY: 'idle',
+        EDITING_NEW_INPUT_CHANGE: {
+          actions: assign({
+            newTodoTitle: (_, event) => event.title
+          })
+        }
       }
     }
   }
