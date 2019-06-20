@@ -16,15 +16,15 @@ class CreateTodoTextbox extends React.Component {
     this.inputRef = React.createRef();
   }
 
-  handleNewTitleChange = event => {
-    this.setState({ newTitle: event.target.value });
+  handleNewTitleChange = newTitle => {
+    this.setState({ newTitle });
   };
 
-  handleKeyDown = event => {
+  handleKeyDown = keyCode => {
     const { newTitle } = this.state;
     const { onHitEnterKey } = this.props;
-    const pressedEnter = event.keyCode === ENTER_KEY;
-    if (pressedEnter) {
+    const didHitEnterKey = keyCode === ENTER_KEY;
+    if (didHitEnterKey) {
       onHitEnterKey({ title: newTitle });
       this.setState({ newTitle: '' });
     }
@@ -37,13 +37,16 @@ class CreateTodoTextbox extends React.Component {
       <input
         className={isBeingEdited ? inputStyleBeingEdited : inputStyleIdle}
         value={newTitle}
-        onChange={event => this.handleNewTitleChange(event)}
+        onChange={({ target }) => this.handleNewTitleChange(target.value)}
         type="text"
         placeholder="Enter your task here..."
-        onKeyDown={event => this.handleKeyDown(event)}
+        onKeyDown={({ keyCode }) => this.handleKeyDown(keyCode)}
         autoFocus={isBeingEdited}
-        onClick={() => onClick({ title: newTitle })}
-        onBlur={onBlur}
+        onClick={onClick}
+        onBlur={() => {
+          console.log('createTextBox onBlur');
+          onBlur();
+        }}
       />
     );
   }

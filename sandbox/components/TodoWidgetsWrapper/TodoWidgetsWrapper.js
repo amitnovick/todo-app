@@ -67,12 +67,13 @@ const TodoWidgetsWrapper = ({
   const { editedTodoValue, todo } = current.context;
   const isCreateTodoTextboxBeingEdited = uiState === 'editingNew';
   const isTodoListBeingEdited = uiState === 'editingExisting';
+  const isInIdleState = uiState === 'idle';
   return (
     <div className={todoDiv}>
       <CreateTodoTextbox
         onHitEnterKey={args => send('EDITING_NEW_HIT_ENTER_KEY', args)}
         isBeingEdited={isCreateTodoTextboxBeingEdited}
-        onClick={args => send('CLICK_NEW_TODO_TEXTBOX', args)}
+        onClick={() => send('CLICK_NEW_TODO_TEXTBOX')}
         onBlur={() => send('EDITING_NEW_CLICK_AWAY')}
       />
       <TodoList
@@ -87,6 +88,7 @@ const TodoWidgetsWrapper = ({
         isBeingEdited={isTodoListBeingEdited}
         onChangeEditedTodoValue={args => send('CHANGE_EDITED_TODO_VALUE', args)}
         onHitEnterKey={() => send('HIT_ENTER_KEY')}
+        shouldRegisterTitleClick={isInIdleState}
       />
     </div>
   );
