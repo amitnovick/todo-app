@@ -12,25 +12,6 @@ const TodosWithMachine = ({
   toggleTodo,
   deleteTodo
 }) => {
-  const machineWithActions = todosMachine.withConfig({
-    actions: {
-      createTodoWhenTitleNotEmpty: (_, { title }) => {
-        if (title.length > 0) {
-          createTodo({ title });
-        }
-      },
-      editTodo: ({ todo, editedTodoValue }, _) =>
-        editTodo({ todo, newTitle: editedTodoValue }),
-      toggleTodo: ({ todo }, _) => toggleTodo({ todo }),
-      deleteTodo: ({ todo }, _) => deleteTodo({ todo }),
-      editTodoWhenEditValueIsDifferent: ({ todo, editedTodoValue }, _) => {
-        if (todo.title !== editedTodoValue) {
-          editTodo({ todo, newTitle: editedTodoValue });
-        }
-      }
-    }
-  });
-
   const [_, __, service] = useMachine(machineWithActions, { devTools: true });
 
   return (

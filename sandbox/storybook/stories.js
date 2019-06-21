@@ -1,7 +1,6 @@
 //@ts-check
 import React from 'react';
-import uuid from 'uuid/v4';
-import { Machine, assign, interpret } from 'xstate';
+import { Machine, assign, State } from 'xstate';
 import { useMachine } from '@xstate/react';
 
 import { storiesOf } from '@storybook/react';
@@ -12,36 +11,6 @@ import todosMachine from '../components/TodoWidgetsWrapper/todosMachine';
 /* 
 storiesOf('Category', module).add('Subcategory', () => <Jumbotron />)
 // */
-const machineService = interpret(todosMachine).start();
-
-////////////// <DATA TRANSFORMATIONS> (in this case: pure) ///////////
-const createTodo = (todos, payload) => {
-  const { title } = payload;
-  const todo = {
-    id: uuid(),
-    title: title,
-    completed: false,
-    createdAt: new Date().toISOString()
-  };
-  return todos.concat([todo]);
-};
-
-const editTodo = (todos, payload) => {
-  const { todo, newTitle } = payload;
-  console.log('editTodo: existing todos:', todos, 'payload:', payload);
-  return todos.map(t => (t !== todo ? t : { ...t, title: newTitle }));
-};
-
-const toggleTodo = (todos, payload) => {
-  const { todo } = payload;
-  return todos.map(t => (t !== todo ? t : { ...t, completed: !t.completed }));
-};
-
-const deleteTodo = (todos, payload) => {
-  const { todo } = payload;
-  return todos.filter(t => t.id !== todo.id);
-};
-////////////// </DATA TRANSFORMATIONS> ///////////
 
 const initialTodos = [
   {
@@ -52,12 +21,23 @@ const initialTodos = [
   }
 ];
 
+const getNextTodosStateNode = (todosMachineStateNode, action) => {
+  console.log(
+    'getNextTodosStateNode: current state node:',
+    todosMachineStateNode
+  );
+  console.log('getNextTodosStateNode: received action:', action);
+  const nextStateNode = todosMachine.transition(todosMachineStateNode, action);
+  console.log('getNextTodosStateNode: next state node:', nextStateNode);
+  return nextStateNode;
+};
+
 const URL = 'ws://localhost:3030';
 
-const formatAction = newTodos => {
+const formatWsUpdatedTodosMachineServiceStateAction = newMachineServiceState => {
   const action = {
-    type: 'UPDATE_STATE',
-    payload: newTodos
+    type: 'UPDATE_TODOS_MACHINE_STATE_NODE',
+    payload: newMachineServiceState
   };
   return action;
 };
@@ -67,23 +47,15 @@ const websocketMachine = Machine({
   initial: 'loading',
   context: {
     ws: null,
-    todos: initialTodos
+    todos: initialTodos,
+    todosMachineStateNode: todosMachine.initialState
   },
   states: {
     loading: {
       on: {
         OPEN: {
           target: 'ready',
-          actions: [
-            assign({ ws: (_, event) => event.ws }),
-            (_, event) => {
-              const { ws } = event;
-              const action = {
-                type: 'GET_STATE'
-              };
-              ws.send(JSON.stringify(action));
-            }
-          ]
+          actions: assign({ ws: (_, event) => event.ws })
         },
         ERROR: 'failure',
         CLOSE: 'failure'
@@ -99,44 +71,21 @@ const websocketMachine = Machine({
           target: 'failure',
           actions: (context, _) => context.ws.close()
         },
-        WS_RECEIVE_TODOS: {
-          actions: assign({ todos: (_, event) => event.todos })
-        },
-        WS_SEND_ACTION: {
+        SEND_TODOS_MACHINE_STATE_NODE: {
           actions: (context, event) => {
-            const { ws, todos } = context;
-            const { transformationType, payload } = event;
-            switch (transformationType) {
-              case 'CREATE': {
-                console.log('WS_SEND_ACTION: CREATE: todos', todos);
-                const newTodos = createTodo(todos, payload);
-                console.log('WS_SEND_ACTION: CREATE: newTodos', newTodos);
-                const action = formatAction(newTodos);
-                ws.send(JSON.stringify(action));
-                return;
-              }
-              case 'EDIT': {
-                const newTodos = editTodo(todos, payload);
-                const action = formatAction(newTodos);
-                ws.send(JSON.stringify(action));
-                return;
-              }
-              case 'TOGGLE': {
-                const newTodos = toggleTodo(todos, payload);
-                const action = formatAction(newTodos);
-                ws.send(JSON.stringify(action));
-                return;
-              }
-              case 'DELETE': {
-                const newTodos = deleteTodo(todos, payload);
-                const action = formatAction(newTodos);
-                ws.send(JSON.stringify(action));
-                return;
-              }
-              default:
-                return;
-            }
+            const { ws } = context;
+            const { action } = event;
+            console.log(
+              'SEND_TODOS_MACHINE_STATE_NODE: received action:',
+              action
+            );
+            ws.send(JSON.stringify(action));
           }
+        },
+        RECEIVE_TODOS_MACHINE_STATE_NODE: {
+          actions: assign({
+            todosMachineStateNode: (_, event) => event.todosMachineStateNode
+          })
         }
       }
     },
@@ -146,100 +95,61 @@ const websocketMachine = Machine({
 
 const withWebSocket = Component => {
   const WithWebSocket = props => {
-    const [current, send] = useMachine(websocketMachine, { devTools: true });
+    const [currentWS, sendWS] = useMachine(websocketMachine, {
+      devTools: true
+    });
     React.useEffect(() => {
       const ws = new WebSocket(URL);
       ws.addEventListener('open', () => {
         // on connecting, do nothing but log it to the console
         console.log('WS connected');
-        send('OPEN', { ws });
+        sendWS('OPEN', { ws });
       });
       ws.addEventListener('message', event => {
         console.log('WS received message');
-        const newTodos = JSON.parse(event.data);
-        send('WS_RECEIVE_TODOS', { todos: newTodos });
+        const incomingPayload = JSON.parse(event.data);
+        console.log('WS message paylaod:', incomingPayload);
+        switch (incomingPayload.type) {
+          case 'TODOS_MACHINE_STATE_NODE': {
+            const { payload: rawTodosMachineStateNodeObject } = incomingPayload;
+            const todosMachineStateNode = State.create(
+              rawTodosMachineStateNodeObject
+            );
+            sendWS('RECEIVE_TODOS_MACHINE_STATE_NODE', {
+              todosMachineStateNode: todosMachineStateNode
+            });
+            return;
+          }
+          default: {
+            console.log('WS message received is of unknown type');
+            return;
+          }
+        }
       });
       ws.addEventListener('close', () => {
         console.log('WS disconnected');
-        send('CLOSE');
-        // // automatically try to reconnect on connection loss
-        // const newWs = new WebSocket(URL);
+        sendWS('CLOSE');
       });
       ws.addEventListener('error', () => {
         console.log('WS error');
-        send('ERROR');
+        sendWS('ERROR');
       });
-    }, [send]);
+    }, [sendWS]);
 
-    // const sendAction = newTodos => {
-    //   const action = {
-    //     type: 'UPDATE_STATE',
-    //     payload: newTodos
-    //   };
-    //   send('WS_SEND_ACTION', { wsAction: action });
-    // };
-
-    // const sendTransformationAsAction = (payload, transformationType) => {
-    //   const { todos } = current.context;
-    //   console.log('sendTransformationAsAction: current', current);
-    //   switch (transformationType) {
-    //     case 'CREATE': {
-    //       const newTodos = createTodo(todos, payload);
-    //       sendAction(newTodos);
-    //       return;
-    //     }
-    //     case 'EDIT': {
-    //       const newTodos = editTodo(todos, payload);
-    //       sendAction(newTodos);
-    //       return;
-    //     }
-    //     case 'TOGGLE': {
-    //       const newTodos = toggleTodo(todos, payload);
-    //       sendAction(newTodos);
-    //       return;
-    //     }
-    //     case 'DELETE': {
-    //       const newTodos = deleteTodo(todos, payload);
-    //       sendAction(newTodos);
-    //       return;
-    //     }
-    //     default:
-    //       return;
-    //   }
-    // };
-
-    switch (current.value) {
+    switch (currentWS.value) {
       case 'loading':
         return <h2>WS: Loading...</h2>;
       case 'ready': {
-        const { todos } = current.context;
+        const { todosMachineStateNode } = currentWS.context;
         return (
           <Component
             {...props}
-            machineService={machineService}
-            todos={todos}
-            createTodo={args =>
-              send('WS_SEND_ACTION', {
-                transformationType: 'CREATE',
-                payload: args
-              })
-            }
-            editTodo={args =>
-              send('WS_SEND_ACTION', {
-                transformationType: 'EDIT',
-                payload: args
-              })
-            }
-            toggleTodo={args =>
-              send('WS_SEND_ACTION', {
-                transformationType: 'TOGGLE',
-                payload: args
-              })
-            }
-            deleteTodo={args =>
-              send('WS_SEND_ACTION', {
-                transformationType: 'DELETE',
-                payload: args
+            currentTodosMachineStateNode={todosMachineStateNode}
+            send={action =>
+              sendWS('SEND_TODOS_MACHINE_STATE_NODE', {
+                action: formatWsUpdatedTodosMachineServiceStateAction(
+                  getNextTodosStateNode(todosMachineStateNode, action)
+                )
               })
             }
           />
@@ -254,32 +164,14 @@ const withWebSocket = Component => {
   return WithWebSocket;
 };
 
-// const TodoWidgetsWrapperContainer = ({ todos, sendAction }) => {
-//   return (
-//     <TodoWidgetsWrapper
-//       todos={todos}
-//       createTodo={args => sendAction(createTodo(todos, args))}
-//       editTodo={args => sendAction(editTodo(todos, args))}
-//       toggleTodo={args => sendAction(toggleTodo(todos, args))}
-//       deleteTodo={args => sendAction(deleteTodo(todos, args))}
-//     />
-//   );
-// };
-
 const TodoWidgetsWrapperContainer2 = ({
-  todos,
-  createTodo,
-  editTodo,
-  toggleTodo,
-  deleteTodo
+  currentTodosMachineStateNode,
+  send
 }) => {
   return (
     <TodoWidgetsWrapper2
-      todos={todos}
-      createTodo={args => createTodo(args)}
-      editTodo={args => editTodo(args)}
-      toggleTodo={args => toggleTodo(args)}
-      deleteTodo={args => deleteTodo(args)}
+      currentTodosMachineStateNode={currentTodosMachineStateNode}
+      send={send}
     />
   );
 };
@@ -326,7 +218,7 @@ storiesOf('Components', module).add('Todo2', () => <TodoWithWebSocket2 />);
 //           // on connecting, do nothing but log it to the console
 //           console.log('WS connected');
 //           const action = {
-//             type: 'GET_STATE'
+//             type: 'GET_TODOS_INITIAL_EXTENDED_STATE'
 //           };
 //           ws.send(JSON.stringify(action));
 //         });

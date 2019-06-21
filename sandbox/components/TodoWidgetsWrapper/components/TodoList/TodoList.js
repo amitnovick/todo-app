@@ -97,7 +97,8 @@ const TodoList = ({
     <div className={divStyle}>
       <ul className={ulStyle}>
         {todos.map(todo => {
-          const isThisTodoBeingEdited = isBeingEdited && todo === editedTodo;
+          const isThisTodoBeingEdited =
+            isBeingEdited && todo.id === editedTodo.id;
           if (isThisTodoBeingEdited) {
             return (
               <TodoItemBeingEdited
@@ -125,7 +126,7 @@ const TodoList = ({
 };
 
 TodoList.propTypes = {
-  onEdit: PropTypes.func.isRequired,
+  todos: PropTypes.array.isRequired,
   onToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
@@ -134,7 +135,7 @@ TodoList.propTypes = {
   isBeingEdited: PropTypes.bool.isRequired,
   onChangeEditedTodoValue: PropTypes.func.isRequired,
   onHitEnterKey: PropTypes.func.isRequired,
-  shouldRegisterTitleClick: PropTypes.bool.isRequired
+  onClickTitle: PropTypes.func.isRequired
 };
 
 export default TodoList;

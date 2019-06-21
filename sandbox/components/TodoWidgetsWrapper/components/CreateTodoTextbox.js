@@ -16,7 +16,7 @@ const CreateTodoTextbox = ({
   const handleKeyDown = keyCode => {
     const didHitEnterKey = keyCode === ENTER_KEY;
     if (didHitEnterKey) {
-      onHitEnterKey({ title: inputValue });
+      onHitEnterKey();
     }
   };
 

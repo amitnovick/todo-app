@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
-import { useService } from '@xstate/react';
 
 import TodoList from './components/TodoList/TodoList';
 import CreateTodoTextbox from './components/CreateTodoTextbox';
@@ -33,43 +32,43 @@ const todoDiv = css`
   ${myStyle}
 `;
 
-const TodoWidgetsWrapper = ({
-  todos,
-  createTodo,
-  editTodo,
-  toggleTodo,
-  deleteTodo,
-  machineService
-}) => {
-  const [current, send] = useService(machineService);
-  const uiState = current.value;
-  const { newTodoTitle, editedTodoValue, todo } = current.context;
+const TodoWidgetsWrapper = ({ currentTodosMachineStateNode, send }) => {
+  const uiState = currentTodosMachineStateNode.value;
+  const {
+    newTodoTitle,
+    editedTodoValue,
+    todo,
+    todos
+  } = currentTodosMachineStateNode.context;
   const isCreateTodoTextboxBeingEdited = uiState === 'editingNew';
   const isTodoListBeingEdited = uiState === 'editingExisting';
-  const isInIdleState = uiState === 'idle';
   return (
     <div className={todoDiv}>
       <CreateTodoTextbox
-        onHitEnterKey={args => send('EDITING_NEW_HIT_ENTER_KEY', args)}
+        onHitEnterKey={() => send({ type: 'EDITING_NEW_HIT_ENTER_KEY' })}
         isBeingEdited={isCreateTodoTextboxBeingEdited}
         onClick={() => send('CLICK_NEW_TODO_TEXTBOX')}
         onBlur={() => send('EDITING_NEW_CLICK_AWAY')}
-        onInputChange={args => send('EDITING_NEW_INPUT_CHANGE', args)}
+        onInputChange={args =>
+          send({ ...args, type: 'EDITING_NEW_INPUT_CHANGE' })
+        }
         inputValue={newTodoTitle}
       />
       <TodoList
         todos={todos}
-        onDelete={args => deleteTodo(args)}
-        onEdit={args => editTodo(args)}
-        onToggle={args => toggleTodo(args)}
+        onDelete={({ todo }) => send({ type: 'CLICK_DELETE_BUTTON', todo })}
+        onToggle={({ todo }) => send({ type: 'CLICK_TOGGLE_BUTTON', todo })}
         onBlur={() => send('EDITING_EXISTING_CLICK_AWAY')}
-        onClickTitle={args => send('CLICK_EXISTING_TODO_TITLE', args)}
+        onClickTitle={({ todo }) =>
+          send({ type: 'CLICK_EXISTING_TODO_TITLE', todo })
+        }
         editedTodo={todo}
         editedTodoValue={editedTodoValue}
         isBeingEdited={isTodoListBeingEdited}
-        onChangeEditedTodoValue={args => send('CHANGE_EDITED_TODO_VALUE', args)}
+        onChangeEditedTodoValue={args =>
+          send({ ...args, type: 'CHANGE_EDITED_TODO_VALUE' })
+        }
         onHitEnterKey={() => send('HIT_ENTER_KEY')}
-        shouldRegisterTitleClick={isInIdleState}
       />
     </div>
   );
@@ -88,7 +87,8 @@ TodoWidgetsWrapper.propTypes = {
   editTodo: PropTypes.func.isRequired,
   toggleTodo: PropTypes.func.isRequired,
   deleteTodo: PropTypes.func.isRequired,
-  machineService: PropTypes.any.isRequired
+  currentTodosMachineStateNode: PropTypes.any.isRequired,
+  send: PropTypes.func.isRequired
 };
 
 export default TodoWidgetsWrapper;
