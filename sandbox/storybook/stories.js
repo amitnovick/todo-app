@@ -1,16 +1,18 @@
 //@ts-check
 import React from 'react';
 import uuid from 'uuid/v4';
-import { Machine, assign } from 'xstate';
+import { Machine, assign, interpret } from 'xstate';
 import { useMachine } from '@xstate/react';
 
 import { storiesOf } from '@storybook/react';
 
-import TodoWidgetsWrapper from '../../src/components/TodoWidgetsWrapper/TodoWidgetsWrapper';
+// import TodoWidgetsWrapper from '../../src/components/TodoWidgetsWrapper/TodoWidgetsWrapper';
 import TodoWidgetsWrapper2 from '../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
+import todosMachine from '../components/TodoWidgetsWrapper/todosMachine';
 /* 
 storiesOf('Category', module).add('Subcategory', () => <Jumbotron />)
 // */
+const machineService = interpret(todosMachine).start();
 
 ////////////// <DATA TRANSFORMATIONS> (in this case: pure) ///////////
 const createTodo = (todos, payload) => {
@@ -142,11 +144,9 @@ const websocketMachine = Machine({
   }
 });
 
-/* Work In Progress */
 const withWebSocket = Component => {
   const WithWebSocket = props => {
     const [current, send] = useMachine(websocketMachine, { devTools: true });
-
     React.useEffect(() => {
       const ws = new WebSocket(URL);
       ws.addEventListener('open', () => {
@@ -216,6 +216,7 @@ const withWebSocket = Component => {
         return (
           <Component
             {...props}
+            machineService={machineService}
             todos={todos}
             createTodo={args =>
               send('WS_SEND_ACTION', {

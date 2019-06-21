@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { css } from 'emotion';
-import { useMachine } from '@xstate/react';
+import { useService } from '@xstate/react';
 
 import TodoList from './components/TodoList/TodoList';
 import CreateTodoTextbox from './components/CreateTodoTextbox';
 import wrapperRadius from './wrapperRadius';
 import colors from '../../../src/style/colors';
-import todosMachine from './todosMachine';
 
 const centeredDivStyle = `
 max-width: 550px;
@@ -35,34 +34,14 @@ const todoDiv = css`
 `;
 
 const TodoWidgetsWrapper = ({
-  // container state
   todos,
-  // container methods
   createTodo,
   editTodo,
   toggleTodo,
-  deleteTodo
+  deleteTodo,
+  machineService
 }) => {
-  const machineWithActions = todosMachine.withConfig({
-    actions: {
-      createTodoWhenTitleNotEmpty: (_, { title }) => {
-        if (title.length > 0) {
-          createTodo({ title });
-        }
-      },
-      editTodo: ({ todo, editedTodoValue }, _) =>
-        editTodo({ todo, newTitle: editedTodoValue }),
-      toggleTodo: ({ todo }, _) => toggleTodo({ todo }),
-      deleteTodo: ({ todo }, _) => deleteTodo({ todo }),
-      editTodoWhenEditValueIsDifferent: ({ todo, editedTodoValue }, _) => {
-        console.log('editTodoWhenEditValueIsDifferent');
-        if (todo.title !== editedTodoValue) {
-          editTodo({ todo, newTitle: editedTodoValue });
-        }
-      }
-    }
-  });
-  const [current, send] = useMachine(machineWithActions, { devTools: true }); // { devTools: true }
+  const [current, send] = useService(machineService);
   const uiState = current.value;
   const { newTodoTitle, editedTodoValue, todo } = current.context;
   const isCreateTodoTextboxBeingEdited = uiState === 'editingNew';
@@ -108,7 +87,8 @@ TodoWidgetsWrapper.propTypes = {
   createTodo: PropTypes.func.isRequired,
   editTodo: PropTypes.func.isRequired,
   toggleTodo: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired
+  deleteTodo: PropTypes.func.isRequired,
+  machineService: PropTypes.any.isRequired
 };
 
 export default TodoWidgetsWrapper;
