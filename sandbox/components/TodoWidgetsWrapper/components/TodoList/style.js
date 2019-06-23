@@ -1,21 +1,9 @@
 import { css } from 'emotion';
-import colors from '../../../../../src/style/colors';
-import wrapperRadius from '../../wrapperRadius';
-
-const todoMvcStyle = `
-position: relative;
-font-size: 24px;
-`;
-
-const liRadius = 3;
-
-const myStyle = `
-  outline: ${liRadius - wrapperRadius}px solid ${colors.CYAN};
-`;
 
 export const liStyle = css`
-  ${todoMvcStyle}
-  ${myStyle}
+  position: relative;
+  font-size: 24px;
+  border-bottom: 1px solid #ededed;
 `;
 
 export const buttonStyle = css`

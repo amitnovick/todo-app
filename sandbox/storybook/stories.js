@@ -7,19 +7,12 @@ import { storiesOf } from '@storybook/react';
 
 // import TodoWidgetsWrapper from '../../src/components/TodoWidgetsWrapper/TodoWidgetsWrapper';
 import TodoWidgetsWrapper2 from '../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
-import todosMachine from '../components/TodoWidgetsWrapper/todosMachine';
+import todosMachine from '../states/todos/todosMachine';
+import TodosWithMachine from '../containers/TodosWithMachine';
+
 /* 
 storiesOf('Category', module).add('Subcategory', () => <Jumbotron />)
 // */
-
-const initialTodos = [
-  {
-    id: 1,
-    title: 'LOCAL MOCK',
-    completed: true,
-    createdAt: new Date().toISOString()
-  }
-];
 
 const getNextTodosStateNode = (todosMachineStateNode, action) => {
   console.log(
@@ -47,7 +40,6 @@ const websocketMachine = Machine({
   initial: 'loading',
   context: {
     ws: null,
-    todos: initialTodos,
     todosMachineStateNode: todosMachine.initialState
   },
   states: {
@@ -183,6 +175,8 @@ const TodoWithWebSocket2 = withWebSocket(TodoWidgetsWrapperContainer2);
 // storiesOf('Components', module).add('Todo', () => <TodoWithWebSocket />);
 
 storiesOf('Components', module).add('Todo2', () => <TodoWithWebSocket2 />);
+
+storiesOf('Containers', module).add('Todo', () => <TodosWithMachine />);
 
 /* Wrapper impl */
 // const TodoWidgetsWrapperContainer2 = ({ todos, sendAction }) => {

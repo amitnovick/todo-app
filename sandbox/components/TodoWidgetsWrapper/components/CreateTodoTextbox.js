@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { inputStyleBeingEdited, inputStyleIdle } from './style';
+import { inputStyle } from './style';
 
 const ENTER_KEY = 13;
 
@@ -22,7 +22,7 @@ const CreateTodoTextbox = ({
 
   return (
     <input
-      className={isBeingEdited ? inputStyleBeingEdited : inputStyleIdle}
+      className={inputStyle}
       value={inputValue}
       onChange={({ target }) => onInputChange({ title: target.value })}
       type="text"
