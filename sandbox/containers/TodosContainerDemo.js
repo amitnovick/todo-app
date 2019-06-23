@@ -1,5 +1,6 @@
 import React from 'react';
 import { useMachine } from '@xstate/react';
+import { Atom, useAtom, deref, swap } from '@dbeining/react-atom';
 
 import TodoWidgetWrapper from '../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
 import todosMachine from '../states/todos/todosMachine';
@@ -22,74 +23,82 @@ const loadFromLocalStorage = () => {
   return localStorageData == null ? initialState : JSON.parse(localStorageData);
 };
 /////////////////// UTILS ////////////
-const TodosContainer = () => {
-  const [todos, setTodos] = React.useState(loadFromLocalStorage());
-  const [todo, setTodo] = React.useState({});
-  const [editedTodoValue, setEditedTodoValue] = React.useState('');
-  const [newTodoTitle, setNewTodoTitle] = React.useState('');
-  console.log('todos:', todos);
-  console.log('todo:', todo);
-  console.log('editedTodoValue:', editedTodoValue);
-  console.log('newTodoTitle:', newTodoTitle);
-  console.log('--------');
+const initialAtomState = {
+  todos: loadFromLocalStorage(),
+  todo: {},
+  editedTodoValue: '',
+  newTodoTitle: ''
+};
 
-  const setTodosAndSave = todos => {
-    setTodos(todos);
-    saveToLocalStorage(todos);
-  };
-  const todosMachineWithActions = todosMachine.withConfig({
-    actions: {
-      updateTodosEnterExistingTodoEdit: (_, { todo }) => {
-        setEditedTodoValue(todo.title);
-        setTodo(todo);
-      },
-      updateEditedTodoValue: (_, event) => {
-        console.log('updateEditedTodoValue: title:', event.title);
-        setEditedTodoValue(event.title);
-      },
-      updateNewTodoValue: (_, event) => setNewTodoTitle(event.title),
-      createTodoWhenTitleNotEmpty: (
-        _,
-        __ // TODO: Check why not working
-      ) => {
-        console.log('edit: newTodoTitle', newTodoTitle);
-        setTodosAndSave(
-          newTodoTitle.length > 0
-            ? createTodo(todos, { title: newTodoTitle })
-            : todos
-        );
-      },
-      resetNewTodoInput: (_, __) => {
-        console.log('reset');
-        setNewTodoTitle('');
-      },
-      editTodo: (
-        _,
-        __ // TODO: Check why not working
-      ) => {
-        console.log('editTodo: editedTodoValue:', editedTodoValue);
-        console.log('editTodo: todo:', todo);
-        console.log('editTodo: todos:', todos);
-        const newTodos = editTodo(todos, { todo, newTitle: editedTodoValue });
+const atom = Atom.of(initialAtomState);
 
-        setTodosAndSave(newTodos);
-      },
-      toggleTodo: (_, { todo }) => setTodosAndSave(toggleTodo(todos, { todo })),
-      deleteTodo: (_, { todo }) => {
-        console.log('deleteTodo: todos:', todos);
-        setTodosAndSave(deleteTodo(todos, { todo }));
-      },
-      editTodoWhenEditValueIsDifferent: (_, __) =>
-        setTodosAndSave(
-          todo.title !== editedTodoValue
-            ? editTodo(todos, { todo, newTitle: editedTodoValue })
-            : todos
-        )
+const setTodosAndSave = todos => {
+  swap(atom, currentAtom => ({ ...currentAtom, todos: todos }));
+  saveToLocalStorage(todos);
+};
+const todosMachineWithActions = todosMachine.withConfig({
+  actions: {
+    updateTodosEnterExistingTodoEdit: (_, { todo }) => {
+      swap(atom, currentAtom => ({
+        ...currentAtom,
+        editedTodoValue: todo.title,
+        todo: todo
+      }));
+    },
+    updateEditedTodoValue: (_, event) => {
+      swap(atom, currentAtom => ({
+        ...currentAtom,
+        editedTodoValue: event.title
+      }));
+    },
+    updateNewTodoValue: (_, event) =>
+      swap(atom, currentAtom => ({
+        ...currentAtom,
+        newTodoTitle: event.title
+      })),
+    createTodoWhenTitleNotEmpty: (_, __) => {
+      const { newTodoTitle, todos } = deref(atom);
+      setTodosAndSave(
+        newTodoTitle.length > 0
+          ? createTodo(todos, { title: newTodoTitle })
+          : todos
+      );
+    },
+    resetNewTodoInput: (_, __) => {
+      swap(atom, currentAtom => ({ ...currentAtom, newTodoTitle: '' }));
+    },
+    editTodo: (_, __) => {
+      const { editedTodoValue, todos, todo } = deref(atom);
+      const newTodos = editTodo(todos, { todo, newTitle: editedTodoValue });
+
+      setTodosAndSave(newTodos);
+    },
+    toggleTodo: (_, { todo }) => {
+      const { todos } = deref(atom);
+      setTodosAndSave(toggleTodo(todos, { todo }));
+    },
+    deleteTodo: (_, { todo }) => {
+      const { todos } = deref(atom);
+      setTodosAndSave(deleteTodo(todos, { todo }));
+    },
+    editTodoWhenEditValueIsDifferent: (_, __) => {
+      const { todos, todo, editedTodoValue } = deref(atom);
+      setTodosAndSave(
+        todo.title !== editedTodoValue
+          ? editTodo(todos, { todo, newTitle: editedTodoValue })
+          : todos
+      );
     }
-  });
+  }
+});
+
+const TodosContainer = () => {
+  const { todos, todo, editedTodoValue, newTodoTitle } = useAtom(atom);
+
   const [current, send] = useMachine(todosMachineWithActions, {
     devTools: true
   });
+
   return (
     <TodoWidgetWrapper
       currentTodosMachineStateNode={current}

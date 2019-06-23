@@ -176,6 +176,8 @@ const withWebSocket = Component => {
 
 storiesOf('Containers', module).add('TodosDemo', () => <TodosContainerDemo />);
 
+storiesOf('Components', module).add('test', () => <h2>Test</h2>);
+
 /* Wrapper impl */
 // const TodoWidgetsWrapperContainer2 = ({ todos, sendAction }) => {
 //   return (
