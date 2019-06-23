@@ -9,7 +9,7 @@ import { storiesOf } from '@storybook/react';
 import TodoWidgetsWrapper2 from '../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
 import todosMachine from '../states/todos/todosMachine';
 import TodosWithMachine from '../containers/TodosWithMachine';
-
+import TodosContainerDemo from '../containers/TodosContainerDemo';
 /* 
 storiesOf('Category', module).add('Subcategory', () => <Jumbotron />)
 // */
@@ -156,27 +156,25 @@ const withWebSocket = Component => {
   return WithWebSocket;
 };
 
-const TodoWidgetsWrapperContainer2 = ({
-  currentTodosMachineStateNode,
-  send
-}) => {
-  return (
-    <TodoWidgetsWrapper2
-      currentTodosMachineStateNode={currentTodosMachineStateNode}
-      send={send}
-    />
-  );
-};
+// const TodoWidgetsWrapperContainer2 = ({
+//   currentTodosMachineStateNode,
+//   send
+// }) => {
+//   return (
+//     <TodoWidgetsWrapper2
+//       currentTodosMachineStateNode={currentTodosMachineStateNode}
+//       send={send}
+//     />
+//   );
+// };
 
-// const TodoWithWebSocket = withWebSocket(TodoWidgetsWrapperContainer);
+// const TodoWithWebSocket2 = withWebSocket(TodoWidgetsWrapperContainer2);
 
-const TodoWithWebSocket2 = withWebSocket(TodoWidgetsWrapperContainer2);
+// storiesOf('Components', module).add('Todo2', () => <TodoWithWebSocket2 />);
 
-// storiesOf('Components', module).add('Todo', () => <TodoWithWebSocket />);
+// storiesOf('Containers', module).add('Todo', () => <TodosWithMachine />);
 
-storiesOf('Components', module).add('Todo2', () => <TodoWithWebSocket2 />);
-
-storiesOf('Containers', module).add('Todo', () => <TodosWithMachine />);
+storiesOf('Containers', module).add('TodosDemo', () => <TodosContainerDemo />);
 
 /* Wrapper impl */
 // const TodoWidgetsWrapperContainer2 = ({ todos, sendAction }) => {

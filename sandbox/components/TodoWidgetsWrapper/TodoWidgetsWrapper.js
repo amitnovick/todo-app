@@ -25,14 +25,15 @@ const todoDiv = css`
   ${todoMvcStyle}
 `;
 
-const TodoWidgetsWrapper = ({ currentTodosMachineStateNode, send }) => {
+const TodoWidgetsWrapper = ({
+  currentTodosMachineStateNode,
+  send,
+  newTodoTitle,
+  editedTodoValue,
+  todo,
+  todos
+}) => {
   const uiState = currentTodosMachineStateNode.value;
-  const {
-    newTodoTitle,
-    editedTodoValue,
-    todo,
-    todos
-  } = currentTodosMachineStateNode.context;
   const isCreateTodoTextboxBeingEdited = uiState === 'editingNew';
   const isTodoListBeingEdited = uiState === 'editingExisting';
   return (
