@@ -95,9 +95,7 @@ const todosMachineWithActions = todosMachine.withConfig({
 const TodosContainer = () => {
   const { todos, todo, editedTodoValue, newTodoTitle } = useAtom(atom);
 
-  const [current, send] = useMachine(todosMachineWithActions, {
-    devTools: true
-  });
+  const [current, send] = useMachine(todosMachineWithActions);
 
   return (
     <TodoWidgetWrapper

@@ -2,53 +2,46 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { inputStyle } from './style';
+
 const ENTER_KEY = 13;
 
-class CreateTodoTextbox extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      newTitle: ''
-    };
-  }
-
-  handleNewTitleChange = event => {
-    this.setState({ newTitle: event.target.value });
-  };
-
-  handleNewTitleKeyDown = event => {
-    const pressedEnter = event.keyCode === ENTER_KEY;
-    if (!pressedEnter) return;
-
-    const newTitleValue = this.state.newTitle.trim();
-
-    const shouldCreateNewTodo = newTitleValue.length > 0;
-    if (!shouldCreateNewTodo) return;
-    else {
-      this.props.createTodo({ title: newTitleValue });
-      this.setState({ newTitle: '' });
+const CreateTodoTextbox = ({
+  inputValue,
+  isBeingEdited,
+  onClick,
+  onBlur,
+  onInputChange,
+  onHitEnterKey
+}) => {
+  const handleKeyDown = keyCode => {
+    const didHitEnterKey = keyCode === ENTER_KEY;
+    if (didHitEnterKey) {
+      onHitEnterKey();
     }
   };
 
-  render() {
-    const { newTitle } = this.state;
-    return (
-      <input
-        className={inputStyle}
-        value={newTitle}
-        onChange={event => this.handleNewTitleChange(event)}
-        type="text"
-        placeholder="Enter your task here..."
-        onKeyDown={event => this.handleNewTitleKeyDown(event)}
-        autoFocus={true}
-      />
-    );
-  }
-}
+  return (
+    <input
+      className={inputStyle}
+      value={inputValue}
+      onChange={({ target }) => onInputChange({ title: target.value })}
+      type="text"
+      placeholder="Enter your task here..."
+      onKeyDown={({ keyCode }) => handleKeyDown(keyCode)}
+      autoFocus={isBeingEdited}
+      onClick={onClick}
+      onBlur={() => onBlur()}
+    />
+  );
+};
 
 CreateTodoTextbox.propTypes = {
-  createTodo: PropTypes.func.isRequired
+  onClick: PropTypes.func.isRequired,
+  onBlur: PropTypes.func.isRequired,
+  isBeingEdited: PropTypes.bool.isRequired,
+  onHitEnterKey: PropTypes.func.isRequired,
+  onInputChange: PropTypes.func.isRequired,
+  inputValue: PropTypes.string.isRequired
 };
 
 export default CreateTodoTextbox;

@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Atom, useAtom, swap, deref } from '@dbeining/react-atom';
 
-import TodoWidgetWrapper from '../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
-import firestore from '../../firebase/realtimeDb.js';
-import withAuth from '../../containers/Auth/withAuth';
-import initialTodosState from '../states/todos/initialState';
-import todosMachine from '../states/todos/todosMachine';
+import TodoWidgetWrapper from '../../../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
+import firestore from '../../../firebase/realtimeDb.js';
+import withAuth from '../../Auth/withAuth';
+import initialTodosState from '../../../states/todos/initialState';
+import todosMachine from '../../../states/todos/todosMachine';
 import { useMachine } from '@xstate/react';
+import firestoreTodosCollectionMachine from './firestoreTodosCollectionMachine';
 
 const mapUserIdToCollection = userId => `todos-${userId}`;
 
@@ -20,7 +21,7 @@ const initialAtomState = {
 
 const atom = Atom.of(initialAtomState);
 
-const createTodo = ({ todosCollection, title }) => {
+const createTodo = (todosCollection, { title }) => {
   const todo = {
     title: title,
     completed: false,
@@ -29,7 +30,7 @@ const createTodo = ({ todosCollection, title }) => {
   firestore.collection(todosCollection).add(todo);
 };
 
-const editTodo = ({ todosCollection, todo, newTitle }) => {
+const editTodo = (todosCollection, { todo, newTitle }) => {
   const todoChange = {
     title: newTitle
   };
@@ -39,7 +40,7 @@ const editTodo = ({ todosCollection, todo, newTitle }) => {
     .update(todoChange);
 };
 
-const toggleTodo = ({ todosCollection, todo }) => {
+const toggleTodo = (todosCollection, { todo }) => {
   const todoChange = {
     completed: !todo.completed
   };
@@ -49,38 +50,35 @@ const toggleTodo = ({ todosCollection, todo }) => {
     .update(todoChange);
 };
 
-const deleteTodo = ({ todosCollection, todo }) => {
+const deleteTodo = (todosCollection, { todo }) => {
   firestore
     .collection(todosCollection)
     .doc(todo.id)
     .delete();
 };
 
-const mountStore = async todosCollection => {
-  const unsubscribe = await firestore
-    .collection(todosCollection)
-    .onSnapshot(snapshot => {
-      let todos = [];
+const subscribeToFirestore = async ({ todosCollection }) => {
+  /* Returned value: an `unsubscribe` function */
+  return await firestore.collection(todosCollection).onSnapshot(snapshot => {
+    let todos = [];
 
-      snapshot.forEach(doc => {
-        const todo = doc.data();
-        todo.id = doc.id;
-        todos.push(todo);
-      });
-
-      const scoreByCreatedAt = (todoA, todoB) => {
-        return (
-          new Date(todoA.createdAt).getTime() -
-          new Date(todoB.createdAt).getTime()
-        );
-      };
-
-      todos.sort(scoreByCreatedAt);
-      // Anytime the state of remote database changes, we update local state
-      swap(atom, currentAtom => ({ ...currentAtom, todos: todos }));
+    snapshot.forEach(doc => {
+      const todo = doc.data();
+      todo.id = doc.id;
+      todos.push(todo);
     });
 
-  return unsubscribe;
+    const scoreByCreatedAt = (todoA, todoB) => {
+      return (
+        new Date(todoA.createdAt).getTime() -
+        new Date(todoB.createdAt).getTime()
+      );
+    };
+
+    todos.sort(scoreByCreatedAt);
+    /* Every time the state of remote database changes, we update local state */
+    swap(atom, currentAtom => ({ ...currentAtom, todos: todos }));
+  });
 };
 
 const TodosContainer = ({ userOAuth }) => {
@@ -135,24 +133,46 @@ const TodosContainer = ({ userOAuth }) => {
       }
     }
   });
-  const [current, send] = useMachine(todosMachineWithActions);
+  const [currentTodosMachine, sendTodosMachine] = useMachine(
+    todosMachineWithActions
+  );
+  const firestoreTodosCollectionMachineWithContext = firestoreTodosCollectionMachine.withConfig(
+    {
+      services: {
+        subscribeToFirestore: subscribeToFirestore
+      }
+    },
+    {
+      todosCollection: todosCollection
+    }
+  );
+  const [currentFirestore, sendFirestore] = useMachine(
+    firestoreTodosCollectionMachineWithContext
+  );
 
   React.useEffect(() => {
-    const todosCollection = mapUserIdToCollection(userId);
-    const unsubscribe = mountStore(todosCollection);
-    return unsubscribe;
-  }, [userId]);
+    return () => sendFirestore('UNSUBSCRIBE');
+  }, [sendFirestore]);
 
-  return (
-    <TodoWidgetWrapper
-      currentTodosMachineStateNode={current}
-      send={send}
-      todos={todos}
-      todo={todo}
-      editedTodoValue={editedTodoValue}
-      newTodoTitle={newTodoTitle}
-    />
-  );
+  switch (currentFirestore.value) {
+    case 'loading':
+      return <h2>Loading...</h2>;
+    case 'connected':
+      return (
+        <TodoWidgetWrapper
+          currentTodosMachineStateNode={currentTodosMachine}
+          send={sendTodosMachine}
+          todos={todos}
+          todo={todo}
+          editedTodoValue={editedTodoValue}
+          newTodoTitle={newTodoTitle}
+        />
+      );
+    case 'disconnected':
+      return <h2>Disconnected</h2>;
+    default:
+      return <h2>Unknown state</h2>;
+  }
 };
 
 TodosContainer.propTypes = {

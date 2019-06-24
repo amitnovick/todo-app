@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { css } from 'emotion';
 
 import TodoList from './components/TodoList/TodoList';
 import CreateTodoTextbox from './components/CreateTodoTextbox';
-import { css } from 'emotion';
 
 const centeredDivStyle = `
 max-width: 550px;
@@ -26,40 +26,51 @@ const todoDiv = css`
 `;
 
 const TodoWidgetsWrapper = ({
-  // container state
-  todos,
-  // container methods
-  createTodo,
-  editTodo,
-  toggleTodo,
-  deleteTodo
+  currentTodosMachineStateNode,
+  send,
+  newTodoTitle,
+  editedTodoValue,
+  todo,
+  todos
 }) => {
+  const uiState = currentTodosMachineStateNode.value;
+  const isCreateTodoTextboxBeingEdited = uiState === 'editingNew';
+  const isTodoListBeingEdited = uiState === 'editingExisting';
   return (
     <div className={todoDiv}>
-      <CreateTodoTextbox createTodo={args => createTodo(args)} />
+      <CreateTodoTextbox
+        onHitEnterKey={() => send({ type: 'EDITING_NEW_HIT_ENTER_KEY' })}
+        isBeingEdited={isCreateTodoTextboxBeingEdited}
+        onClick={() => send('CLICK_NEW_TODO_TEXTBOX')}
+        onBlur={() => send('EDITING_NEW_CLICK_AWAY')}
+        onInputChange={args =>
+          send({ ...args, type: 'EDITING_NEW_INPUT_CHANGE' })
+        }
+        inputValue={newTodoTitle}
+      />
       <TodoList
         todos={todos}
-        onDelete={args => deleteTodo(args)}
-        onEdit={args => editTodo(args)}
-        onToggle={args => toggleTodo(args)}
+        onDelete={({ todo }) => send({ type: 'CLICK_DELETE_BUTTON', todo })}
+        onToggle={({ todo }) => send({ type: 'CLICK_TOGGLE_BUTTON', todo })}
+        onBlur={() => send('EDITING_EXISTING_CLICK_AWAY')}
+        onClickTitle={({ todo }) =>
+          send({ type: 'CLICK_EXISTING_TODO_TITLE', todo })
+        }
+        editedTodo={todo}
+        editedTodoValue={editedTodoValue}
+        isBeingEdited={isTodoListBeingEdited}
+        onChangeEditedTodoValue={args =>
+          send({ ...args, type: 'CHANGE_EDITED_TODO_VALUE' })
+        }
+        onHitEnterKey={() => send('HIT_ENTER_KEY')}
       />
     </div>
   );
 };
 
 TodoWidgetsWrapper.propTypes = {
-  todos: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.any.isRequired,
-      title: PropTypes.string.isRequired,
-      completed: PropTypes.bool.isRequired,
-      createdAt: PropTypes.string.isRequired
-    })
-  ),
-  createTodo: PropTypes.func.isRequired,
-  editTodo: PropTypes.func.isRequired,
-  toggleTodo: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired
+  currentTodosMachineStateNode: PropTypes.any.isRequired,
+  send: PropTypes.func.isRequired
 };
 
 export default TodoWidgetsWrapper;
