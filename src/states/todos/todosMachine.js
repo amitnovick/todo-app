@@ -2,7 +2,7 @@
 import { Machine } from 'xstate';
 
 const todosMachine = Machine({
-  id: 'todo-list',
+  id: 'todo-widgets-wrapper',
   initial: 'editingNew',
   states: {
     idle: {

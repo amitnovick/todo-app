@@ -16,12 +16,15 @@ const initialAtomState = {
   todos: initialTodosState,
   todo: {},
   editedTodoValue: '',
-  newTodoTitle: ''
+  newTodoTitle: '',
+  todosCollection: '',
+  unsubscribe: () => {}
 };
 
 const atom = Atom.of(initialAtomState);
 
-const createTodo = (todosCollection, { title }) => {
+const createTodo = ({ title }) => {
+  const { todosCollection } = deref(atom);
   const todo = {
     title: title,
     completed: false,
@@ -30,7 +33,9 @@ const createTodo = (todosCollection, { title }) => {
   firestore.collection(todosCollection).add(todo);
 };
 
-const editTodo = (todosCollection, { todo, newTitle }) => {
+const editTodo = ({ todo, newTitle }) => {
+  const { todosCollection } = deref(atom);
+
   const todoChange = {
     title: newTitle
   };
@@ -40,7 +45,9 @@ const editTodo = (todosCollection, { todo, newTitle }) => {
     .update(todoChange);
 };
 
-const toggleTodo = (todosCollection, { todo }) => {
+const toggleTodo = ({ todo }) => {
+  const { todosCollection } = deref(atom);
+
   const todoChange = {
     completed: !todo.completed
   };
@@ -50,14 +57,21 @@ const toggleTodo = (todosCollection, { todo }) => {
     .update(todoChange);
 };
 
-const deleteTodo = (todosCollection, { todo }) => {
+const deleteTodo = ({ todo }) => {
+  const { todosCollection } = deref(atom);
+
   firestore
     .collection(todosCollection)
     .doc(todo.id)
     .delete();
 };
 
-const subscribeToFirestore = async ({ todosCollection }) => {
+const subscribeToFirestore = async userId => {
+  const todosCollection = mapUserIdToCollection(userId);
+  swap(atom, currentAtom => ({
+    ...currentAtom,
+    todosCollection: todosCollection
+  }));
   /* Returned value: an `unsubscribe` function */
   return await firestore.collection(todosCollection).onSnapshot(snapshot => {
     let todos = [];
@@ -84,7 +98,6 @@ const subscribeToFirestore = async ({ todosCollection }) => {
 const TodosContainer = ({ userOAuth }) => {
   const { uid: userId } = userOAuth;
   const { todos, todo, editedTodoValue, newTodoTitle } = useAtom(atom);
-  const todosCollection = mapUserIdToCollection(userId);
 
   const todosMachineWithActions = todosMachine.withConfig({
     actions: {
@@ -109,7 +122,7 @@ const TodosContainer = ({ userOAuth }) => {
       createTodoWhenTitleNotEmpty: (_, __) => {
         const { newTodoTitle } = deref(atom);
         if (newTodoTitle.length > 0) {
-          createTodo(todosCollection, { title: newTodoTitle });
+          createTodo({ title: newTodoTitle });
         }
       },
       resetNewTodoInput: (_, __) => {
@@ -117,18 +130,18 @@ const TodosContainer = ({ userOAuth }) => {
       },
       editTodo: (_, __) => {
         const { editedTodoValue, todo } = deref(atom);
-        editTodo(todosCollection, { todo, newTitle: editedTodoValue });
+        editTodo({ todo, newTitle: editedTodoValue });
       },
       toggleTodo: (_, { todo }) => {
-        toggleTodo(todosCollection, { todo });
+        toggleTodo({ todo });
       },
       deleteTodo: (_, { todo }) => {
-        deleteTodo(todosCollection, { todo });
+        deleteTodo({ todo });
       },
       editTodoWhenEditValueIsDifferent: (_, __) => {
         const { todo, editedTodoValue } = deref(atom);
         if (todo.title !== editedTodoValue) {
-          editTodo(todosCollection, { todo, newTitle: editedTodoValue });
+          editTodo({ todo, newTitle: editedTodoValue });
         }
       }
     }
@@ -138,12 +151,20 @@ const TodosContainer = ({ userOAuth }) => {
   );
   const firestoreTodosCollectionMachineWithContext = firestoreTodosCollectionMachine.withConfig(
     {
+      actions: {
+        storeUnsubscribeFunction: (_, event) =>
+          swap(atom, currentAtom => ({
+            ...currentAtom,
+            unsubscribe: event.data
+          })),
+        callUnsubscribeFunction: (_, __) => {
+          const { unsubscribe } = deref(atom);
+          unsubscribe();
+        }
+      },
       services: {
-        subscribeToFirestore: subscribeToFirestore
+        subscribeToFirestore: () => subscribeToFirestore(userId)
       }
-    },
-    {
-      todosCollection: todosCollection
     }
   );
   const [currentFirestore, sendFirestore] = useMachine(
