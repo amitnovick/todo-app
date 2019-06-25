@@ -27,3 +27,5 @@ yarn-error.log*
 .eslintrc
 jsconfig.json
 /misc
+/storybook-static
+/sandbox
