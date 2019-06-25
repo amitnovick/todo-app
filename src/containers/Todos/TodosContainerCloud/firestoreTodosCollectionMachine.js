@@ -1,20 +1,16 @@
 //@ts-check
-import { Machine, assign } from 'xstate';
+import { Machine } from 'xstate';
 
 const firestoreTodosCollectionMachine = Machine({
   id: 'firestore-todos-collection',
   initial: 'loading',
-  context: {
-    unsubscribe: () => {}, // default value
-    todosCollection: '' // default value
-  },
   states: {
     loading: {
       invoke: {
         src: 'subscribeToFirestore',
         onDone: {
           target: 'connected',
-          actions: assign({ unsubscribe: (_, event) => event.data })
+          actions: 'storeUnsubscribeFunction'
         },
         onError: {
           target: 'disconnected'
@@ -27,7 +23,7 @@ const firestoreTodosCollectionMachine = Machine({
   on: {
     UNSUBSCRIBE: {
       target: 'disconnected',
-      actions: ({ unsubscribe }) => unsubscribe()
+      actions: 'callUnsubscribeFunction'
     }
   }
 });
