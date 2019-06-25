@@ -2,15 +2,15 @@ import React from 'react';
 import { useMachine } from '@xstate/react';
 import { Atom, useAtom, deref, swap } from '@dbeining/react-atom';
 
-import TodoWidgetWrapper from '../../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
-import todosMachine from '../../states/todos/todosMachine';
-import initialState from '../../states/todos/initialState';
+import TodoWidgetWrapper from '../components/TodoWidgetsWrapper/TodoWidgetsWrapper';
+import todosMachine from '../states/todos/todosMachine';
+import initialState from '../states/todos/initialState';
 import {
   createTodo,
   editTodo,
   toggleTodo,
   deleteTodo
-} from '../../states/todos/stateTransformers';
+} from '../states/todos/stateTransformers';
 
 /////////////////// UTILS ////////////
 const NAMESPACE = 'todos';

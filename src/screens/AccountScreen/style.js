@@ -1,11 +1,8 @@
 import { css } from 'emotion';
+import buttontyle from '../../style/buttonStyle';
 
 export const logoutButtonStyle = css`
-  cursor: pointer;
+  ${buttontyle}
   background-color: #dd4b39;
   color: white;
-  font-size: 26px;
-  border-radius: 6px;
-  border: 1px solid;
-  padding: 12px;
 `;
