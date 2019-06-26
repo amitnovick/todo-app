@@ -26,4 +26,8 @@ yarn-error.log*
 /.idea
 .eslintrc
 jsconfig.json
+
+# special directories
 /misc
+/sandbox
+/storybook-static
