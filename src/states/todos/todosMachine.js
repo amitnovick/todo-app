@@ -5,6 +5,17 @@ const todosMachine = Machine({
   id: 'todo-widgets-wrapper',
   initial: 'editingNew',
   states: {
+    editingNew: {
+      on: {
+        EDITING_NEW_HIT_ENTER_KEY: {
+          actions: ['createTodoWhenTitleNotEmpty', 'resetNewTodoInput']
+        },
+        EDITING_NEW_CLICK_AWAY: 'idle',
+        EDITING_NEW_INPUT_CHANGE: {
+          actions: 'updateNewTodoValue'
+        }
+      }
+    },
     idle: {
       on: {
         CLICK_EXISTING_TODO_TITLE: {
@@ -34,17 +45,6 @@ const todosMachine = Machine({
         },
         CHANGE_EDITED_TODO_VALUE: {
           actions: 'updateEditedTodoValue'
-        }
-      }
-    },
-    editingNew: {
-      on: {
-        EDITING_NEW_HIT_ENTER_KEY: {
-          actions: ['createTodoWhenTitleNotEmpty', 'resetNewTodoInput']
-        },
-        EDITING_NEW_CLICK_AWAY: 'idle',
-        EDITING_NEW_INPUT_CHANGE: {
-          actions: 'updateNewTodoValue'
         }
       }
     }
