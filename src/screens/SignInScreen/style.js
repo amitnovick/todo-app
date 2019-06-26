@@ -1,12 +1,8 @@
 import { css } from 'emotion';
+import buttonStyle from '../../style/buttonStyle';
 
-export const buttonStyle = css`
-  cursor: pointer;
+export const signInButtonStyle = css`
+  ${buttonStyle}
   background-color: black;
   color: white;
-  margin: 8px;
-  font-size: 26px;
-  border-radius: 6px;
-  border: 1px solid;
-  padding: 12px;
 `;

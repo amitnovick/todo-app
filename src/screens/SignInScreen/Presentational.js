@@ -1,12 +1,12 @@
 import React from 'react';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { buttonStyle } from './style';
+import { signInButtonStyle } from './style';
 
 const SignInScreen = ({ hasFailedLogin, attemptToLogin }) => (
   <div>
     <h1>Sign-in</h1>
-    <button className={buttonStyle} onClick={attemptToLogin}>
+    <button className={signInButtonStyle} onClick={attemptToLogin}>
       {`Sign in with GitHub `}
       <FontAwesomeIcon icon={faGithub} style={{ marginRight: 4 }} />
     </button>
