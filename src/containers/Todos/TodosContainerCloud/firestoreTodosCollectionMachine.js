@@ -3,8 +3,13 @@ import { Machine } from 'xstate';
 
 const firestoreTodosCollectionMachine = Machine({
   id: 'firestore-todos-collection',
-  initial: 'loading',
+  initial: 'uninitialized',
   states: {
+    uninitialized: {
+      on: {
+        INITIALIZE: 'loading'
+      }
+    },
     loading: {
       invoke: {
         src: 'subscribeToFirestore',
