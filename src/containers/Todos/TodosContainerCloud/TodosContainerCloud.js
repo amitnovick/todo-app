@@ -95,87 +95,91 @@ const subscribeToFirestore = async userId => {
   });
 };
 
+const firestoreTodosCollectionMachineWithHandlers = firestoreTodosCollectionMachine.withConfig(
+  {
+    actions: {
+      storeUnsubscribeFunction: (_, event) =>
+        swap(atom, currentAtom => ({
+          ...currentAtom,
+          unsubscribe: event.data
+        })),
+      callUnsubscribeFunction: (_, __) => {
+        const { unsubscribe } = deref(atom);
+        unsubscribe();
+      }
+    },
+    services: {
+      subscribeToFirestore: (_, event) => subscribeToFirestore(event.userId)
+    }
+  }
+);
+
+const todosMachineWithActions = todosMachine.withConfig({
+  actions: {
+    updateTodosEnterExistingTodoEdit: (_, { todo }) => {
+      swap(atom, currentAtom => ({
+        ...currentAtom,
+        editedTodoValue: todo.title,
+        todo: todo
+      }));
+    },
+    updateEditedTodoValue: (_, event) => {
+      swap(atom, currentAtom => ({
+        ...currentAtom,
+        editedTodoValue: event.title
+      }));
+    },
+    updateNewTodoValue: (_, event) =>
+      swap(atom, currentAtom => ({
+        ...currentAtom,
+        newTodoTitle: event.title
+      })),
+    createTodoWhenTitleNotEmpty: (_, __) => {
+      const { newTodoTitle } = deref(atom);
+      if (newTodoTitle.length > 0) {
+        createTodo({ title: newTodoTitle });
+      }
+    },
+    resetNewTodoInput: (_, __) => {
+      swap(atom, currentAtom => ({ ...currentAtom, newTodoTitle: '' }));
+    },
+    editTodo: (_, __) => {
+      const { editedTodoValue, todo } = deref(atom);
+      editTodo({ todo, newTitle: editedTodoValue });
+    },
+    toggleTodo: (_, { todo }) => {
+      toggleTodo({ todo });
+    },
+    deleteTodo: (_, { todo }) => {
+      deleteTodo({ todo });
+    },
+    editTodoWhenEditValueIsDifferent: (_, __) => {
+      const { todo, editedTodoValue } = deref(atom);
+      if (todo.title !== editedTodoValue) {
+        editTodo({ todo, newTitle: editedTodoValue });
+      }
+    }
+  }
+});
+
 const TodosContainer = ({ userOAuth }) => {
   const { uid: userId } = userOAuth;
   const { todos, todo, editedTodoValue, newTodoTitle } = useAtom(atom);
 
-  const todosMachineWithActions = todosMachine.withConfig({
-    actions: {
-      updateTodosEnterExistingTodoEdit: (_, { todo }) => {
-        swap(atom, currentAtom => ({
-          ...currentAtom,
-          editedTodoValue: todo.title,
-          todo: todo
-        }));
-      },
-      updateEditedTodoValue: (_, event) => {
-        swap(atom, currentAtom => ({
-          ...currentAtom,
-          editedTodoValue: event.title
-        }));
-      },
-      updateNewTodoValue: (_, event) =>
-        swap(atom, currentAtom => ({
-          ...currentAtom,
-          newTodoTitle: event.title
-        })),
-      createTodoWhenTitleNotEmpty: (_, __) => {
-        const { newTodoTitle } = deref(atom);
-        if (newTodoTitle.length > 0) {
-          createTodo({ title: newTodoTitle });
-        }
-      },
-      resetNewTodoInput: (_, __) => {
-        swap(atom, currentAtom => ({ ...currentAtom, newTodoTitle: '' }));
-      },
-      editTodo: (_, __) => {
-        const { editedTodoValue, todo } = deref(atom);
-        editTodo({ todo, newTitle: editedTodoValue });
-      },
-      toggleTodo: (_, { todo }) => {
-        toggleTodo({ todo });
-      },
-      deleteTodo: (_, { todo }) => {
-        deleteTodo({ todo });
-      },
-      editTodoWhenEditValueIsDifferent: (_, __) => {
-        const { todo, editedTodoValue } = deref(atom);
-        if (todo.title !== editedTodoValue) {
-          editTodo({ todo, newTitle: editedTodoValue });
-        }
-      }
-    }
-  });
   const [currentTodosMachine, sendTodosMachine] = useMachine(
     todosMachineWithActions
   );
-  const firestoreTodosCollectionMachineWithContext = firestoreTodosCollectionMachine.withConfig(
-    {
-      actions: {
-        storeUnsubscribeFunction: (_, event) =>
-          swap(atom, currentAtom => ({
-            ...currentAtom,
-            unsubscribe: event.data
-          })),
-        callUnsubscribeFunction: (_, __) => {
-          const { unsubscribe } = deref(atom);
-          unsubscribe();
-        }
-      },
-      services: {
-        subscribeToFirestore: () => subscribeToFirestore(userId)
-      }
-    }
-  );
   const [currentFirestore, sendFirestore] = useMachine(
-    firestoreTodosCollectionMachineWithContext
+    firestoreTodosCollectionMachineWithHandlers
   );
 
   React.useEffect(() => {
+    sendFirestore({ type: 'INITIALIZE', userId });
     return () => sendFirestore('UNSUBSCRIBE');
-  }, [sendFirestore]);
+  }, [sendFirestore, userId]);
 
   switch (currentFirestore.value) {
+    case 'uninitialized':
     case 'loading':
       return <h2>Loading...</h2>;
     case 'connected':
